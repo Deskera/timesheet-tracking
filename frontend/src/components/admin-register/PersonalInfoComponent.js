@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormGroup, Button, Input, Label } from 'reactstrap';
-import styled from 'styled-components';
-import { Centered, Card, ParentCard, FieldFeedback, WrapperInput } from './CustomStyles';
+import { Centered, Card, ParentCard, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import InputFormat from './InputComponent';
+import InputFormat from '../../common/InputComponent';
+import {images} from '../../common/CommonUtils';
 
 const initialValues = {
     firstname: '',
@@ -24,14 +24,10 @@ const validationSchema = Yup.object({
 function PersonalInfo() {
 
     const history = useHistory();
-    console.log("aaaa", history);
 
     const registerValues = history.location.state;
     const onSubmit = (values) => {
-
         registerValues["personal_info"] = values;
-        // console.log("vibhu", registerValues);
-
         history.push("/register/organization-info", registerValues);
     }
 
@@ -41,7 +37,7 @@ function PersonalInfo() {
                 <Card className="col-12 p-5 py-0 d-flex align-items-center justify-content-center">
                     <div style={{ width: '100%' }} className="p-2 py-0">
                         <div className="text-center mt-3 mb-4" >
-                            <img src="/assets/images/logo-black.svg" alt="Deskera logo"
+                            <img src={images["logo-black.svg"].default} alt="Deskera logo"
                                 style={{ width: "40%", maxWidth: '400px', height: '', objectFit: 'cover' }}
                             />
                             <h2 className="display-6 text-center">Fill your Account Details</h2>

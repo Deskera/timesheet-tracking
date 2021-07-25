@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormGroup, Input, Button, Label } from 'reactstrap';
-import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from './CustomStyles';
+import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
-import InputFormat from './InputComponent';
+import InputFormat from '../../common/InputComponent';
 import PhoneInput from 'react-phone-input-2';
 
 const initialValues = {

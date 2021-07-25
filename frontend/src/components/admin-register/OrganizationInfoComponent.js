@@ -1,10 +1,11 @@
 import React from 'react';
 import { FormGroup, Button } from 'reactstrap';
-import { Centered, Card, ParentCard } from './CustomStyles'
+import { Centered, Card, ParentCard } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputFormat from './InputComponent';
+import InputFormat from '../../common/InputComponent';
+import { images } from '../../common/CommonUtils';
 
 const initialValues = {
     companyName: '',
@@ -33,7 +34,6 @@ function OrganizationInfo() {
 
     const onSubmit = (values) => {
         registerValues["organization_info"] = values;
-        console.log("aa ", registerValues);
 
         const newUser = {
             tenantDto: {
@@ -45,21 +45,20 @@ function OrganizationInfo() {
             userDto: {
                 firstName: registerValues.personal_info.firstname,
                 lastName: registerValues.personal_info.lastname,
-                gender: registerValues.personal_info.gender,
                 email: registerValues.values.email,
-                contactNumber: registerValues.values.phone,
+                gender: registerValues.personal_info.gender,
+                contactNumber: registerValues.values.phone
             }
         }
 
-
+        console.log("asd", newUser);
 
         fetch("http://localhost:8080/api/tenants/initial-setup?password=" + registerValues.values.password, {
             method: 'POST',
             body: JSON.stringify(newUser),
             headers: {
-                // 'Access-Control-Allow-Origin': 'http://localhost:3000',
-                // 'Access-Control-Allow-Credentials': 'true',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'connection': 'keep-alive'
             },
             credentials: 'same-origin'
         })
@@ -78,11 +77,10 @@ function OrganizationInfo() {
                     throw errmess;
                 })
             .then(response => response.json())
-            .then(response => console.log(response))
-            .then(history.push("/dashboard"))
+            .then(response => { console.log("av", response) })
             .catch(error => {
-                console.log('Post User', error.message);
-                alert('Sorry, try Again\nError: ' + error.message);
+                console.log('Post User', error);
+                // alert('Sorry, try Again\nError: ' + error.message);
             });
 
 
@@ -95,12 +93,13 @@ function OrganizationInfo() {
                 <Card className="col-12 p-5 py-0 d-flex align-items-center justify-content-center">
                     <div style={{ width: '100%' }} className="p-2">
                         <div className="text-center mt-3 mb-4" >
-                            <img src="/assets/images/logo-black.svg" alt="Deskera logo"
+                            <img src={images["logo-black.svg"].default} alt="Deskera logo"
                                 style={{ width: "40%", maxWidth: '400px', height: '', objectFit: 'cover' }}
                             />
                             <h2 className="display-6 text-center">Hi {registerValues.personal_info.firstname}</h2>
                             <h4 className="text-center">Tell us something about your company :)</h4>
                         </div>
+
                         <Formik
                             initialValues={initialValues}
                             validationSchema={validationSchema}

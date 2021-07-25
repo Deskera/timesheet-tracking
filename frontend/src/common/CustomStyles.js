@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-// import logo1 from '/assets/images/logo.png'
+import {images} from './CommonUtils';
 
 const Centered = styled.div`
     position: fixed;
@@ -54,7 +54,7 @@ function LogoCard(props) {
     return (
 
         <Card left className="col-6 text-center bg-white d-flex flex-column justify-content-center align-items-center">
-            <img src="/assets/images/logo-red.png" alt="Deskera logo"
+            <img src={images['logo-red.png'].default} alt="Deskera logo"
                 className="mt-3 mb-5"
                 style={{ width: "70%", maxWidth: '400px', height: '70px', objectFit: 'cover' }}
             />
@@ -78,8 +78,6 @@ function LogoCard(props) {
                             Integrated Accounting, CRM & HR Software for Business Growth
                         </h4>
                     </div>
-
-
             }
             <Panel className="mb-4">Admin Panel</Panel>
         </Card>

@@ -1,75 +1,47 @@
-import React from 'react';
+import * as React from 'react';
 import { FormGroup, Button } from 'reactstrap';
-import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from './CustomStyles';
+import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputFormat from './InputComponent';
+import InputFormat from '../../common/InputComponent';
+import { images } from '../../common/CommonUtils';
+import Loader from '../../common/Loader';
+import {baseUrl} from '../../common/baseUrl';
 
 const initialValues = {
-    email: '',
-    password: ''
+    email: 'a11@q.qq',
+    password: 'aaaa!!A2'
 }
 
-// const loginUser = (values, history) => {
-//     fetch("http://localhost:8080/api/users/login?email="+values.email+"&password="+values.password, {
-//             // headers: {
-//             //     'Access-Control-Allow-Origin': 'http://localhost:3000',
-//             //     'Access-Control-Allow-Credentials': 'true',
-//             //     'Content-Type': 'application/json'
-//             // },
-//         })
-//             .then(response => {
-//                 if (response.ok) {
-//                     history.push("/dashboard");
-//                     return response;
-//                 }
-//                 else {
-//                     var error = new Error(response.status + ': ' + response.statusText);
-//                     error.response = response;
-//                     if(response.status === 404) {
-//                         alert("Whoops! This email isn't registered :(");
-//                     }
-//                     else {
-//                         alert("Incorrect password for this email.");
-//                     }
-//                     throw error;
-//                 }
-//             },
-//                 error => {
-//                     var errmess = new Error(error.message);
-//                     throw errmess;
-//                 })
-//             .then(response => response.json())
-//             .then(response => console.log(response))
-//             .catch(error => console.log(error))
-// }
-
-// Yup.addMethod(Yup.string, 'checkUserExists', function () {
-//     return this.test('test-phone', "Whoops! This email isn't registered :(", value => {
-//         if (value && value.length > 4) return this.phone().isValidSync(value)
-//         return true
-//     })
-// })
+const atleast1Cap = "(?=.*[A-Z])";
+const atleast1Num = ".*[0-9].*";
+const atleast1Spe = "[*@!#%&()^~{}]+";
 
 const validationSchema = Yup.object({
     email: Yup.string()
         .required('Required')
         .email('Invalid email format'),
-        // .checkUserExists(),
 
     password: Yup.string()
         .required('Required')
-        .min(8, 'Hint: Your password contains atleast 8 characters!')
-        .max(16, "Hint: Your password is not more than 16 characters!"),
+        .min(8, 'Password must be 8 characters or longer!')
+        .max(16, "Password can't be more than 16 characters"),
+    // .matches(atleast1Cap, "Please use atleast one capital letter!")
+    // .matches(atleast1Num, "Please use atleast one number!")
+    // .matches(atleast1Spe, "Please use atleast one special character!"),
 })
 
 function Login() {
 
+    const [loader, setLoader] = React.useState(false);
+
+    const formRef = React.useRef();
     const history = useHistory();
 
     const onSubmit = (values) => {
-        fetch("http://localhost:8080/api/users/login?email="+values.email+"&password="+values.password, {
+        setLoader(true);
+        fetch(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password, {
             // headers: {
             //     'Access-Control-Allow-Origin': 'http://localhost:3000',
             //     'Access-Control-Allow-Credentials': 'true',
@@ -77,38 +49,42 @@ function Login() {
             // },
         })
             .then(response => {
+                setLoader(false);
                 if (response.ok) {
-                    // response = response.json()
-                    // console.log("mm", response)
-                    // history.push("/dashboard");
                     return response;
                 }
                 else {
                     var error = new Error(response.status + ': ' + response.statusText);
                     error.response = response;
-                    if(response.status === 404) {
-                        alert("Whoops! This email isn't registered :(");
+                    if (response.status === 404) {
+                        formRef.current.setFieldError("email", "Whoops! This email isn't registered :(")
                     }
                     else {
-                        alert("Incorrect password for this email.");
+                        formRef.current.setFieldError("password", "Incorrect password for this email.")
                     }
                     throw error;
                 }
+
             },
                 error => {
                     var errmess = new Error(error.message);
                     throw errmess;
                 })
             .then(response => response.json())
-            .then(response => {console.log(response);localStorage.setItem("user",JSON.stringify(response))})
-            .then(response => history.push("/dashboard"))
+            .then(response => {
+                console.log(response);
+                localStorage.setItem("user", JSON.stringify(response));
+                history.push("/dashboard");
+            })
             .catch(error => console.log(error))
-        // loginUser(values, history);
     }
 
     return (
+
         <Centered className="container">
-            <ParentCard className="row">
+            <ParentCard className="row" style={{ opacity: loader ? '0.4' : ''}} >
+                {loader && <Loader />}
+
                 <LogoCard login />
 
                 <Card right className="col-6 p-5 d-flex align-items-center justify-content-center">
@@ -119,16 +95,17 @@ function Login() {
                             initialValues={initialValues}
                             validationSchema={validationSchema}
                             onSubmit={onSubmit}
+                            innerRef={formRef}
                         >
                             <Form className="mx-auto mb-5" style={{ maxWidth: '350px' }}>
-                                
+
                                 {/* Email Address */}
                                 <FormGroup className="field-wrapper">
                                     <InputFormat id="email" name="email"
                                         type="email"
                                         placeholder="Email"
                                         imgInfo={{
-                                            frontImg: "./assets/images/mail.svg",
+                                            frontImg: images['mail.svg'].default,
                                             frontAlt: "Mail Icon"
                                         }}
                                     />
@@ -140,7 +117,7 @@ function Login() {
                                         type="password"
                                         placeholder="Password"
                                         imgInfo={{
-                                            frontImg: "./assets/images/key.svg",
+                                            frontImg: images['key.svg'].default,
                                             frontAlt: "Key Icon"
                                         }}
                                     />

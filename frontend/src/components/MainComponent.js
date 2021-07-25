@@ -1,11 +1,15 @@
 import React from 'react';
-import Login from './LoginComponent';
-import Register from './RegisterComponent';
-import OrganizationInfo from './OrganizationInfoComponent';
-import PersonalInfo from './PersonalInfoComponent';
-import Dashboard from './DashboardCompnent';
-import EditAdmin from './EditAdminInfo';
-import Add from './AddEmployee';
+
+import Login from './admin-login/LoginComponent';
+
+import Register from './admin-register/RegisterComponent';
+import OrganizationInfo from './admin-register/OrganizationInfoComponent';
+import PersonalInfo from './admin-register/PersonalInfoComponent';
+
+import Dashboard from './dashboard/DashboardCompnent';
+import EditAdmin from './dashboard/EditAdminInfo';
+import Add from './dashboard/AddEmployee';
+
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 // import { connect } from 'react-redux';
 
