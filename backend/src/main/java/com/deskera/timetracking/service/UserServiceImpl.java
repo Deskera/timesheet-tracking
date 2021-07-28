@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService{
 			{
 					throw new BadRequestException("user already exists");
 			}	
-		
+	
 		Tenant tenantToMap=tenantService.getTenantByName(userDto.getTenantName());
 		Role userRole=roleService.getRoleById(userDto.getRoleId());
 		
@@ -92,7 +92,8 @@ public class UserServiceImpl implements UserService{
 	public List<UserDto> getAllUsersByTenantName(final String tenantName) {
 		
 		Tenant tenant=tenantService.getTenantByName(tenantName);		
-		return USER_ENTITY_MAPPER.mapUser(userRepository.findAllByTenantId(tenant));
+		Role role=roleService.getRoleById(2);
+		return USER_ENTITY_MAPPER.mapUser(userRepository.findAllByTenantId(tenant,role));
 	}
 
 	@Override

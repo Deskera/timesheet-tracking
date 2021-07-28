@@ -10,10 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import com.deskera.timetracking.common.Gender;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.deskera.timetracking.common.GENDER;
 
 //import lombok.Data;
 
@@ -57,8 +61,9 @@ public class User {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender")
-	private Gender gender;
+	private GENDER gender;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(name = "joining_date")
 	private Date joiningDate;
 	
@@ -147,11 +152,11 @@ public class User {
 		this.contactNumber = contactNumber;
 	}
 
-	public Gender getGender() {
+	public GENDER getGender() {
 		return gender;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(GENDER gender) {
 		this.gender = gender;
 	}
 
@@ -186,6 +191,5 @@ public class User {
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
-	
+	 
 }

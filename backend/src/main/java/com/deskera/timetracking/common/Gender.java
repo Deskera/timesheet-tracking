@@ -1,5 +1,5 @@
 package com.deskera.timetracking.common;
 
-public enum Gender {
+public enum GENDER {
 	FEMALE,MALE,OTHER;
 }

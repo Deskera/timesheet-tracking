@@ -63,5 +63,10 @@ public class UserController {
 		
 		return new ResponseEntity<>(userService.editUser(userDto),HttpStatus.OK);
 	}
+	
+	@GetMapping("/search")	
+	public ResponseEntity<Boolean> isPresent(@RequestParam("email") final String email) {
+		return new ResponseEntity<>(userService.isPresent(email),HttpStatus.OK);	
+	}
 }
  

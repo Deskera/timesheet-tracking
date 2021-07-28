@@ -2,7 +2,7 @@ package com.deskera.timetracking.dto;
 
 import java.util.Date;
 
-import com.deskera.timetracking.common.Gender;
+import com.deskera.timetracking.common.GENDER;
 import com.sun.istack.NotNull;
 
 public class UserDto {
@@ -12,8 +12,8 @@ public class UserDto {
 	private String email;
 	private String designation;
 	private String contactNumber;
-	private Gender gender;
-	private Date joiningDate;
+	private String gender;
+	private String joiningDate;
 	private long roleId;
 	private String tenantName;
 	
@@ -47,16 +47,16 @@ public class UserDto {
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
-	public Gender getGender() {
+	public String getGender() {
 		return gender;
 	}
-	public void setGender(Gender gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public Date getJoiningDate() {
+	public String getJoiningDate() {
 		return joiningDate;
 	}
-	public void setJoiningDate(Date joiningDate) {
+	public void setJoiningDate(String joiningDate) {
 		this.joiningDate = joiningDate;
 	}
 	public long getRoleId() {
@@ -74,7 +74,7 @@ public class UserDto {
 	public UserDto() {}
 	
 	public UserDto(String firstName, String lastName, String email, String designation,
-			String contactNumber, Gender gender, Date joiningDate, long roleId, String tenantName) {
+			String contactNumber, String gender, String joiningDate, long roleId, String tenantName) {
 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -85,6 +85,7 @@ public class UserDto {
 		this.joiningDate = joiningDate;
 		this.roleId = roleId;
 		this.tenantName = tenantName;
+		
 	}
 	
 }
