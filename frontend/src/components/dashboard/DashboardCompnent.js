@@ -5,12 +5,11 @@ import MaterialTable, { MTableToolbar } from "material-table";
 
 import { FieldFeedback, WrapperInput } from '../../common/CustomStyles';
 
-
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Input, FormGroup, Label, Button } from 'reactstrap';
+import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
+import { Input, FormGroup, Label } from 'reactstrap';
 import { Modal } from 'react-bootstrap'
 
-import { images } from '../../common/CommonUtils';
+import { images, getUser } from '../../common/CommonUtils';
 import { tableIcons } from '../../common/TableIcons';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -24,6 +23,8 @@ import CloseIcon from '@material-ui/icons/Close';
 
 
 import FormView from './FormComponent';
+
+import { baseUrl } from '../../common/baseUrl';
 
 Yup.addMethod(Yup.string, 'validatePhone', function () {
     return this.test('test-phone', "Invalid number format", value => {
@@ -47,7 +48,6 @@ const validationSchema = Yup.object({
         .required('Required'),
 
     phone: Yup.string()
-        .required('Required!')
         .validatePhone(),
 })
 
@@ -57,14 +57,16 @@ function Dashboard() {
     const [addModal, setAddModal] = React.useState();
     const [editModal, setEditModal] = React.useState(false);
     const [deleteModal, setDeleteModal] = React.useState(false);
-    const [emp, setEmp] = React.useState();
+    const [emp, setEmp] = React.useState()
+    const [num, setNum] = React.useState(0);
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    // console.log(user);
+    const addEmpFormRef = React.useRef();
+    const editEmpFormRef = React.useRef();
 
+    // using localstorage created while admin login to access the tenantName
     React.useEffect(() => {
         const getUsers = async (values) => {
-            axios.get("http://localhost:8080/api/users/tenant/" + user.tenantName)
+            axios.get(baseUrl + "api/users/tenant/" + getUser().tenantName)
                 .then((response) => {
                     console.log(response.data);
                     setAllEmployees(response.data);
@@ -74,26 +76,112 @@ function Dashboard() {
                 })
         }
         getUsers();
-    }, [])
+    }, [num])
 
+    // saving new employee from modal
     const addEmployee = () => {
-        setAddModal(true);
+        console.log("addref", addEmpFormRef);
+        addEmpFormRef.current.setTouched({
+            firstname: true,
+            lastname: true,
+            email: true,
+            designation: true,
+            phone: true
+        })
+        addEmpFormRef.current.validateForm();
+
+        const newEmp = {
+            firstName: addEmpFormRef.current.values.firstname,
+            lastName: addEmpFormRef.current.values.lastname,
+            email: addEmpFormRef.current.values.email,
+            designation: addEmpFormRef.current.values.designation,
+            contactNumber: addEmpFormRef.current.values.phone,
+            gender: addEmpFormRef.current.values.gender,
+            joiningDate: addEmpFormRef.current.values.joiningDate,
+            roleId: 2,
+            tenantName: getUser().tenantName
+        }
+        axios.post((baseUrl + "api/users/save?password=Welcome" + newEmp.firstName), newEmp)
+            .then(() => {
+                setNum(num + 1);
+                setAddModal(false);
+            })
+            .catch((err) => {
+                if (err.response.data === "user already exists") {
+                    console.log("a", addEmpFormRef);
+                    addEmpFormRef.current.setFieldError("email", "Email already taken!")
+                }
+                console.log(err.response)
+            })
     }
 
-    const editEmployee = (e) => {
-        console.log("emp", emp);
-    }
+    // editing existing employee from modal
+    const editEmployee = () => {
+        // console.log("editemp", emp);
 
-    const deleteEmployee = (e) => {
-        console.log("delete", e);
-        axios.delete("http://localhost:8080/api/users/delete?" + e.email)
-            .then((response) => {
-                console.log(response.data);
-                setAllEmployees(response.data);
+        editEmpFormRef.current.setTouched({
+            firstname: true,
+            lastname: true,
+            email: true,
+            designation: true,
+            phone: true
+        })
+        editEmpFormRef.current.validateForm();
+
+        const editEmp = {
+            firstName: editEmpFormRef.current.values.firstname,
+            lastName: editEmpFormRef.current.values.lastname,
+            email: editEmpFormRef.current.values.email,
+            designation: editEmpFormRef.current.values.designation,
+            contactNumber: editEmpFormRef.current.values.phone,
+            gender: editEmpFormRef.current.values.gender,
+            joiningDate: editEmpFormRef.current.values.joiningDate,
+            roleId: 2
+        }
+        axios.put((baseUrl + "api/users/edit"), editEmp)
+            .then(() => {
+                setNum(num + 1);
+                setEditModal(false);
             })
             .catch((err) => {
                 console.log(err)
             })
+    }
+
+    // deleting existing employee
+    const deleteEmployee = () => {
+        console.log("delete", emp.email);
+        axios.delete(baseUrl + "api/users/delete?" + emp.email)
+            .then((response) => {
+                setNum(num + 1);
+                console.log("res", response);
+                setDeleteModal(false);
+            })
+            .catch((err) => {
+                console.log("error", err)
+            })
+
+        setDeleteModal(false);
+    }
+
+    const initialValuesAdd = {
+        firstname: '',
+        lastname: '',
+        email: '',
+        designation: '',
+        phone: '',
+        gender: '',
+        joiningDate: ''
+    }
+
+    const initialValuesEdit = {
+        firstname: emp && emp.firstName,
+        lastname: emp && emp.lastName,
+        email: emp && emp.email,
+        designation: emp && emp.designation,
+        phone: emp && emp.contactNumber,
+        gender: emp && emp.gender,
+        joiningDate: emp && emp.joiningDate
     }
 
     const tableColumns = [
@@ -102,6 +190,7 @@ function Dashboard() {
         { title: "Designation", field: "designation" },
         { title: "Email", field: "email" },
         { title: "Phone", field: "contactNumber" },
+        { title: "Joining Date", field: "joiningDate" },
         {
             title: "Actions", field: "email", filtering: false, render: row =>
                 <>
@@ -131,31 +220,6 @@ function Dashboard() {
         }
     ]
 
-    const onSubmit = (values) => {
-        console.log(values);
-    }
-
-    const initialValuesAdd = {
-        firstname: '',
-        lastname: '',
-        email: '',
-        designation: '',
-        phone: '',
-        gender: ''
-    }
-
-    const initialValuesEdit = {
-        firstname: emp && emp.firstName,
-        lastname: emp && emp.lastName,
-        email: emp && emp.email,
-        designation: emp && emp.designation,
-        phone: emp && emp.contactNumber,
-        gender: emp && emp.gender
-    }
-
-    const addEmpFormRef = React.useRef();
-    const editEmpFormRef = React.useRef();
-
     return (
         <div className="col-10 offset-1">
 
@@ -170,7 +234,7 @@ function Dashboard() {
                     <Formik
                         initialValues={initialValuesAdd}
                         validationSchema={validationSchema}
-                        onSubmit={onSubmit}
+                        // onSubmit={onSubmit}
                         innerRef={addEmpFormRef}
                     >
                         <FormView />
@@ -178,9 +242,9 @@ function Dashboard() {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button color="primary" onClick={() => addEmployee(emp)}>Save</Button>
+                    <Button variant="primary" onClick={() => addEmployee()}>Save</Button>
                     <span></span>
-                    <Button color="secondary" onClick={() => setAddModal(false)}>Cancel</Button>
+                    <Button className="btn-outline-danger" variant="" onClick={() => setAddModal(false)}>Cancel</Button>
                 </Modal.Footer>
             </Modal>
 
@@ -195,15 +259,18 @@ function Dashboard() {
                     <Formik
                         initialValues={initialValuesEdit}
                         validationSchema={validationSchema}
-                        onSubmit={onSubmit}
+                        // onSubmit={onSubmit}
                         innerRef={editEmpFormRef}
                     >
                         <FormView />
                     </Formik>
-
-                    <Button color="secondary" onClick={() => setEditModal(false)}>Cancel</Button>
-                    <Button color="primary" onClick={() => editEmployee(emp)}>Save</Button>
                 </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => editEmployee()}>Save</Button>
+                    <span></span>
+                    <Button className="btn-outline-danger" variant="" onClick={() => setEditModal(false)}>Cancel</Button>
+                </Modal.Footer>
             </Modal>
 
             {/* Delete Employee Modal */}
@@ -213,8 +280,8 @@ function Dashboard() {
                     <CloseIcon onClick={() => setDeleteModal(false)} style={{ cursor: 'pointer' }} />
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <Button color='success' style={{marginRight: '20px'}} onClick={() => deleteEmployee(emp)}>Yes</Button>
-                    <Button color='danger' onClick={() => setDeleteModal(false)}>No</Button>
+                    <Button variant='danger' style={{ marginRight: '20px' }} onClick={() => deleteEmployee()}>Yes</Button>
+                    <Button variant='success' onClick={() => setDeleteModal(false)}>No</Button>
                 </Modal.Body>
             </Modal>
 
@@ -244,7 +311,7 @@ function Dashboard() {
                             }}
                         >
                             <MTableToolbar {...props} />
-                            <Button color="primary" onClick={() => setAddModal(true)}>+ Add Employee</Button>
+                            <Button variant="primary" className="m-3 p-1 px-2" onClick={() => setAddModal(true)}>Add Employee</Button>
                         </div>
                     )
                 }}

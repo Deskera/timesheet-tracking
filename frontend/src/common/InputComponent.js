@@ -29,7 +29,7 @@ function InputFormat(props) {
                 return (
                     <>
                         <WrapperInput className="input-group"
-                            valid={field.value!=='' && meta.touched && !meta.error}
+                            // valid={field.value!=='' && meta.touched && !meta.error}
                             invalid={meta.touched && meta.error}
 
                         >
@@ -46,7 +46,7 @@ function InputFormat(props) {
                                 type={type}
                                 placeholder={placeholder}
                                 className="form-control inputF"
-                                valid={field.value!=='' && meta.touched && !meta.error}
+                                // valid={field.value!=='' && meta.touched && !meta.error}
                                 invalid={meta.touched && meta.error}
                             />
                             {(() => {

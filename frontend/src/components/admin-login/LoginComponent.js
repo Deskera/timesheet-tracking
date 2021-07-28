@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
 import Loader from '../../common/Loader';
-import {baseUrl} from '../../common/baseUrl';
+import { baseUrl } from '../../common/baseUrl';
 
 const initialValues = {
     email: 'a@b.c',
@@ -26,10 +26,10 @@ const validationSchema = Yup.object({
     password: Yup.string()
         .required('Required')
         .min(8, 'Password must be 8 characters or longer!')
-        .max(16, "Password can't be more than 16 characters"),
-    // .matches(atleast1Cap, "Please use atleast one capital letter!")
-    // .matches(atleast1Num, "Please use atleast one number!")
-    // .matches(atleast1Spe, "Please use atleast one special character!"),
+        .max(16, "Password can't be more than 16 characters")
+        .matches(atleast1Cap, "Please use atleast one capital letter!")
+        .matches(atleast1Num, "Please use atleast one number!")
+        .matches(atleast1Spe, "Please use atleast one special character!"),
 })
 
 function Login() {
@@ -42,11 +42,6 @@ function Login() {
     const onSubmit = (values) => {
         setLoader(true);
         fetch(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password, {
-            // headers: {
-            //     'Access-Control-Allow-Origin': 'http://localhost:3000',
-            //     'Access-Control-Allow-Credentials': 'true',
-            //     'Content-Type': 'application/json'
-            // },
         })
             .then(response => {
                 setLoader(false);
@@ -82,7 +77,7 @@ function Login() {
     return (
 
         <Centered className="container">
-            <ParentCard className="row" style={{ opacity: loader ? '0.4' : ''}} >
+            <ParentCard className="row" style={{ opacity: loader ? '0.4' : '' }} >
                 {loader && <Loader />}
 
                 <LogoCard login />

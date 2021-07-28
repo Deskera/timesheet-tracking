@@ -1,11 +1,9 @@
 import React from 'react';
 
-function EditAdmin() {
+function EditAdminInfo() {
     return (
-        <div>
-            a
-        </div>
+        <div>a</div>
     )
 }
 
-export default EditAdmin;
+export default EditAdminInfo;

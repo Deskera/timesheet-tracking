@@ -47,7 +47,8 @@ function OrganizationInfo() {
                 lastName: registerValues.personal_info.lastname,
                 email: registerValues.values.email,
                 gender: registerValues.personal_info.gender,
-                contactNumber: registerValues.values.phone
+                contactNumber: registerValues.values.phone,
+                roleId: 1,
             }
         }
 
@@ -77,7 +78,7 @@ function OrganizationInfo() {
                     throw errmess;
                 })
             .then(response => response.json())
-            .then(response => { console.log("av", response) })
+            .then(response => { console.log(response); alert("Registered!"); history.push("/login") })
             .catch(error => {
                 console.log('Post User', error);
                 // alert('Sorry, try Again\nError: ' + error.message);

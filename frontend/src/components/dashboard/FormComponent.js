@@ -12,6 +12,8 @@ function FormView(props) {
     return (
 
         <Form>
+
+            {/* First Name */}
             <FormGroup className="field-wrapper">
                 <Field name="firstname">
                     {props => {
@@ -34,6 +36,7 @@ function FormView(props) {
                 </Field>
             </FormGroup>
 
+            {/* Last Name */}
             <FormGroup className="field-wrapper">
                 <Field name="lastname">
                     {props => {
@@ -56,6 +59,7 @@ function FormView(props) {
                 </Field>
             </FormGroup>
 
+            {/* Phone Number */}
             <FormGroup className="field-wrapper">
                 <Field name="phone">
                     {props => {
@@ -65,7 +69,7 @@ function FormView(props) {
                                 <Label htmlFor="phone" className="col-3 p-0">Phone Number</Label>
                                 <div className="col-6">
                                     <WrapperInput className="input-group bg-info col-6 p-0"
-                                        valid={field.value !== '' && field.value.length > 4 && meta.touched && !meta.error}
+                                        // valid={field.value !== '' && field.value.length > 4 && meta.touched && !meta.error}
                                         invalid={meta.touched && meta.error}
                                     >
                                         <div style={{ width: '100%' }}>
@@ -107,15 +111,14 @@ function FormView(props) {
                                         </div>
                                     </WrapperInput>
                                     <ErrorMessage name={field.name} component={FieldFeedback} />
-
                                 </div>
-                                {/* <ErrorMessage name='phone' component={FieldFeedback} /> */}
                             </div>
                         )
                     }}
                 </Field>
             </FormGroup>
 
+            {/* Email */}
             <FormGroup className="field-wrapper">
                 <Field name="email">
                     {props => {
@@ -138,6 +141,7 @@ function FormView(props) {
                 </Field>
             </FormGroup>
 
+            {/* Designation */}
             <FormGroup className="field-wrapper">
                 <Field name="designation">
                     {props => {
@@ -160,6 +164,7 @@ function FormView(props) {
                 </Field>
             </FormGroup>
 
+            {/* Gender */}
             <FormGroup className="field-wrapper">
                 <Field name="gender">
                     {props => {
@@ -197,6 +202,30 @@ function FormView(props) {
                                             Other
                                         </Label>
                                     </div>
+                                </div>
+                            </div>
+                        )
+                    }}
+                </Field>
+            </FormGroup>
+
+            {/* Date */}
+            <FormGroup className="field-wrapper">
+                <Field name="joiningDate">
+                    {props => {
+                        const { field, form, meta } = props
+                        return (
+                            <div className="row d-flex justify-content-center align-items-center">
+                                <Label htmlFor="joiningDate" className="col-3 p-0">Joining Date</Label>
+                                <div className="col-6">
+                                    <Input {...field} id="joiningDate" name="joiningDate"
+                                        type="date"
+                                        placeholder=""
+                                        invalid={meta.touched && meta.error}
+                                        // onChange={form.handleChange}
+                                    />
+                                    <ErrorMessage name={field.name} component={FieldFeedback} />
+
                                 </div>
                             </div>
                         )

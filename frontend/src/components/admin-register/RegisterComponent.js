@@ -72,7 +72,7 @@ function Register() {
                 })
             .then(response => response.json())
             .then(response => { 
-                console.log("navay", response); 
+                // console.log("navay", response); 
                 if(response === true) {
                     formRefRegister.current.setFieldError("email","Email already taken!");
                 }
@@ -120,7 +120,7 @@ function Register() {
                                             return (
                                                 <>
                                                     <WrapperInput className="input-group"
-                                                        valid={field.value !== '' && field.value.length > 4 && meta.touched && !meta.error}
+                                                        // valid={field.value !== '' && field.value.length > 4 && meta.touched && !meta.error}
                                                         invalid={meta.touched && meta.error}
                                                     >
                                                         <PhoneInput
