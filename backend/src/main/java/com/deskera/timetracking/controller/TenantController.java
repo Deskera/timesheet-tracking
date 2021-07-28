@@ -43,7 +43,7 @@ public class TenantController {
 //			return new ResponseEntity<>(tenantService.saveTenant(tenantDto),HttpStatus.OK);
 //			
 //	}
-//	
+	
 	@PostMapping("/initial-setup")
 	public ResponseEntity<UserTenantDto> initialSetup(@RequestBody final UserTenantDto userTenantDto,@RequestParam("password") final String password) {
 			return new ResponseEntity<>(tenantService.initialSetup(userTenantDto,password),HttpStatus.OK);		

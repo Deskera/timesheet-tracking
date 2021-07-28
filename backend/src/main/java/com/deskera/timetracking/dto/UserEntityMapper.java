@@ -1,28 +1,35 @@
 package com.deskera.timetracking.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.deskera.timetracking.common.GENDER;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
 import com.deskera.timetracking.entity.User;
 import com.deskera.timetracking.exception.BadRequestException;
 
 public class UserEntityMapper {
-	
+	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	public UserDto mapUser(final User user) {
 		if(user==null)
 		{
 			return null;
 		}
+		
 		UserDto userDto=new UserDto();
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
 		userDto.setEmail(user.getEmail());
 		userDto.setContactNumber(user.getContactNumber());
 		userDto.setDesignation(user.getDesignation());
-		userDto.setGender(user.getGender());
-		userDto.setJoiningDate(user.getJoiningDate());
+		userDto.setGender((user.getGender()==null)?null:user.getGender().toString());
+		
+		userDto.setJoiningDate((user.getJoiningDate()==null)?null:DATE_FORMAT.format(user.getJoiningDate()));
+		
 		userDto.setRoleId(user.getRoleEntity().getRid());
 		userDto.setTenantName(user.getTenantEntity().getTenantName());
 		
@@ -45,8 +52,19 @@ public class UserEntityMapper {
 		user.setEmail(userDto.getEmail());
 		user.setContactNumber(userDto.getContactNumber());
 		user.setDesignation(userDto.getDesignation());
-		user.setGender(userDto.getGender());
-		user.setJoiningDate(userDto.getJoiningDate());
+		
+		if(!(userDto.getGender()==null) && !(userDto.getGender().isEmpty()))
+			user.setGender(GENDER.valueOf(userDto.getGender()));
+
+		if(!(userDto.getJoiningDate()==null) && !(userDto.getJoiningDate().isEmpty()))
+		{		
+			try {
+				user.setJoiningDate(DATE_FORMAT.parse(userDto.getJoiningDate()));
+			} catch (Exception e) {
+				throw new BadRequestException("Invalid joining date");
+			}
+		}
+	
 		user.setRoleEntity(roleEntity);
 		user.setTenantEntity(tenantEntity);
 		
@@ -67,13 +85,18 @@ public class UserEntityMapper {
 		if(!(userDto.getDesignation()==null))
 			user.setDesignation(userDto.getDesignation());
 
-		if(!(userDto.getGender()==null))
-			user.setGender(userDto.getGender());
+		if(!(userDto.getGender()==null) && !(userDto.getGender().isEmpty()))
+			user.setGender(GENDER.valueOf(userDto.getGender()));
 		
-		if(!(userDto.getJoiningDate()==null))
-			user.setJoiningDate(userDto.getJoiningDate());
+		if(!(userDto.getJoiningDate()==null) && !(userDto.getJoiningDate().isEmpty()))
+		{		
+			try {
+				user.setJoiningDate(DATE_FORMAT.parse(userDto.getJoiningDate()));
+			} catch (ParseException e) {
+				throw new BadRequestException("Invalid joining date");
+			}
+		}
 
-	//	if(!(userDto.getRoleId()==0))
 		user.setRoleEntity(roleEntity);
 		
 		return user;

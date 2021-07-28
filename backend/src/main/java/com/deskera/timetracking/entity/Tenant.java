@@ -23,7 +23,7 @@ public class Tenant {
 	
 	@Column(name = "tenant_name",nullable = false)
 	private String tenantName;
-//enum	
+	
 	@Column(name = "country")
 	private String country;
 	

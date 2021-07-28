@@ -72,9 +72,9 @@ public class TenantServiceImpl implements TenantService{
 		if(optional.isPresent())
 		{
 			tenant=optional.get();
-			if(userService.getUserCountByTenant(tenantName)>0)
+			if(userService.getUserCountByTenant(tenantName)>1)
 			{
-				throw new BadRequestException("cannot delete tenant with 1 or more users");
+				throw new BadRequestException("cannot delete tenant with 1 or more employees");
 			}
 			tenant.setDeleted(true);
 			tenantRepository.save(tenant);

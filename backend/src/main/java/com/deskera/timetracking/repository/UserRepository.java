@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
 import com.deskera.timetracking.entity.User;
 
@@ -16,8 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	//@Query("SELECT u FROM User u WHERE u.email = ?1 and u.isDeleted=false")
 	//List<User> findByEmailWhereSetDeleted(String email);
 
-	@Query("SELECT u FROM User u WHERE u.tenantEntity = ?1 AND u.isDeleted=false ORDER BY joiningDate desc")
-	List<User> findAllByTenantId(Tenant tenant);
+	@Query("SELECT u FROM User u WHERE u.tenantEntity = ?1 AND u.roleEntity = ?2 AND u.isDeleted=false ORDER BY joiningDate desc")
+	List<User> findAllByTenantId(Tenant tenant,Role role);
 	
 	//List<User> findAllByTenantEntityOrderByJoiningDateDesc(Tenant tenant);
 	
