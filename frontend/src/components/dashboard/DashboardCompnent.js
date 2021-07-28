@@ -80,16 +80,6 @@ function Dashboard() {
 
     // saving new employee from modal
     const addEmployee = () => {
-        console.log("addref", addEmpFormRef);
-        addEmpFormRef.current.setTouched({
-            firstname: true,
-            lastname: true,
-            email: true,
-            designation: true,
-            phone: true
-        })
-        addEmpFormRef.current.validateForm();
-
         const newEmp = {
             firstName: addEmpFormRef.current.values.firstname,
             lastName: addEmpFormRef.current.values.lastname,
@@ -117,17 +107,6 @@ function Dashboard() {
 
     // editing existing employee from modal
     const editEmployee = () => {
-        // console.log("editemp", emp);
-
-        editEmpFormRef.current.setTouched({
-            firstname: true,
-            lastname: true,
-            email: true,
-            designation: true,
-            phone: true
-        })
-        editEmpFormRef.current.validateForm();
-
         const editEmp = {
             firstName: editEmpFormRef.current.values.firstname,
             lastName: editEmpFormRef.current.values.lastname,
@@ -151,7 +130,7 @@ function Dashboard() {
     // deleting existing employee
     const deleteEmployee = () => {
         console.log("delete", emp.email);
-        axios.delete(baseUrl + "api/users/delete?" + emp.email)
+        axios.delete(baseUrl + "api/users/delete?email=" + emp.email)
             .then((response) => {
                 setNum(num + 1);
                 console.log("res", response);
@@ -234,7 +213,7 @@ function Dashboard() {
                     <Formik
                         initialValues={initialValuesAdd}
                         validationSchema={validationSchema}
-                        // onSubmit={onSubmit}
+                        onSubmit={() => addEmployee()}
                         innerRef={addEmpFormRef}
                     >
                         <FormView />
@@ -242,7 +221,7 @@ function Dashboard() {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => addEmployee()}>Save</Button>
+                    <Button variant="primary" onClick={() => addEmpFormRef.current.submitForm()}>Save</Button>
                     <span></span>
                     <Button className="btn-outline-danger" variant="" onClick={() => setAddModal(false)}>Cancel</Button>
                 </Modal.Footer>
@@ -259,7 +238,7 @@ function Dashboard() {
                     <Formik
                         initialValues={initialValuesEdit}
                         validationSchema={validationSchema}
-                        // onSubmit={onSubmit}
+                        onSubmit={() => editEmployee()}
                         innerRef={editEmpFormRef}
                     >
                         <FormView />
@@ -267,7 +246,7 @@ function Dashboard() {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => editEmployee()}>Save</Button>
+                    <Button variant="primary" onClick={() => editEmpFormRef.current.submitForm()}>Save</Button>
                     <span></span>
                     <Button className="btn-outline-danger" variant="" onClick={() => setEditModal(false)}>Cancel</Button>
                 </Modal.Footer>

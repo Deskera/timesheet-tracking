@@ -7,6 +7,7 @@ import OrganizationInfo from './admin-register/OrganizationInfoComponent';
 import PersonalInfo from './admin-register/PersonalInfoComponent';
 
 import Dashboard from './dashboard/DashboardCompnent';
+import EditAdminInfo from './dashboard/EditAdminInfo';
 
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 

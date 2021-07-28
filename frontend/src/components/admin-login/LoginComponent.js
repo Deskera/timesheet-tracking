@@ -10,8 +10,8 @@ import Loader from '../../common/Loader';
 import { baseUrl } from '../../common/baseUrl';
 
 const initialValues = {
-    email: 'a@b.c',
-    password: 'aaaaaaaa'
+    email: '',
+    password: 'Abc@1234'
 }
 
 const atleast1Cap = "(?=.*[A-Z])";

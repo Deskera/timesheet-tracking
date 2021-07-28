@@ -10,9 +10,7 @@ import { WrapperInput, FieldFeedback } from '../../common/CustomStyles';
 function FormView(props) {
 
     return (
-
         <Form>
-
             {/* First Name */}
             <FormGroup className="field-wrapper">
                 <Field name="firstname">
@@ -178,6 +176,7 @@ function FormView(props) {
                                             name="gender"
                                             type="radio"
                                             value="MALE"
+                                            checked={field.value === 'MALE'}
                                             onChange={form.handleChange}
                                         />{' '}
                                         <Label htmlFor="male" className="form-check-label">Male</Label>
@@ -187,6 +186,7 @@ function FormView(props) {
                                             name="gender"
                                             type="radio"
                                             value="FEMALE"
+                                            checked={field.value === 'FEMALE'}
                                             onChange={form.handleChange}
                                         />{' '}
                                         <Label htmlFor="female" className="form-check-label">Female</Label>
@@ -197,6 +197,7 @@ function FormView(props) {
                                                 name="gender"
                                                 type="radio"
                                                 value="OTHER"
+                                                checked={field.value === 'OTHER'}
                                                 onChange={form.handleChange}
                                             />{' '}
                                             Other

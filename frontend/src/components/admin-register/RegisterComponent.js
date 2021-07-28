@@ -12,8 +12,8 @@ import {images} from '../../common/CommonUtils';
 const initialValues = {
     email: '',
     phone: '',
-    password: 'aaaa!!A2',
-    confirmPassword: 'aaaa!!A2'
+    password: 'Abc@1234',
+    confirmPassword: 'Abc@1234'
 }
 
 Yup.addMethod(Yup.string, 'validatePhone', function () {
