@@ -191,5 +191,21 @@ public class User {
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	 
+	
+	public User() {}
+	
+	public User(String firstName, String lastName, String email, Tenant tenantEntity, Role roleEntity, String password,
+			String designation, String contactNumber, GENDER gender, Date joiningDate) {
+
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.tenantEntity = tenantEntity;
+		this.roleEntity = roleEntity;
+		this.password = password;
+		this.designation = designation;
+		this.contactNumber = contactNumber;
+		this.gender = gender;
+		this.joiningDate = joiningDate;
+	}
 }

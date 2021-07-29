@@ -18,9 +18,6 @@ public class Role {
 	@Column(name = "role_name")
 	private String roleName;
 	
-//	@OneToOne(mappedBy = "roleEntity")
-//	private User userEntity;
-
 	public long getRid() {
 		return rid;
 	}
@@ -36,5 +33,12 @@ public class Role {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+
+	public Role() {}
 	
+	public Role(long rid, String roleName) {
+		this.rid = rid;
+		this.roleName = roleName;
+	}
+
 }

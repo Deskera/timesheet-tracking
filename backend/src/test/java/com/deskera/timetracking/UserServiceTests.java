@@ -1,72 +1,49 @@
 package com.deskera.timetracking;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
-import java.time.LocalDateTime;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Date;
 
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.deskera.timetracking.common.GENDER;
-import com.deskera.timetracking.dto.UserDto;
-import com.deskera.timetracking.dto.UserEntityMapper;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
-import com.deskera.timetracking.repository.RoleRepository;
+import com.deskera.timetracking.entity.User;
 import com.deskera.timetracking.repository.TenantRepository;
 import com.deskera.timetracking.repository.UserRepository;
-import com.deskera.timetracking.service.TenantService;
-import com.deskera.timetracking.service.UserServiceImpl;
 
-@SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)
-class UserServiceTests {
+@RunWith(SpringRunner.class)
+@SpringBootTest()
+//@EnableConfigurationProperties
+//@TestMethodOrder(OrderAnnotation.class)
+//@DataJpaTest
+//@AutoConfigureTestDatabase(replace = Replace.NONE)
 
-//	private static final UserEntityMapper USER_ENTITY_MAPPER = new UserEntityMapper();
-//	
-//	@InjectMocks 
-//	UserServiceImpl userService;
-//	
-//	@InjectMocks 
-//	TenantService tenantService;
-//	
-//	@Mock
-//	UserRepository userRepository;
-//	
-//	@Mock
-//	TenantRepository tenantRepository;
-//	
-//	@Mock
-//	RoleRepository roleRepository;
-//	
-//	@Test
-//	@Order(1)
-//	public void saveUsersTest() {
-//		UserDto user1=new UserDto();
-//		user1.setFirstName("Abc");
-//		user1.setLastName("Def");
-//		user1.setContactNumber("6798560956");
-//		user1.setDesignation("HR");
-//		user1.setEmail("t1@gmail.com");
-//		user1.setGender(GENDER.MALE);
-//		Date d=new Date();
-//		//d.parse("2020-10-03");  
-//		user1.setJoiningDate(d.toString());
-//		user1.setRoleId(2);
-//		user1.setTenantName("tenant");
-//		userService.saveUser(user1, "test");
-//		Tenant t = tenantRepository.findByTenantName(user1.getTenantName()).get();
-//		Role r = roleRepository.findById(user1.getRoleId()).get();
-//		verify(userRepository,times(1)).save(USER_ENTITY_MAPPER.mapUser(user1,t,r));
-//	}
+class UserRepoTests {
+
+	
+	@Autowired
+    private UserRepository userRepo;
+	@Autowired
+    private TenantRepository tenantRepo;
+	
+	@Test
+	public void testSaveUser() {
+			Tenant tenant=new Tenant("test-tenant","India","xyz.com","7889677867");
+			tenantRepo.save(tenant);
+			Role role=new Role(1,"admin");
+			Date joiningDate=new Date();
+	        
+			User user=new User("Akansha","B","abc@gmail.com",tenant,role,"pass","developer","9089789078",GENDER.FEMALE,joiningDate);
+	        userRepo.save(user);   
+	        
+	        User testuser = userRepo.findByEmail(user.getEmail()).get();
+	        assertEquals(testuser.getEmail(),"abc@gmail.com");
+	}
 
 }

@@ -110,12 +110,13 @@ public class Tenant {
 		this.isDeleted = isDeleted;
 	}
 
-//	public User getUserEntity() {
-//		return userEntity;
-//	}
-//
-//	public void setUserEntity(User userEntity) {
-//		this.userEntity = userEntity;
-//	}
+	public Tenant() {}
+	
+	public Tenant(String tenantName, String country, String websiteUrl, String contact) {
+		this.tenantName = tenantName;
+		this.country = country;
+		this.websiteUrl = websiteUrl;
+		this.contact = contact;
+	}
 
 }
