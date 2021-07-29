@@ -1,75 +1,20 @@
 import * as React from 'react';
 import { FormGroup, Input, Button } from 'reactstrap';
-import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from './CustomStyles';
+import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
-import InputFormat from './InputComponent';
+import InputFormat from '../../common/InputComponent';
+import {images} from '../../common/CommonUtils';
 
 const initialValues = {
     email: '',
     phone: '',
-    password: '',
-    confirmPassword: ''
+    password: 'Abc@1234',
+    confirmPassword: 'Abc@1234'
 }
-
-const loginUser = (value) => {
-    var r=3;
-    fetch("http://localhost:8080/api/users/login?email="+value+"&password="+"abc", {
-            // headers: {
-            //     'Access-Control-Allow-Origin': 'http://localhost:3000',
-            //     'Access-Control-Allow-Credentials': 'true',
-            //     'Content-Type': 'application/json'
-            // },
-        })
-            .then(response => {
-                if (response.ok) {
-                    // history.push("/dashboard");
-                    return response;
-                }
-                else {
-                    var error = new Error(response.status + ': ' + response.statusText);
-                    error.response = response;
-                    if(response.status === 404) {
-                        console.log("404 wali error ", r)
-                        r=0;
-                        return 0;
-                        // alert("Whoops! This email isn't registered :(");
-                    }
-                    else {
-                        console.log("400 wali error ", r)
-                        r=1;
-                        return 1;
-                        // alert("Incorrect password for this email.");
-                    }
-                    // throw error;
-                }
-            },
-                error => {
-                    var errmess = new Error(error.message);
-                    throw errmess;
-                })
-            // .then(response => response.json())
-            // .then(response => console.log(response))
-            // .catch(error => console.log(error))
-    // return r;
-}
-
-Yup.addMethod(Yup.string, 'checkUserExists', function () {
-    console.log("check");
-    return this.test('check-user-existence', "Email already taken!", value => {
-        var ans = loginUser(value);
-        console.log("acdd", loginUser(value))
-        console.log("ans = ", ans);
-        if (ans === 1) {
-            // console.log("ans = 0")
-            return false
-        }
-        return true
-    })
-})
 
 Yup.addMethod(Yup.string, 'validatePhone', function () {
     return this.test('test-phone', "Invalid number format", value => {
@@ -78,19 +23,25 @@ Yup.addMethod(Yup.string, 'validatePhone', function () {
     })
 })
 
+const atleast1Cap = "(?=.*[A-Z])";
+const atleast1Num = ".*[0-9].*";
+const atleast1Spe = "[*@!#%&()^~{}]+";
+
 const validationSchema = Yup.object({
     email: Yup.string()
         .required('Required')
         .email('Invalid Email format'),
-        // .checkUserExists(),
 
     phone: Yup.string()
         .validatePhone(),
 
     password: Yup.string()
         .required('Required')
-        .min(8, 'Password must contain atleast 8 characters')
-        .max(16, "Password can't be more than 16 characters"),
+        .min(8, 'Password must be 8 characters or longer!')
+        .max(16, "Password can't be more than 16 characters!")
+        .matches(atleast1Cap, "Please use atleast one capital letter!")
+        .matches(atleast1Num, "Please use atleast one number!")
+        .matches(atleast1Spe, "Please use atleast one special character!"),
 
     confirmPassword: Yup.string()
         .required('Required')
@@ -99,10 +50,37 @@ const validationSchema = Yup.object({
 
 function Register() {
 
+    const formRefRegister = React.useRef();
     const history = useHistory();
+
     const onSubmit = (values) => {
-        // console.log("a", values);
-        history.push("/register/personal-info", {values});
+        // history.push("/register/personal-info", {values})
+        fetch("http://localhost:8080/api/users/search?email=" + values.email)
+            .then(response => {
+                if (response.ok) {
+                    return response;
+                }
+                else {
+                    var error = new Error(response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+                error => {
+                    var errmess = new Error(error.message);
+                    throw errmess;
+                })
+            .then(response => response.json())
+            .then(response => { 
+                // console.log("navay", response); 
+                if(response === true) {
+                    formRefRegister.current.setFieldError("email","Email already taken!");
+                }
+                else {
+                    history.push("/register/personal-info", {values})
+                }
+            })
+            .catch(error => console.log(error))
     }
 
     return (
@@ -117,6 +95,7 @@ function Register() {
                             initialValues={initialValues}
                             validationSchema={validationSchema}
                             onSubmit={onSubmit}
+                            innerRef={formRefRegister}
                         >
                             {/* this 'Form' wrapper is from formik package which automatically hooks into formik's handleSubmit() method */}
                             <Form className="mx-auto mb-5" style={{ maxWidth: '350px' }}>
@@ -127,7 +106,7 @@ function Register() {
                                         type="email"
                                         placeholder="Email"
                                         imgInfo={{
-                                            frontImg: "./assets/images/mail.svg",
+                                            frontImg: images['mail.svg'].default,
                                             frontAlt: "Mail Icon"
                                         }}
                                     />
@@ -141,7 +120,7 @@ function Register() {
                                             return (
                                                 <>
                                                     <WrapperInput className="input-group"
-                                                        valid={field.value !== '' && field.value.length > 4 && meta.touched && !meta.error}
+                                                        // valid={field.value !== '' && field.value.length > 4 && meta.touched && !meta.error}
                                                         invalid={meta.touched && meta.error}
                                                     >
                                                         <PhoneInput
@@ -194,7 +173,7 @@ function Register() {
                                         type="password"
                                         placeholder="Password"
                                         imgInfo={{
-                                            frontImg: "./assets/images/key.svg",
+                                            frontImg: images['key.svg'].default,
                                             frontAlt: "Key Icon"
                                         }}
                                     />
@@ -206,7 +185,7 @@ function Register() {
                                         type="password"
                                         placeholder="Confirm Password"
                                         imgInfo={{
-                                            frontImg: "./assets/images/key.svg",
+                                            frontImg: images['key.svg'].default,
                                             frontAlt: "Key Icon"
                                         }}
                                     />

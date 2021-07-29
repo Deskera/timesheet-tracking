@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Input } from 'reactstrap';
 import { WrapperInput, FieldFeedback } from './CustomStyles';
 import { ErrorMessage, Field } from 'formik';
+import {images} from '../common/CommonUtils';
 
 function InputFormat(props) {
 
@@ -28,7 +29,7 @@ function InputFormat(props) {
                 return (
                     <>
                         <WrapperInput className="input-group"
-                            valid={field.value!=='' && meta.touched && !meta.error}
+                            // valid={field.value!=='' && meta.touched && !meta.error}
                             invalid={meta.touched && meta.error}
 
                         >
@@ -45,7 +46,7 @@ function InputFormat(props) {
                                 type={type}
                                 placeholder={placeholder}
                                 className="form-control inputF"
-                                valid={field.value!=='' && meta.touched && !meta.error}
+                                // valid={field.value!=='' && meta.touched && !meta.error}
                                 invalid={meta.touched && meta.error}
                             />
                             {(() => {
@@ -53,7 +54,7 @@ function InputFormat(props) {
                                     if (type === 'password') {
                                         return (
                                             <span className="input-group-text bg-white inputF p-0">
-                                                <img src="./assets/images/eye-closed.svg" alt="eye closed" style={{ width: '20px', marginRight: '10px', cursor: 'pointer' }}
+                                                <img src={images['eye-closed.svg'].default} alt="eye closed" style={{ width: '20px', marginRight: '10px', cursor: 'pointer' }}
                                                     onMouseOver={toggleType}
                                                 />
                                             </span>
@@ -62,7 +63,7 @@ function InputFormat(props) {
                                     else {
                                         return (
                                             <span className="input-group-text bg-white inputF p-0">
-                                                <img src="./assets/images/eye.svg" alt="eye opened" style={{ width: '20px', marginRight: '10px', cursor: 'pointer' }}
+                                                <img src={images['eye.svg'].default} alt="eye opened" style={{ width: '20px', marginRight: '10px', cursor: 'pointer' }}
                                                     onMouseLeave={toggleType}
                                                 />
                                             </span>
