@@ -2,6 +2,7 @@ package com.deskera.timetracking.service;
 
 import java.util.List;
 import com.deskera.timetracking.dto.UserDto;
+import com.deskera.timetracking.dto.UserTenantDto;
 
 public interface UserService {
 	List<UserDto> getAllUsers();
@@ -10,7 +11,7 @@ public interface UserService {
 	void deleteUserById(final long id);
 	UserDto getUserByEmail(final String email);
 	List<UserDto> getAllUsersByTenantName(final String tenantName);
-	UserDto isValidLogin(final String email,final String pass);
+	UserTenantDto isValidLogin(final String email,final String pass);
 	long getUserCountByTenant(final String tenantName);
 	boolean isPresent(final String email);
 	UserDto deleteUserByEmail(final String email);

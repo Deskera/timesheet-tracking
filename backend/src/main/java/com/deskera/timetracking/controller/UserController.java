@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deskera.timetracking.dto.UserDto;
+import com.deskera.timetracking.dto.UserTenantDto;
 import com.deskera.timetracking.service.UserService;
 
 
@@ -41,7 +42,7 @@ public class UserController {
 	
 //user login with email and password(match)
 	@GetMapping("/login")	
-	public ResponseEntity<UserDto> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
+	public ResponseEntity<UserTenantDto> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
 		return new ResponseEntity<>(userService.isValidLogin(email,password),HttpStatus.OK);	
 	}
 

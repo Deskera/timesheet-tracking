@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deskera.timetracking.dto.TenantDto;
 import com.deskera.timetracking.dto.UserDto;
 import com.deskera.timetracking.dto.UserEntityMapper;
+import com.deskera.timetracking.dto.UserTenantDto;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
 import com.deskera.timetracking.entity.User;
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserDto isValidLogin(final String email,final String pass) {
+	public UserTenantDto isValidLogin(final String email,final String pass) {
 		
 			Optional<User> optional=userRepository.findByEmail(email);
 			User user = null;
@@ -106,7 +107,7 @@ public class UserServiceImpl implements UserService{
 				user=optional.get();
 				if(pass.equals(user.getPassword()))
 				{
-					return USER_ENTITY_MAPPER.mapUser(userRepository.findByEmail(email).get());
+					return USER_ENTITY_MAPPER.mapUserTenant(USER_ENTITY_MAPPER.mapUser(user),tenantService.getTenantDetailsByName(user.getTenantEntity().getTenantName()));
 				}
 				else {
 					throw new BadRequestException("Invalid password");
