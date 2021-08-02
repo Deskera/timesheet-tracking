@@ -138,8 +138,6 @@ public class TenantServiceImpl implements TenantService{
 		Tenant tenant=optional.get();
 		tenant=TENANT_ENTITY_MAPPER.mapTenanttoTenant(tenant,tenantDto);
 		tenantRepository.save(tenant);
-		return TENANT_ENTITY_MAPPER.mapTenant(tenant);
-		
+		return TENANT_ENTITY_MAPPER.mapTenant(tenant);	
 	}
-
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deskera.timetracking.dto.TenantDto;
 import com.deskera.timetracking.dto.UserDto;
 import com.deskera.timetracking.dto.UserEntityMapper;
+import com.deskera.timetracking.dto.UserResponseDto;
 import com.deskera.timetracking.dto.UserTenantDto;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
@@ -31,32 +32,29 @@ public class UserServiceImpl implements UserService{
 	private TenantService tenantService;
 	
 	@Override
-	public List<UserDto> getAllUsers() {
+	public List<UserResponseDto> getAllUsers() {
 		return USER_ENTITY_MAPPER.mapUser(userRepository.findAllUsers());
 	}
 
 	@Override
-	public UserDto getUserById(final long id) {
+	public UserResponseDto getUserById(final long id) {
 		Optional<User> optional = userRepository.findById(id);
-		User user = null;
-		if (optional.isPresent()) {
-			user = optional.get();
-		} else {
+		if (!optional.isPresent()) {
 			throw new ResourceNotFoundException("No User found with id : " + id);
 		}
-		return USER_ENTITY_MAPPER.mapUser(user);
+		return USER_ENTITY_MAPPER.mapUserResponse(optional.get());
 	}
 
 	@Override
 	@Transactional
-	public UserDto saveUser(final UserDto userDto,final String password) {
+	public UserResponseDto saveUser(final UserDto userDto,final String password) {
 	
 		Optional<User> optional=userRepository.findByEmail(userDto.getEmail());
 		if(optional.isPresent())
 			{
 					throw new BadRequestException("user already exists");
 			}	
-	
+		
 		Tenant tenantToMap=tenantService.getTenantByName(userDto.getTenantName());
 		Role userRole=roleService.getRoleById(userDto.getRoleId());
 		
@@ -66,35 +64,24 @@ public class UserServiceImpl implements UserService{
 		
 		this.userRepository.save(user);
 		
-		return USER_ENTITY_MAPPER.mapUser(user);
+		return USER_ENTITY_MAPPER.mapUserResponse(user);
 	}
 
 	@Override
-	public void deleteUserById(final long id) {
-		//this.userRepository.deleteById(id);		
-	}
-	
-
-	@Override
-	public UserDto getUserByEmail(final String email) {
+	public UserResponseDto getUserByEmail(final String email) {
 		Optional<User> optional=userRepository.findByEmail(email);
-		User user=null;
-		if(optional.isPresent())
+		if(!optional.isPresent())
 		{
-			user=optional.get();
-		}
-		else {
 			throw new ResourceNotFoundException("No User found with email : " + email);
 		}
-		return USER_ENTITY_MAPPER.mapUser(user);
+		return USER_ENTITY_MAPPER.mapUserResponse(optional.get());
 	}
 	
 	@Override
-	public List<UserDto> getAllUsersByTenantName(final String tenantName) {
+	public List<UserResponseDto> getAllUsersByTenantName(final String tenantName) {
 		
 		Tenant tenant=tenantService.getTenantByName(tenantName);		
-		Role role=roleService.getRoleById(2);
-		return USER_ENTITY_MAPPER.mapUser(userRepository.findAllByTenantId(tenant,role));
+		return USER_ENTITY_MAPPER.mapUser(userRepository.findAllByTenant(tenant));
 	}
 
 	@Override
@@ -141,7 +128,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	@Transactional
-	public UserDto deleteUserByEmail(final String email) {
+	public UserResponseDto deleteUserByEmail(final String email) {
 
 		Optional<User> optional=userRepository.findByEmail(email);
 		if(!optional.isPresent())
@@ -151,12 +138,12 @@ public class UserServiceImpl implements UserService{
 		User user=optional.get();
 		user.setDeleted(true);
 		userRepository.save(user);
-		return USER_ENTITY_MAPPER.mapUser(user);	
+		return USER_ENTITY_MAPPER.mapUserResponse(user);	
 	}
 	
 	@Override
 	@Transactional
-	public UserDto editUser(final UserDto userDto) {
+	public UserResponseDto editUser(final UserDto userDto) {
 
 		Optional<User> optional=userRepository.findByEmail(userDto.getEmail());
 		if(!optional.isPresent())
@@ -172,7 +159,7 @@ public class UserServiceImpl implements UserService{
 			user=USER_ENTITY_MAPPER.mapUsertoUser(user,userDto,user.getRoleEntity());
 		}
 		userRepository.save(user);
-		return USER_ENTITY_MAPPER.mapUser(user);	
+		return USER_ENTITY_MAPPER.mapUserResponse(user);	
 	}
 	
 //	@Override

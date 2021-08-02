@@ -15,10 +15,10 @@ import com.deskera.timetracking.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	//@Query("SELECT u FROM User u WHERE u.email = ?1 and u.isDeleted=false")
-	//List<User> findByEmailWhereSetDeleted(String email);
+	//List<User> findByEmailWhereNotSetDeleted(String email);
 
-	@Query("SELECT u FROM User u WHERE u.tenantEntity = ?1 AND u.roleEntity = ?2 AND u.isDeleted=false ORDER BY joiningDate desc")
-	List<User> findAllByTenantId(Tenant tenant,Role role);
+	@Query("SELECT u FROM User u WHERE u.tenantEntity = ?1 AND u.isDeleted=false ORDER BY joiningDate desc")
+	List<User> findAllByTenant(Tenant tenant);
 	
 	//List<User> findAllByTenantEntityOrderByJoiningDateDesc(Tenant tenant);
 	

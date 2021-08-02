@@ -9,6 +9,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.deskera.timetracking.common.COUNTRY;
+
 import java.util.Date;
 
 import javax.persistence.UniqueConstraint;
@@ -25,7 +28,7 @@ public class Tenant {
 	private String tenantName;
 	
 	@Column(name = "country")
-	private String country;
+	private COUNTRY country;
 	
 	@Column(name = "website_url")
 	private String websiteUrl;
@@ -62,11 +65,11 @@ public class Tenant {
 		this.tenantName = tenantName;
 	}
 
-	public String getCountry() {
+	public COUNTRY getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(COUNTRY country) {
 		this.country = country;
 	}
 
@@ -112,7 +115,7 @@ public class Tenant {
 
 	public Tenant() {}
 	
-	public Tenant(String tenantName, String country, String websiteUrl, String contact) {
+	public Tenant(String tenantName, COUNTRY country, String websiteUrl, String contact) {
 		this.tenantName = tenantName;
 		this.country = country;
 		this.websiteUrl = websiteUrl;

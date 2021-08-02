@@ -54,7 +54,10 @@ public class UserEntityMapper {
 		user.setDesignation(userDto.getDesignation());
 		
 		if(!(userDto.getGender()==null) && !(userDto.getGender().isEmpty()))
-			user.setGender(GENDER.valueOf(userDto.getGender()));
+			if(GENDER.isExist(userDto.getGender()))
+				user.setGender(GENDER.valueOf(userDto.getGender()));
+			else
+				throw new BadRequestException("Invalid gender");
 
 		if(!(userDto.getJoiningDate()==null) && !(userDto.getJoiningDate().isEmpty()))
 		{		
@@ -86,7 +89,10 @@ public class UserEntityMapper {
 			user.setDesignation(userDto.getDesignation());
 
 		if(!(userDto.getGender()==null) && !(userDto.getGender().isEmpty()))
-			user.setGender(GENDER.valueOf(userDto.getGender()));
+			if(GENDER.isExist(userDto.getGender()))
+				user.setGender(GENDER.valueOf(userDto.getGender()));
+			else
+				throw new BadRequestException("Invalid gender");
 		
 		if(!(userDto.getJoiningDate()==null) && !(userDto.getJoiningDate().isEmpty()))
 		{		
@@ -102,13 +108,13 @@ public class UserEntityMapper {
 		return user;
 	}
 
-	public List<UserDto> mapUser(List<User> userList) {
-		List<UserDto> userDtoList=new ArrayList<UserDto>();
+	public List<UserResponseDto> mapUser(List<User> userList) {
+		List<UserResponseDto> userResponseDtoList=new ArrayList<UserResponseDto>();
 		for(User u:userList)
 		{
-			userDtoList.add(mapUser(u));
+			userResponseDtoList.add(mapUserResponse(u));
 		}
-		return userDtoList;
+		return userResponseDtoList;
 	}
 
 	public UserTenantDto mapUserTenant(UserDto userDto, TenantDto tenantDto) {
@@ -120,6 +126,21 @@ public class UserEntityMapper {
 		userTenantDto.setUserDto(userDto);
 		userTenantDto.setTenantDto(tenantDto);
 		return userTenantDto;
+	}
+	
+	public UserTenantDto mapUserTenant(UserResponseDto userResponseDto, TenantDto tenantDto) {
+		if(userResponseDto==null || tenantDto==null)
+		{
+			throw new BadRequestException("user and tenant cannot be null");
+		}
+		UserTenantDto userTenantDto = new UserTenantDto();
+		userTenantDto.setUserDto(userResponseDto.getUserDto());
+		userTenantDto.setTenantDto(tenantDto);
+		return userTenantDto;
+	}
+	
+	public UserResponseDto mapUserResponse(final User user) {
+		return new UserResponseDto(user.getUid(),mapUser(user));
 	}
 	
 }

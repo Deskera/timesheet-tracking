@@ -3,9 +3,12 @@ package com.deskera.timetracking.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deskera.timetracking.common.COUNTRY;
+import com.deskera.timetracking.common.GENDER;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
 import com.deskera.timetracking.entity.User;
+import com.deskera.timetracking.exception.BadRequestException;
 
 public class TenantEntityMapper {
 	
@@ -17,7 +20,7 @@ public class TenantEntityMapper {
 		TenantDto tenantDto=new TenantDto();
 		tenantDto.setTenantName(tenant.getTenantName());
 		tenantDto.setContact(tenant.getContact());
-		tenantDto.setCountry(tenant.getCountry());
+		tenantDto.setCountry(tenant.getCountry()==null?null:tenant.getCountry().toString());
 		tenantDto.setWebsiteUrl(tenant.getWebsiteUrl());
 		return tenantDto;
 	}
@@ -31,7 +34,14 @@ public class TenantEntityMapper {
 		Tenant tenant=new Tenant();
 		tenant.setTenantName(tenantDto.getTenantName());
 		tenant.setContact(tenantDto.getContact());
-		tenant.setCountry(tenantDto.getCountry());
+		
+		if(!(tenantDto.getCountry()==null) && !(tenantDto.getCountry().isEmpty()))
+			if(COUNTRY.isExist(tenantDto.getCountry()))
+				tenant.setCountry(COUNTRY.valueOf(tenantDto.getCountry()));
+			else
+				throw new BadRequestException("Invalid country");
+			
+		
 		tenant.setWebsiteUrl(tenantDto.getWebsiteUrl());
 		return tenant;
 	}
@@ -47,8 +57,11 @@ public class TenantEntityMapper {
 
 	public Tenant mapTenanttoTenant(final Tenant tenant,final TenantDto tenantDto)
 	{
-		if(!(tenantDto.getCountry()==null))
-			tenant.setCountry(tenantDto.getCountry());
+		if(!(tenantDto.getCountry()==null) && !(tenantDto.getCountry().isEmpty()))
+			if(COUNTRY.isExist(tenantDto.getCountry()))
+				tenant.setCountry(COUNTRY.valueOf(tenantDto.getCountry()));
+			else
+				throw new BadRequestException("Invalid country");
 		
 		if(!(tenantDto.getContact()==null))
 			tenant.setContact(tenantDto.getContact());

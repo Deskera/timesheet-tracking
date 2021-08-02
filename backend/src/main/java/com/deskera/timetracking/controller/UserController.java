@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deskera.timetracking.dto.UserDto;
+import com.deskera.timetracking.dto.UserResponseDto;
 import com.deskera.timetracking.dto.UserTenantDto;
 import com.deskera.timetracking.service.UserService;
 
@@ -28,39 +29,39 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-//get all users from user table
+	//get all users from user table
 	@GetMapping("")
-	public ResponseEntity<List<UserDto>> getAllUsers() {
+	public ResponseEntity<List<UserResponseDto>> getAllUsers() {
 		return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);	
 	}
 
-//get all users of an organization(by org name)
+	//get all users of an organization(by org name)
 	@GetMapping("/tenant/{tenantname}")
-	public ResponseEntity<List<UserDto>> getAllUsers(@PathVariable("tenantname") final String tenantName) {
+	public ResponseEntity<List<UserResponseDto>> getAllUsers(@PathVariable("tenantname") final String tenantName) {
 		return new ResponseEntity<>(userService.getAllUsersByTenantName(tenantName),HttpStatus.OK);	
 	}
 	
-//user login with email and password(match)
+	//user login with email and password(match)
 	@GetMapping("/login")	
 	public ResponseEntity<UserTenantDto> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
 		return new ResponseEntity<>(userService.isValidLogin(email,password),HttpStatus.OK);	
 	}
 
-//	add new user (returns details of the new user)
+	//add new user (returns details of the new user)
 	@PostMapping(value="/save")
-	public ResponseEntity<UserDto> saveUser(@RequestBody final UserDto userDto,@RequestParam final String password) {
+	public ResponseEntity<UserResponseDto> saveUser(@RequestBody final UserDto userDto,@RequestParam final String password) {
 		
 		return new ResponseEntity<>(userService.saveUser(userDto,password),HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete")
-	public ResponseEntity<UserDto> deleteUser(@RequestParam final String email) {
+	public ResponseEntity<UserResponseDto> deleteUser(@RequestParam final String email) {
 		
 		return new ResponseEntity<>(userService.deleteUserByEmail(email),HttpStatus.OK);
 	}
 	
 	@PutMapping("/edit")
-	public ResponseEntity<UserDto> editUser(@RequestBody final UserDto userDto) {
+	public ResponseEntity<UserResponseDto> editUser(@RequestBody final UserDto userDto) {
 		
 		return new ResponseEntity<>(userService.editUser(userDto),HttpStatus.OK);
 	}
