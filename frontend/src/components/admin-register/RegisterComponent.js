@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormGroup, Input, Button } from 'reactstrap';
+import { FormGroup, Button } from 'reactstrap';
 import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
@@ -116,7 +116,7 @@ function Register() {
                                 <FormGroup className="field-wrapper">
                                     <Field name="phone">
                                         {props => {
-                                            const { field, form, meta } = props
+                                            const { form, meta } = props
                                             return (
                                                 <>
                                                     <WrapperInput className="input-group"

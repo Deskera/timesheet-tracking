@@ -15,7 +15,7 @@ function FormView(props) {
             <FormGroup className="field-wrapper">
                 <Field name="firstname">
                     {props => {
-                        const { field, form, meta } = props
+                        const { field, meta } = props
                         return (
                             <div className="row d-flex justify-content-center align-items-center">
                                 <Label htmlFor="firstname" className="col-3 p-0">First Name</Label>
@@ -38,7 +38,7 @@ function FormView(props) {
             <FormGroup className="field-wrapper">
                 <Field name="lastname">
                     {props => {
-                        const { field, form, meta } = props
+                        const { field, meta } = props
                         return (
                             <div className="row d-flex justify-content-center align-items-center">
                                 <Label htmlFor="lastname" className="col-3 p-0">Last Name</Label>
@@ -120,7 +120,7 @@ function FormView(props) {
             <FormGroup className="field-wrapper">
                 <Field name="email">
                     {props => {
-                        const { field, form, meta } = props
+                        const { field, meta } = props
                         return (
                             <div className="row d-flex justify-content-center align-items-center">
                                 <Label htmlFor="email" className="col-3 p-0">Email</Label>
@@ -143,7 +143,7 @@ function FormView(props) {
             <FormGroup className="field-wrapper">
                 <Field name="designation">
                     {props => {
-                        const { field, form, meta } = props
+                        const { field, meta } = props
                         return (
                             <div className="row d-flex justify-content-center align-items-center">
                                 <Label htmlFor="designation" className="col-3 p-0">Designaion</Label>
@@ -166,7 +166,7 @@ function FormView(props) {
             <FormGroup className="field-wrapper">
                 <Field name="gender">
                     {props => {
-                        const { field, form, meta } = props
+                        const { field, form } = props
                         return (
                             <div className="row d-flex justify-content-center align-items-center">
                                 <Label htmlFor="gender" className="col-3 p-0">Gender</Label>
@@ -211,10 +211,10 @@ function FormView(props) {
             </FormGroup>
 
             {/* Date */}
-            <FormGroup className="field-wrapper">
+            <FormGroup className="">
                 <Field name="joiningDate">
                     {props => {
-                        const { field, form, meta } = props
+                        const { field, meta } = props
                         return (
                             <div className="row d-flex justify-content-center align-items-center">
                                 <Label htmlFor="joiningDate" className="col-3 p-0">Joining Date</Label>

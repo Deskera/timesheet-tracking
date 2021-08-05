@@ -25,7 +25,7 @@ function InputFormat(props) {
     return (
         <Field name={name}>
             {props => {
-                const { field, form, meta } = props
+                const { field, meta } = props
                 return (
                     <>
                         <WrapperInput className="input-group"
@@ -90,7 +90,7 @@ export default InputFormat;
 
 
 // implementing the Field component from formik package as
-{/* 
+/* 
 
 
 <Field name="email">
@@ -109,4 +109,4 @@ export default InputFormat;
 </Field>
 
 
-*/}
+*/

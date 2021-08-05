@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormGroup, Button, Input, Label } from 'reactstrap';
-import { Centered, Card, ParentCard, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
+import { Centered, Card, ParentCard } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -73,7 +73,7 @@ function PersonalInfo() {
                                 <FormGroup className="row field-wrapper">
                                     <Field name="phone">
                                         {props => {
-                                            const { field, form, meta } = props
+                                            const { form } = props
                                             return (
                                                 <>
                                                     <div className="col-3 my-auto">Gender</div>

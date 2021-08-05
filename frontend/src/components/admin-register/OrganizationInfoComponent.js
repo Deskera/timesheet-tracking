@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormGroup, Button } from 'reactstrap';
-import { Centered, Card, ParentCard } from '../../common/CustomStyles'
+import { Centered, Card, ParentCard, WrapperInput } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
@@ -97,7 +97,7 @@ function OrganizationInfo() {
                             <img src={images["logo-black.svg"].default} alt="Deskera logo"
                                 style={{ width: "40%", maxWidth: '400px', height: '', objectFit: 'cover' }}
                             />
-                            <h2 className="display-6 text-center">Hi {registerValues.personal_info.firstname}</h2>
+                            {/* <h2 className="display-6 text-center">Hi {registerValues.personal_info.firstname}</h2> */}
                             <h4 className="text-center">Tell us something about your company :)</h4>
                         </div>
 
@@ -117,12 +117,32 @@ function OrganizationInfo() {
                                 </FormGroup>
 
                                 {/* Country */}
-                                <FormGroup className="field-wrapper">
+                                <FormGroup className="row field-wrapper">
+                                    <Field name="country">
+                                        {props => {
+                                            const { field, form, meta } = props
+                                            return (
+                                                <>
+                                                    <WrapperInput className="input-group">
+                                                        <select class="form-select">
+                                                            <option selected>Country</option>
+                                                            <option value="India">India</option>
+                                                            <option value="US">United States of America</option>
+                                                            <option value="Singapore">Singapore</option>
+                                                        </select>
+                                                    </WrapperInput>
+                                                </>
+                                            )
+                                        }}
+                                    </Field>
+                                </FormGroup>
+
+                                {/* <FormGroup className="field-wrapper">
                                     <InputFormat id="country" name="country"
                                         type="text"
                                         placeholder="Country"
                                     />
-                                </FormGroup>
+                                </FormGroup> */}
 
                                 {/* Website URL */}
                                 <FormGroup className="field-wrapper">
