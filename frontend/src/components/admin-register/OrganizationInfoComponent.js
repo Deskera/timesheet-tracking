@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, Button } from 'reactstrap';
+import { FormGroup, Button, Input } from 'reactstrap';
 import { Centered, Card, ParentCard, WrapperInput } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
@@ -24,6 +24,17 @@ const validationSchema = Yup.object({
     websiteUrl: Yup.string()
         .url('Must be a valid URL')
 })
+
+export const countryOptions = [
+    { value: 'SG', key: "Singapore (SG)"},
+    { value: 'US', key: "United States of America (US)"},
+    { value: 'MY', key: "Malaysia (MY)"},
+    { value: 'AU', key: "Australia (AU)"},
+    { value: 'CA', key: "Canada (CA)"},
+    { value: 'ID', key: "Indonesia (ID)"},
+    { value: 'IN', key: "India (IN)"},
+    { value: 'UK', key: "United Kingdom of Great Britain and Northern Ireland (UK)"}
+]
 
 function OrganizationInfo() {
 
@@ -83,9 +94,6 @@ function OrganizationInfo() {
                 console.log('Post User', error);
                 // alert('Sorry, try Again\nError: ' + error.message);
             });
-
-
-
     }
 
     return (
@@ -120,16 +128,22 @@ function OrganizationInfo() {
                                 <FormGroup className="row field-wrapper">
                                     <Field name="country">
                                         {props => {
-                                            const { field, form, meta } = props
+                                            const { field } = props
                                             return (
                                                 <>
                                                     <WrapperInput className="input-group">
-                                                        <select class="form-select">
-                                                            <option selected>Country</option>
-                                                            <option value="India">India</option>
-                                                            <option value="US">United States of America</option>
-                                                            <option value="Singapore">Singapore</option>
-                                                        </select>
+                                                        <Input {...field} type="select" id="country" name="country" className="form-select">
+                                                            <option selected value="">
+                                                                Country
+                                                            </option>
+                                                            {countryOptions.map(option => {
+                                                                return (
+                                                                    <option key={option.value} value={option.value} selected={field.value === option.value}>
+                                                                        {option.key}
+                                                                    </option>
+                                                                )
+                                                            })}
+                                                        </Input>
                                                     </WrapperInput>
                                                 </>
                                             )

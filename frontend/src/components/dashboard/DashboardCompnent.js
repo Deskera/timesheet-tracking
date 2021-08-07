@@ -2,8 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import MaterialTable, { MTableToolbar, MTablePagination, MTableBody, MTableCell, Paper, MTableBodyRow } from "material-table";
 
-import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
-import { Modal } from 'react-bootstrap'
+import { OverlayTrigger, Tooltip, Button, Modal } from "react-bootstrap";
 
 import { images, getUser } from '../../common/CommonUtils';
 import { tableIcons } from '../../common/TableIcons';
@@ -23,9 +22,11 @@ import { baseUrl } from '../../common/baseUrl';
 
 import OrganizationForm from './OrganizationForm';
 
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import BeatLoader from "react-spinners/BeatLoader";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 Yup.addMethod(Yup.string, 'validatePhone', function () {
@@ -58,20 +59,7 @@ const validationSchemaOrg = Yup.object({
         .required('Rwquired!'),
 
     country: Yup.string()
-        .required('Required!'),
-
-    firstname: Yup.string()
-        .required('Required!'),
-
-    lastname: Yup.string()
-        .required('Required!'),
-
-    email: Yup.string()
-        .required('Required')
-        .email('Invalid email format'),
-
-    adminPhone: Yup.string()
-        .validatePhone(),
+        .required('Required!')
 })
 
 function Dashboard() {
@@ -90,7 +78,7 @@ function Dashboard() {
     const editEmpFormRef = React.useRef();
     const editOrgFormRef = React.useState();
 
-    // console.log("aaa", getUser());
+    const notify = () => toast("Wow so easy!");
 
     // using localstorage created while admin login to access the tenantName
     React.useEffect(() => {
@@ -111,7 +99,6 @@ function Dashboard() {
 
     // editing company info
     const editOrg = () => {
-        // console.log("called");
         const editOrg = {
             tenantName: editOrgFormRef.current.values.tenantName,
             country: editOrgFormRef.current.values.country,
@@ -119,23 +106,14 @@ function Dashboard() {
             contact: editOrgFormRef.current.values.contact
         }
 
-        const editAdmin = {
-            firstName: editOrgFormRef.current.values.firstname,
-            lastName: editOrgFormRef.current.values.lastname,
-            email: editOrgFormRef.current.values.email,
-            contactNumber: editOrgFormRef.current.values.adminPhone,
-            gender: editOrgFormRef.current.values.gender,
-            roleId: 1,
-        }
-
         axios.put((baseUrl + "api/tenants/edit"), editOrg)
             .then(() => {
-                console.log("abc");
                 setNum(num + 1);
                 var user = getUser();
                 user.tenantDto = editOrg;
                 localStorage.setItem("user", JSON.stringify(user));
                 setOrgModal(false);
+                toast.success("Company updated successfully!");
             })
             .catch((err) => {
                 console.log(err)
@@ -159,6 +137,7 @@ function Dashboard() {
             .then(() => {
                 setNum(num + 1);
                 setAddModal(false);
+                toast.success("Employee added successfully!");
             })
             .catch((err) => {
                 if (err.response.data === "user already exists") {
@@ -179,17 +158,20 @@ function Dashboard() {
             contactNumber: editEmpFormRef.current.values.phone,
             gender: editEmpFormRef.current.values.gender,
             joiningDate: editEmpFormRef.current.values.joiningDate,
-            roleId: 2
+            roleId: editEmpFormRef.current.values.roleId
         }
         axios.put((baseUrl + "api/users/edit"), editEmp)
             .then(() => {
                 setNum(num + 1);
                 setEditModal(false);
+                toast.success("Employee updated successfully!");
             })
             .catch((err) => {
                 console.log(err)
             })
     }
+
+    console.log("abc", allEmployees);
 
     // deleting existing employee
     const deleteEmployee = () => {
@@ -199,6 +181,7 @@ function Dashboard() {
                 setNum(num + 1);
                 console.log("res", response);
                 setDeleteModal(false);
+                toast.success("Employee deleted successfully!");
             })
             .catch((err) => {
                 console.log("error", err)
@@ -224,7 +207,8 @@ function Dashboard() {
         designation: emp && emp.designation,
         phone: emp && emp.contactNumber,
         gender: emp && emp.gender,
-        joiningDate: emp && emp.joiningDate
+        joiningDate: emp && emp.joiningDate,
+        roleId: emp && emp.roleId
     }
 
     const initialValuesOrgEdit = {
@@ -237,7 +221,7 @@ function Dashboard() {
     const tableColumns = [
         { title: "Employee ID", field: "userId", filtering: false },
         { title: "Name", field: "userDto.firstName", render: row => (row.userDto.firstName + " " + row.userDto.lastName) },
-        { title: "Role", field: "userDto.roleId", render: row => (row.userDto.roleId == 1 ? 'Admin' : 'User') },
+        { title: "Role", field: "userDto.roleId", render: row => (row.userDto.roleId == 1 ? 'Admin' : 'Employee') },
         { title: "Designation", field: "userDto.designation" },
         { title: "Email", field: "userDto.email" },
         // { title: "Phone", field: "contactNumber" },
@@ -258,12 +242,12 @@ function Dashboard() {
                         </div>
                         <div>
                             <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">View Report</Tooltip>}>
-                                <img src={images['report.png'].default} alt="download report icon" style={{ width: '25px', cursor: 'pointer' }} onClick={() => console.log(row)} />
+                                <img src={images['report.png'].default} alt="download report icon" style={{ width: '25px', cursor: 'pointer' }} onClick={() => {alert("This feature is currently not available!"); console.log(row)} } />
                             </OverlayTrigger>
                         </div>
                         <div>
                             <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">Download Report</Tooltip>}>
-                                <tableIcons.Export style={{ width: '25px', cursor: 'pointer' }} onClick={() => console.log(row)} />
+                                <tableIcons.Export style={{ width: '25px', cursor: 'pointer' }} onClick={() => {alert("This feature is currently not available!"); console.log(row)} } />
                             </OverlayTrigger>
                         </div>
                     </div>
@@ -279,6 +263,17 @@ function Dashboard() {
 
     return (
         <div className="container">
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <div className="mt-1 text-center d-flex justify-content-between align-items-center bg-white">
                 {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
                 <div className="ms-4" style={{ margni: 'auto 0' }}>
@@ -313,7 +308,7 @@ function Dashboard() {
                     {/* Edit Organization */}
                     <Modal show={orgModal} onHide={() => setOrgModal(false)} centered>
                         <Modal.Header>
-                            <Modal.Title>Company Details</Modal.Title>
+                            <Modal.Title>{getUser().tenantDto.tenantName}: Company Details</Modal.Title>
                             <CloseIcon onClick={() => setOrgModal(false)} style={{ cursor: 'pointer' }} />
                         </Modal.Header>
 
@@ -409,37 +404,19 @@ function Dashboard() {
                             }
                         }}
                         icons={tableIcons}
-                        // title="Employee Details"
                         columns={tableColumns}
-                        // columns={[{ title: "Name", field: "firstName" },
-                        // { title: "Designation", field: "designation" }]}
+
                         data={allEmployees}
                         options={{
                             showTitle: false,
                             search: true,
-                            // selection: true,
-                            // paging: true,
-                            // pageSize: 10
-                            // filtering: true,
-                            // grouping: false,
-                            // paging: false,
-                            // searchFieldAlignment: 'left',
-
                         }}
                         components={{
-                            // Body: (props) => {
+                            // Container: (props) => {
                             //     return (
-                            //         // <div className="bg-warning" style={{width: '100vw'}}>
-                            //             // {/* abc */}
+                            //         // <div className="bg-info">
+                            //             <Paper {...props} />
                             //         // {/* </div> */}
-                            //         // <>
-                            //         //     {
-                            //         //         loader ?
-                            //         //             <Loader />
-                            //         //             :
-                            //                     <MTableBody {...props} />
-                            //         //     }
-                            //         // </>
                             //     )
                             // },
                             Toolbar: (props) => {
@@ -460,7 +437,6 @@ function Dashboard() {
                                     <div className="" style={{ margin: '0 auto', width: '250px' }}>
                                         <div>
                                             <MTablePagination {...props} />
-                                            {/* <MTableBodyRow {...props} /> */}
                                         </div>
                                     </div>
                                 );
