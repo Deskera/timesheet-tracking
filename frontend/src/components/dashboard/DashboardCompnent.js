@@ -16,7 +16,7 @@ import 'yup-phone-lite';
 import CloseIcon from '@material-ui/icons/Close';
 
 
-import FormView from './FormComponent';
+import UserForm from './UserForm';
 
 import { baseUrl } from '../../common/baseUrl';
 
@@ -337,14 +337,14 @@ function Dashboard() {
                             <CloseIcon onClick={() => setAddModal(false)} style={{ cursor: 'pointer' }} />
                         </Modal.Header>
 
-                        <Modal.Body>
+                        <Modal.Body style={{ maxHeight: '70vh', overflowY: 'scroll'}}>
                             <Formik
                                 initialValues={initialValuesAdd}
                                 validationSchema={validationSchema}
                                 onSubmit={() => addEmployee()}
                                 innerRef={addEmpFormRef}
                             >
-                                <FormView />
+                                <UserForm />
                             </Formik>
                         </Modal.Body>
 
@@ -362,14 +362,14 @@ function Dashboard() {
                             <CloseIcon onClick={() => setEditModal(false)} style={{ cursor: 'pointer' }} />
                         </Modal.Header>
 
-                        <Modal.Body className="modal-body-scroll" >
+                        <Modal.Body className="modal-body-scroll" style={{ maxHeight: '70vh', overflowY: 'scroll'}}>
                             <Formik
                                 initialValues={initialValuesEdit}
                                 validationSchema={validationSchema}
                                 onSubmit={() => editEmployee()}
                                 innerRef={editEmpFormRef}
                             >
-                                <FormView />
+                                <UserForm />
                             </Formik>
                         </Modal.Body>
 

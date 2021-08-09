@@ -10,7 +10,8 @@ import React from 'react'
 import InputText from './InputText';
 import PhoneNumber from './PhoneNumber';
 import RadioButtons from './RadioButtons';
-import Select from './Select'
+import Select from './Select';
+import DatePicker from './DataPicker';
 
 function FormikControl(props) {
     const { control, ...rest } = props;
@@ -19,20 +20,14 @@ function FormikControl(props) {
             return <InputText {...rest} />
         case 'phoneNumber':
             return <PhoneNumber {...rest} />
-        // case 'textarea':
-        //   return <Textarea />
         case 'select':
           return <Select {...rest} />
         case 'radio':
           return <RadioButtons {...rest} />
-        // case 'checkbox':
-        //   return <CheckboxGroup />
-        // case 'date':
-        //   return <DatePicker />
-        // case 'chakraInput':
-        //   return <ChakraInput />
-        // default:
-        //   return null
+        case 'date':
+          return <DatePicker {...rest} />
+        default:
+          return null
     }
 }
 

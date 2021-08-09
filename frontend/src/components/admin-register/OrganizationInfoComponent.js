@@ -6,6 +6,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
+import FormikControl from '../../common/Formik/FormikControl';
 
 const initialValues = {
     companyName: '',
@@ -26,14 +27,14 @@ const validationSchema = Yup.object({
 })
 
 export const countryOptions = [
-    { value: 'SG', key: "Singapore (SG)"},
-    { value: 'US', key: "United States of America (US)"},
-    { value: 'MY', key: "Malaysia (MY)"},
-    { value: 'AU', key: "Australia (AU)"},
-    { value: 'CA', key: "Canada (CA)"},
-    { value: 'ID', key: "Indonesia (ID)"},
-    { value: 'IN', key: "India (IN)"},
-    { value: 'UK', key: "United Kingdom of Great Britain and Northern Ireland (UK)"}
+    { value: 'SG', key: "Singapore (SG)" },
+    { value: 'US', key: "United States of America (US)" },
+    { value: 'MY', key: "Malaysia (MY)" },
+    { value: 'AU', key: "Australia (AU)" },
+    { value: 'CA', key: "Canada (CA)" },
+    { value: 'ID', key: "Indonesia (ID)" },
+    { value: 'IN', key: "India (IN)" },
+    { value: 'UK', key: "United Kingdom of Great Britain and Northern Ireland (UK)" }
 ]
 
 function OrganizationInfo() {
@@ -118,7 +119,9 @@ function OrganizationInfo() {
 
                                 {/* Company Name */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="companyName" name="companyName"
+                                    <FormikControl control="inputText"
+                                        id="companyName"
+                                        name="companyName"
                                         type="text"
                                         placeholder="Company Name"
                                     />
@@ -126,41 +129,19 @@ function OrganizationInfo() {
 
                                 {/* Country */}
                                 <FormGroup className="row field-wrapper">
-                                    <Field name="country">
-                                        {props => {
-                                            const { field } = props
-                                            return (
-                                                <>
-                                                    <WrapperInput className="input-group">
-                                                        <Input {...field} type="select" id="country" name="country" className="form-select">
-                                                            <option selected value="">
-                                                                Country
-                                                            </option>
-                                                            {countryOptions.map(option => {
-                                                                return (
-                                                                    <option key={option.value} value={option.value} selected={field.value === option.value}>
-                                                                        {option.key}
-                                                                    </option>
-                                                                )
-                                                            })}
-                                                        </Input>
-                                                    </WrapperInput>
-                                                </>
-                                            )
-                                        }}
-                                    </Field>
-                                </FormGroup>
-
-                                {/* <FormGroup className="field-wrapper">
-                                    <InputFormat id="country" name="country"
-                                        type="text"
-                                        placeholder="Country"
+                                    <FormikControl control="select"
+                                        id="country"
+                                        name="country"
+                                        type="select"
+                                        options={countryOptions}
                                     />
-                                </FormGroup> */}
+                                </FormGroup>
 
                                 {/* Website URL */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="websiteUrl" name="websiteUrl"
+                                    <FormikControl control="inputText"
+                                        id="websiteUrl"
+                                        name="websiteUrl"
                                         type="text"
                                         placeholder="Website URL"
                                     />
@@ -168,7 +149,9 @@ function OrganizationInfo() {
 
                                 {/* Company Phone Number */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="companyPhone" name="companyPhone"
+                                    <FormikControl control="inputText"
+                                        id="companyPhone"
+                                        name="companyPhone"
                                         type="tel"
                                         placeholder="Company Phone Number"
                                     />

@@ -6,7 +6,7 @@ import Register from './admin-register/RegisterComponent';
 import OrganizationInfo from './admin-register/OrganizationInfoComponent';
 import PersonalInfo from './admin-register/PersonalInfoComponent';
 
-import Learn from './Learn';
+import Learn from '../common/Formik/Learn';
 
 import Dashboard from './dashboard/DashboardCompnent';
 

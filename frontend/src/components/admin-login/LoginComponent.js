@@ -66,7 +66,10 @@ function Login() {
                 history.push("/dashboard");
             })
             .catch((err) => {
-                if (err.response.status === 404) {
+                if(err.response === undefined) {
+                    alert("Server Error");
+                }
+                else if (err.response.status === 404) {
                     formRef.current.setFieldError("email", "Whoops! This email isn't registered :(")
                 }
                 else if (err.response.data === "Invalid password") {
@@ -112,7 +115,7 @@ function Login() {
 
 
 
-                                <FormGroup className="field-wrapper">
+                                {/* <FormGroup className="field-wrapper">
                                     <FormikControl control='inputText'
                                         id='email'
                                         name='email'
@@ -124,6 +127,31 @@ function Login() {
                                         }}
                                     />
 
+                                </FormGroup> */}
+
+                                <FormGroup className="field-wrapper">
+                                    <FormikControl control='inputText'
+                                        id='email'
+                                        name='email'
+                                        type='email'
+                                        placeholder='Email'
+                                        imgInfo={{
+                                            frontImg: images['mail.svg'].default,
+                                            frontAlt: "Mail Icon"
+                                        }}
+                                    />
+                                </FormGroup>
+
+                                <FormGroup>
+                                    <FormikControl control="inputText"
+                                        id="password" name="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        imgInfo={{
+                                            frontImg: images['key.svg'].default,
+                                            frontAlt: "Key Icon"
+                                        }}
+                                    />
                                 </FormGroup>
 
 
@@ -147,7 +175,7 @@ function Login() {
 
 
 
-                                <FormGroup className="mb-3">
+                                {/* <FormGroup className="mb-3">
                                     <InputFormat id="password" name="password"
                                         type="password"
                                         placeholder="Password"
@@ -156,7 +184,7 @@ function Login() {
                                             frontAlt: "Key Icon"
                                         }}
                                     />
-                                </FormGroup>
+                                </FormGroup> */}
 
 
 

@@ -7,85 +7,49 @@ import PhoneInput from 'react-phone-input-2';
 import { WrapperInput, FieldFeedback } from '../../common/CustomStyles';
 import { countryOptions } from '../admin-register/OrganizationInfoComponent';
 
+import FormikControl from '../../common/Formik/FormikControl';
+
 function OrganizationForm() {
     return (
-        <Form>
+        <Form className="my-3">
             {/* Country */}
-            <FormGroup className="field-wrapper">
-                <Field name="country">
-                    {props => {
-                        const { field, meta } = props
-                        return (
-                            <div className="row d-flex justify-content-center align-items-center">
-                                <Label htmlFor="country" className="col-3 p-0">Country</Label>
-                                <div className="col-6">
-                                    <Input {...field} type="select" id="country" name="country" className="form-select">
-                                        <option selected value="">
-                                            Select
-                                        </option>
-                                        {countryOptions.map(option => {
-                                            return (
-                                                <option key={option.value} value={option.value} selected={field.value === option.value}>
-                                                    {option.key}
-                                                </option>
-                                            )
-                                        })}
-                                    </Input>
-                                    <ErrorMessage name={field.name} component={FieldFeedback} />
-                                </div>
-
-                            </div>
-                        )
-                    }}
-                </Field>
+            <FormGroup className="field-wrapper row d-flex align-items-center">
+                <Label htmlFor="country" className="col-3 offset-1 p-0">Country</Label>
+                <div className="col-7">
+                    <FormikControl control="select"
+                        id="country"
+                        name="country"
+                        type="select"
+                        options={countryOptions}
+                    />
+                </div>
             </FormGroup>
 
-    {/* Website Url */ }
-    < FormGroup className = "field-wrapper" >
-        <Field name="websiteUrl">
-            {props => {
-                const { field, meta } = props
-                return (
-                    <div className="row d-flex justify-content-center align-items-center">
-                        <Label htmlFor="websiteUrl" className="col-3 p-0">Website Url</Label>
-                        <div className="col-6">
-                            <Input {...field} id="websiteUrl" name="websiteUrl"
-                                type="text"
-                                placeholder=""
-                                invalid={meta.touched && meta.error}
-                            />
-                            <ErrorMessage name={field.name} component={FieldFeedback} />
-                        </div>
+            {/* Website Url */}
+            <FormGroup className="field-wrapper row d-flex align-items-center">
+                <Label htmlFor="websiteUrl" className="col-3 offset-1 p-0">Website Url</Label>
+                <div className="col-7">
+                    <FormikControl control="inputText"
+                        id="websiteUrl"
+                        name="websiteUrl"
+                        type="text"
+                        border
+                    />
+                </div>
+            </FormGroup>
 
-                    </div>
-                )
-            }}
-        </Field>
-            </FormGroup >
-
-    {/* Company Contact */ }
-    < FormGroup className = "" >
-        <Field name="contact">
-            {props => {
-                const { field, meta } = props
-                return (
-                    <div className="row d-flex justify-content-center align-items-center">
-                        <Label htmlFor="contact" className="col-3 p-0">Company Number</Label>
-                        <div className="col-6">
-                            <Input {...field} id="contact" name="contact"
-                                type="text"
-                                placeholder=""
-                                invalid={meta.touched && meta.error}
-                            />
-                            <ErrorMessage name={field.name} component={FieldFeedback} />
-                        </div>
-
-                    </div>
-                )
-            }}
-        </Field>
-            </FormGroup >
-        </Form >
+            {/* Company Contact */}
+            <FormGroup className="row d-flex align-items-center">
+                <Label htmlFor="contact" className="col-3 offset-1 p-0">Company Number</Label>
+                <div className="col-7">
+                    <FormikControl control="phoneNumber"
+                        id="contact"
+                        name="contact"
+                        border
+                    />
+                </div>
+            </FormGroup>
+        </Form>
     )
 }
 
