@@ -12,9 +12,9 @@ public enum GENDER {
 	}
 
 	public static Boolean isExist(String name) {
-        if(name.isBlank()) {
-            return false;
-        }
+//        if(name.isBlank()) {
+//            return false;
+//        }
 
         for(GENDER item : GENDER.values()) {
             if(name.equals(item.gender)) {

@@ -61,9 +61,9 @@ public class UserController {
 	}
 	
 	@PutMapping("/edit")
-	public ResponseEntity<UserResponseDto> editUser(@RequestBody final UserDto userDto) {
+	public ResponseEntity<UserResponseDto> editUser(@RequestBody final UserResponseDto userResponseDto) {
 		
-		return new ResponseEntity<>(userService.editUser(userDto),HttpStatus.OK);
+		return new ResponseEntity<>(userService.editUser(userResponseDto),HttpStatus.OK);
 	}
 	
 	@GetMapping("/search")	

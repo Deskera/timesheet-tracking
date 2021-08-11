@@ -35,9 +35,9 @@ public enum COUNTRY {
 	}
 	
 	public static Boolean isExist(String name) {
-        if(name.isBlank()) {
-            return false;
-        }
+//        if(name.isBlank()) {
+//            return false;
+//        }
 
         for(COUNTRY item : COUNTRY.values()) {
             if(name.equals(item.abbreviation)) {

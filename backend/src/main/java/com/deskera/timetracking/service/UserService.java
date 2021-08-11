@@ -15,7 +15,7 @@ public interface UserService {
 	long getUserCountByTenant(final String tenantName);
 	boolean isPresent(final String email);
 	UserResponseDto deleteUserByEmail(final String email);
-	UserResponseDto editUser(final UserDto userDto);
+	UserResponseDto editUser(final UserResponseDto userDto);
 	
 //	boolean isPresent(final long id);
 //	boolean isAdmin(final String email);

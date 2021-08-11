@@ -143,21 +143,22 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	@Transactional
-	public UserResponseDto editUser(final UserDto userDto) {
-
-		Optional<User> optional=userRepository.findByEmail(userDto.getEmail());
+	public UserResponseDto editUser(final UserResponseDto userResponseDto) {
+		
+		Optional<User> optional=userRepository.findById(userResponseDto.getUserId());
 		if(!optional.isPresent())
 		{
-			throw new ResourceNotFoundException("No User found with email : " + userDto.getEmail());
+			throw new ResourceNotFoundException("No User found with id : " + userResponseDto.getUserId());
 		}
 		User user=optional.get();
-		if(userDto.getRoleId()!=0)
+		if(userResponseDto.getUserDto().getRoleId()!=0)
 		{
-			user=USER_ENTITY_MAPPER.mapUsertoUser(user,userDto,roleService.getRoleById(userDto.getRoleId()));
+			user=USER_ENTITY_MAPPER.mapUsertoUser(user,userResponseDto.getUserDto(),roleService.getRoleById(userResponseDto.getUserDto().getRoleId()));
 		}
 		else {
-			user=USER_ENTITY_MAPPER.mapUsertoUser(user,userDto,user.getRoleEntity());
+			user=USER_ENTITY_MAPPER.mapUsertoUser(user,userResponseDto.getUserDto(),user.getRoleEntity());
 		}
+		user.setEmail(userResponseDto.getUserDto().getEmail());
 		userRepository.save(user);
 		return USER_ENTITY_MAPPER.mapUserResponse(user);	
 	}
