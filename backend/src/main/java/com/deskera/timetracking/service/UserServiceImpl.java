@@ -158,7 +158,15 @@ public class UserServiceImpl implements UserService{
 		else {
 			user=USER_ENTITY_MAPPER.mapUsertoUser(user,userResponseDto.getUserDto(),user.getRoleEntity());
 		}
+		if(userResponseDto.getUserDto().getEmail()!=null && !(userResponseDto.getUserDto().getEmail().isEmpty()))
+		{
+			Optional<User> optionalByEmail=userRepository.findByEmail(userResponseDto.getUserDto().getEmail());
+		if(optionalByEmail.isPresent() && optionalByEmail.get().getUid()!=userResponseDto.getUserId())
+			{
+					throw new BadRequestException("email already exists");
+			}	
 		user.setEmail(userResponseDto.getUserDto().getEmail());
+		}
 		userRepository.save(user);
 		return USER_ENTITY_MAPPER.mapUserResponse(user);	
 	}
