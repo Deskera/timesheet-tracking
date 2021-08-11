@@ -1,11 +1,12 @@
 import React from 'react';
-import { FormGroup, Button } from 'reactstrap';
-import { Centered, Card, ParentCard } from '../../common/CustomStyles'
+import { FormGroup, Button, Input } from 'reactstrap';
+import { Centered, Card, ParentCard, WrapperInput } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
+import FormikControl from '../../common/Formik/FormikControl';
 
 const initialValues = {
     companyName: '',
@@ -24,6 +25,17 @@ const validationSchema = Yup.object({
     websiteUrl: Yup.string()
         .url('Must be a valid URL')
 })
+
+export const countryOptions = [
+    { value: 'SG', key: "Singapore (SG)" },
+    { value: 'US', key: "United States of America (US)" },
+    { value: 'MY', key: "Malaysia (MY)" },
+    { value: 'AU', key: "Australia (AU)" },
+    { value: 'CA', key: "Canada (CA)" },
+    { value: 'ID', key: "Indonesia (ID)" },
+    { value: 'IN', key: "India (IN)" },
+    { value: 'UK', key: "United Kingdom of Great Britain and Northern Ireland (UK)" }
+]
 
 function OrganizationInfo() {
 
@@ -83,9 +95,6 @@ function OrganizationInfo() {
                 console.log('Post User', error);
                 // alert('Sorry, try Again\nError: ' + error.message);
             });
-
-
-
     }
 
     return (
@@ -97,7 +106,7 @@ function OrganizationInfo() {
                             <img src={images["logo-black.svg"].default} alt="Deskera logo"
                                 style={{ width: "40%", maxWidth: '400px', height: '', objectFit: 'cover' }}
                             />
-                            <h2 className="display-6 text-center">Hi {registerValues.personal_info.firstname}</h2>
+                            {/* <h2 className="display-6 text-center">Hi {registerValues.personal_info.firstname}</h2> */}
                             <h4 className="text-center">Tell us something about your company :)</h4>
                         </div>
 
@@ -110,23 +119,29 @@ function OrganizationInfo() {
 
                                 {/* Company Name */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="companyName" name="companyName"
+                                    <FormikControl control="inputText"
+                                        id="companyName"
+                                        name="companyName"
                                         type="text"
                                         placeholder="Company Name"
                                     />
                                 </FormGroup>
 
                                 {/* Country */}
-                                <FormGroup className="field-wrapper">
-                                    <InputFormat id="country" name="country"
-                                        type="text"
-                                        placeholder="Country"
+                                <FormGroup className="row field-wrapper">
+                                    <FormikControl control="select"
+                                        id="country"
+                                        name="country"
+                                        type="select"
+                                        options={countryOptions}
                                     />
                                 </FormGroup>
 
                                 {/* Website URL */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="websiteUrl" name="websiteUrl"
+                                    <FormikControl control="inputText"
+                                        id="websiteUrl"
+                                        name="websiteUrl"
                                         type="text"
                                         placeholder="Website URL"
                                     />
@@ -134,7 +149,9 @@ function OrganizationInfo() {
 
                                 {/* Company Phone Number */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="companyPhone" name="companyPhone"
+                                    <FormikControl control="inputText"
+                                        id="companyPhone"
+                                        name="companyPhone"
                                         type="tel"
                                         placeholder="Company Phone Number"
                                     />

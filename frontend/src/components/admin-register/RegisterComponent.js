@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { FormGroup, Input, Button } from 'reactstrap';
+import { FormGroup, Button } from 'reactstrap';
 import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
-import PhoneInput from 'react-phone-input-2';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
 import InputFormat from '../../common/InputComponent';
-import {images} from '../../common/CommonUtils';
+import { images } from '../../common/CommonUtils';
+
+import FormikControl from '../../common/Formik/FormikControl';
+
 
 const initialValues = {
     email: '',
@@ -71,13 +73,13 @@ function Register() {
                     throw errmess;
                 })
             .then(response => response.json())
-            .then(response => { 
+            .then(response => {
                 // console.log("navay", response); 
-                if(response === true) {
-                    formRefRegister.current.setFieldError("email","Email already taken!");
+                if (response === true) {
+                    formRefRegister.current.setFieldError("email", "Email already taken!");
                 }
                 else {
-                    history.push("/register/personal-info", {values})
+                    history.push("/register/personal-info", { values })
                 }
             })
             .catch(error => console.log(error))
@@ -102,9 +104,11 @@ function Register() {
 
                                 {/* Email Address */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="email" name="email"
-                                        type="email"
-                                        placeholder="Email"
+                                    <FormikControl control='inputText'
+                                        id='email'
+                                        name='email'
+                                        type='email'
+                                        placeholder='Email'
                                         imgInfo={{
                                             frontImg: images['mail.svg'].default,
                                             frontAlt: "Mail Icon"
@@ -114,62 +118,17 @@ function Register() {
 
                                 {/* Phone Number */}
                                 <FormGroup className="field-wrapper">
-                                    <Field name="phone">
-                                        {props => {
-                                            const { field, form, meta } = props
-                                            return (
-                                                <>
-                                                    <WrapperInput className="input-group"
-                                                        // valid={field.value !== '' && field.value.length > 4 && meta.touched && !meta.error}
-                                                        invalid={meta.touched && meta.error}
-                                                    >
-                                                        <PhoneInput
-                                                            id="phone"
-                                                            name="phone"
-                                                            value={form.values.phone}
-                                                            onBlur={form.handleBlur}
-                                                            onChange={(a, b, v) => { form.handleChange(v) }}
-                                                            country={'us'}
-                                                            inputProps={{
-                                                                name: 'phone',
-                                                            }}
-                                                            enableSearch disableSearchIcon
-                                                            preferredCountries={['us', 'in', 'sg']}
-                                                            searchPlaceholder="Search Country"
-                                                            inputStyle={{
-                                                                width: "100%",
-                                                                height: '45px',
-                                                                border: 'none',
-                                                                boxShadow: 'none',
-                                                                borderRadius: '4px'
-                                                            }}
-                                                            buttonStyle={{
-                                                                border: 'none',
-                                                                backgroundColor: 'white',
-                                                                borderRadius: '4px'
-                                                            }}
-                                                            dropdownStyle={{
-                                                                borderRadius: '10px',
-                                                                display: 'flex',
-                                                                flexDirection: 'column',
-                                                                alignItems: 'center'
-                                                            }}
-                                                            searchStyle={{
-                                                                textAlign: 'center',
-                                                                border: 'none'
-                                                            }}
-                                                        />
-                                                    </WrapperInput>
-                                                    <ErrorMessage name='phone' component={FieldFeedback} />
-                                                </>
-                                            )
-                                        }}
-                                    </Field>
+                                    <FormikControl control="phoneNumber"
+                                        id="phone"
+                                        name="phone"
+                                    />
                                 </FormGroup>
 
                                 {/* Password */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat name="password"
+                                    <FormikControl control="inputText"
+                                        id="password"
+                                        name="password"
                                         type="password"
                                         placeholder="Password"
                                         imgInfo={{
@@ -181,7 +140,9 @@ function Register() {
 
                                 {/* Confirm Password */}
                                 <FormGroup>
-                                    <InputFormat name="confirmPassword"
+                                    <FormikControl control="inputText"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
                                         type="password"
                                         placeholder="Confirm Password"
                                         imgInfo={{

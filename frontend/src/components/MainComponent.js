@@ -6,14 +6,13 @@ import Register from './admin-register/RegisterComponent';
 import OrganizationInfo from './admin-register/OrganizationInfoComponent';
 import PersonalInfo from './admin-register/PersonalInfoComponent';
 
+import Learn from '../common/Formik/Learn';
+
 import Dashboard from './dashboard/DashboardCompnent';
-import EditAdminInfo from './dashboard/EditAdminInfo';
 
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+// import Loader from '../common/Loader';
 
-import styled from 'styled-components';
-
-import { images, getUser } from '../common/CommonUtils';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 // import { connect } from 'react-redux';
 
@@ -27,35 +26,62 @@ import { images, getUser } from '../common/CommonUtils';
 
 // })
 
+import Loader from '../common/Loader';
+
+
+
+const RouteWithLoader = ({ component: Component, loadTime: time, ...rest }) => {
+    const [load, setLoaded] = React.useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoaded(false), time*1000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    return (
+        <Route {...rest} component={() => (
+            <>
+                {load ? <Loader /> : <Component />}
+            </>
+        )} />
+    );
+};
+
 function Main() {
 
     // componentDidMount() {
 
     // }
 
-
     return (
         <Switch>
-            <Route path="/login" component={() => <Login />} />
-            <Route exact path="/register" component={() => <Register />} />
-            <Route path="/register/personal-info" component={() => <PersonalInfo />} />
-            <Route path="/register/organization-info" component={() => <OrganizationInfo />} />
-            <Route exact path="/dashboard" component={() => (
-                < div className="container">
-                    <div className="row">
-                        {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
-                        <h2 className="col-3 display-5">{getUser().tenantName}</h2>
-                        <h3 className="col-8 text-center display-6">Hi {getUser().firstName}</h3>
+            <RouteWithLoader exact path="/login" component={Login} loadTime="1" />
+            <RouteWithLoader exact path="/register" component={Register} loadTime="1" />
+            <RouteWithLoader exact path="/register/personal-info" component={PersonalInfo} loadTime="3" />
+            <RouteWithLoader exact path="/register/organization-info" component={OrganizationInfo} loadTime="0.5" />
 
-                        <div className="col-1">
-                            User Profile
-                        </div>
-                    </div>
-                    <div className="row mt-5">
-                        <Dashboard />
-                    </div>
-                </div>
+            <RouteWithLoader exact path="/learn" component={Learn} />
+
+            <Route exact path="/dashboard" component={() => (
+                // <div className="container">
+                //     <div className="row text-center">
+                //         {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
+                //         <h2 className="col-3 display-5">{getUser().tenantName}</h2>
+                //         <h3 className="col-6 display-6" style={{color: 'blue'}}>Welcome {getUser().firstName}</h3>
+
+                //         <div className="col-3">
+                //             <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company Profile</Tooltip>}>
+                //                 <AccountCircleIcon style={{ cursor: 'pointer', fontSize: '50px' }} />
+                //             </OverlayTrigger>
+                //         </div>
+                //     </div>
+                // <div className="row mt-5">
+                <Dashboard />
+                // </div>
+                // </div>
             )} />
+
+            {/* <Route exact path="" */}
 
 
 

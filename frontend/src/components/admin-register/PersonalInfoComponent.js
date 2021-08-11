@@ -1,11 +1,13 @@
 import React from 'react';
 import { FormGroup, Button, Input, Label } from 'reactstrap';
-import { Centered, Card, ParentCard, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
+import { Centered, Card, ParentCard } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import InputFormat from '../../common/InputComponent';
-import {images} from '../../common/CommonUtils';
+import { images } from '../../common/CommonUtils';
+
+import FormikControl from '../../common/Formik/FormikControl';
 
 const initialValues = {
     firstname: '',
@@ -20,6 +22,12 @@ const validationSchema = Yup.object({
     lastname: Yup.string()
         .required('Required!')
 })
+
+export const genderOptions = [
+    { key: 'Male', value: 'MALE' },
+    { key: 'Felame', value: 'FEMALE' },
+    { key: 'Other', value: 'OTHER' }
+]
 
 function PersonalInfo() {
 
@@ -52,17 +60,18 @@ function PersonalInfo() {
 
                                 {/* First Name */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="firstname"
+                                    <FormikControl control="inputText"
+                                        id="firstname"
                                         name="firstname"
                                         type="text"
                                         placeholder="First Name"
-                                        reuired
                                     />
                                 </FormGroup>
 
                                 {/* Last Name */}
                                 <FormGroup className="field-wrapper">
-                                    <InputFormat id="lastname"
+                                    <FormikControl control="inputText"
+                                        id="lastname"
                                         name="lastname"
                                         type="text"
                                         placeholder="Last Name"
@@ -71,45 +80,14 @@ function PersonalInfo() {
 
                                 {/* Gender */}
                                 <FormGroup className="row field-wrapper">
-                                    <Field name="phone">
-                                        {props => {
-                                            const { field, form, meta } = props
-                                            return (
-                                                <>
-                                                    <div className="col-3 my-auto">Gender</div>
-                                                    <div className="col-6">
-                                                        <Input id="male"
-                                                            name="gender"
-                                                            type="radio"
-                                                            value="MALE"
-                                                            onChange={form.handleChange}
-                                                        />{' '}
-                                                        <Label htmlFor="male" className="form-check-label">Male</Label>
-                                                        <br />
+                                    <FormikControl control="radio"
+                                        id="gender"
+                                        name="gender"
+                                        type="radio"
+                                        label="Gender"
+                                        options={genderOptions}
+                                    />
 
-                                                        <Input id="female"
-                                                            name="gender"
-                                                            type="radio"
-                                                            value="FEMALE"
-                                                            onChange={form.handleChange}
-                                                        />{' '}
-                                                        <Label htmlFor="female" className="form-check-label">Female</Label>
-
-                                                        <br />
-                                                        <Label htmlFor="other" className="form-check-label" style={{ width: '80px', height: '30px', borderRadius: '100px' }}>
-                                                            <Input id="other"
-                                                                name="gender"
-                                                                type="radio"
-                                                                value="OTHER"
-                                                                onChange={form.handleChange}
-                                                            />{' '}
-                                                            Other
-                                                        </Label>
-                                                    </div>
-                                                </>
-                                            )
-                                        }}
-                                    </Field>
                                 </FormGroup>
 
                                 {/* Submit */}

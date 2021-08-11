@@ -1,13 +1,19 @@
 import * as React from 'react';
 import { FormGroup, Button } from 'reactstrap';
-import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
+import LogoCard, { Centered, ParentCard, Card } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
 import Loader from '../../common/Loader';
 import { baseUrl } from '../../common/baseUrl';
+import axios from 'axios';
+
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+
+import FormikControl from '../../common/Formik/FormikControl';
 
 const initialValues = {
     email: '',
@@ -32,7 +38,19 @@ const validationSchema = Yup.object({
         .matches(atleast1Spe, "Please use atleast one special character!"),
 })
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+    },
+}));
+
 function Login() {
+
+    const classes = useStyles();
+
 
     const [loader, setLoader] = React.useState(false);
 
@@ -40,38 +58,25 @@ function Login() {
     const history = useHistory();
 
     const onSubmit = (values) => {
-        setLoader(true);
-        fetch(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password, {
-        })
-            .then(response => {
-                setLoader(false);
-                if (response.ok) {
-                    return response;
-                }
-                else {
-                    var error = new Error(response.status + ': ' + response.statusText);
-                    error.response = response;
-                    if (response.status === 404) {
-                        formRef.current.setFieldError("email", "Whoops! This email isn't registered :(")
-                    }
-                    else {
-                        formRef.current.setFieldError("password", "Incorrect password for this email.")
-                    }
-                    throw error;
-                }
-
-            },
-                error => {
-                    var errmess = new Error(error.message);
-                    throw errmess;
-                })
-            .then(response => response.json())
-            .then(response => {
-                console.log(response);
-                localStorage.setItem("user", JSON.stringify(response));
+        // setLoader(true);
+        axios.get(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password)
+            .then((response) => {
+                console.log("a", response);
+                localStorage.setItem("user", JSON.stringify(response.data));
                 history.push("/dashboard");
             })
-            .catch(error => console.log(error))
+            .catch((err) => {
+                if(err.response === undefined) {
+                    alert("Server Error");
+                }
+                else if (err.response.status === 404) {
+                    formRef.current.setFieldError("email", "Whoops! This email isn't registered :(")
+                }
+                else if (err.response.data === "Invalid password") {
+                    formRef.current.setFieldError("password", "Incorrect password for this email.")
+                }
+                console.log(err.response)
+            })
     }
 
     return (
@@ -95,7 +100,7 @@ function Login() {
                             <Form className="mx-auto mb-5" style={{ maxWidth: '350px' }}>
 
                                 {/* Email Address */}
-                                <FormGroup className="field-wrapper">
+                                {/* <FormGroup className="field-wrapper">
                                     <InputFormat id="email" name="email"
                                         type="email"
                                         placeholder="Email"
@@ -104,11 +109,42 @@ function Login() {
                                             frontAlt: "Mail Icon"
                                         }}
                                     />
+                                </FormGroup> */}
+
+
+
+
+
+                                {/* <FormGroup className="field-wrapper">
+                                    <FormikControl control='inputText'
+                                        id='email'
+                                        name='email'
+                                        type='email'
+                                        placeholder='Email'
+                                        imgInfo={{
+                                            frontImg: images['mail.svg'].default,
+                                            frontAlt: "Mail Icon"
+                                        }}
+                                    />
+
+                                </FormGroup> */}
+
+                                <FormGroup className="field-wrapper">
+                                    <FormikControl control='inputText'
+                                        id='email'
+                                        name='email'
+                                        type='email'
+                                        placeholder='Email'
+                                        imgInfo={{
+                                            frontImg: images['mail.svg'].default,
+                                            frontAlt: "Mail Icon"
+                                        }}
+                                    />
                                 </FormGroup>
 
-                                {/* Password */}
-                                <FormGroup className="mb-3">
-                                    <InputFormat id="password" name="password"
+                                <FormGroup>
+                                    <FormikControl control="inputText"
+                                        id="password" name="password"
                                         type="password"
                                         placeholder="Password"
                                         imgInfo={{
@@ -118,12 +154,58 @@ function Login() {
                                     />
                                 </FormGroup>
 
+
+
+
+
+                                {/* Password */}
+                                {/* <FormGroup className="mb-3">
+                                    <InputFormat id="password" name="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        imgInfo={{
+                                            frontImg: images['key.svg'].default,
+                                            frontAlt: "Key Icon"
+                                        }}
+                                    />
+                                </FormGroup> */}
+
+                                {/* <FormGroup> */}
+                                {/* </FormGroup> */}
+
+
+
+                                {/* <FormGroup className="mb-3">
+                                    <InputFormat id="password" name="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        imgInfo={{
+                                            frontImg: images['key.svg'].default,
+                                            frontAlt: "Key Icon"
+                                        }}
+                                    />
+                                </FormGroup> */}
+
+
+
+
+
+
+                                {/* <FormGroup> */}
+                                {/* <Field id="email" name="email" type="tel" placeholder="abc"/> */}
+                                {/* <Field> */}
+                                {/* <input type="text" placeholder="abc" /> */}
+                                {/* </Field> */}
+                                {/* </FormGroup> */}
+
                                 {/* Login Button */}
                                 <FormGroup className="mt-5">
                                     <Button type="submit" color="success" style={{ width: "100%" }}>
                                         Login
                                     </Button>
                                 </FormGroup>
+
+
                             </Form>
                         </Formik>
 
@@ -135,6 +217,14 @@ function Login() {
                             </Link>
                         </div>
                     </div>
+
+
+                    {/* <form className={classes.root} noValidate autoComplete="off">
+                        <TextField id="standard-basic" label="Standard" />
+                        <TextField id="filled-basic" label="Filled" variant="filled" />
+                        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+                    </form> */}
+
                 </Card>
             </ParentCard>
         </Centered>

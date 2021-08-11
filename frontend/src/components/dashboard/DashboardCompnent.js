@@ -1,30 +1,33 @@
-import React, { forwardRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import axios from 'axios';
-import MaterialTable, { MTableToolbar } from "material-table";
+import MaterialTable, { MTableToolbar, MTablePagination, MTableBody, MTableCell, Paper, MTableBodyRow } from "material-table";
 
-import { FieldFeedback, WrapperInput } from '../../common/CustomStyles';
-
-import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
-import { Input, FormGroup, Label } from 'reactstrap';
-import { Modal } from 'react-bootstrap'
+import { OverlayTrigger, Tooltip, Button, Modal } from "react-bootstrap";
 
 import { images, getUser } from '../../common/CommonUtils';
 import { tableIcons } from '../../common/TableIcons';
 
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
 
-import InputFormat from '../../common/InputComponent';
 
 
 import CloseIcon from '@material-ui/icons/Close';
 
 
-import FormView from './FormComponent';
+import UserForm from './UserForm';
 
 import { baseUrl } from '../../common/baseUrl';
+
+import OrganizationForm from './OrganizationForm';
+
+
+import BeatLoader from "react-spinners/BeatLoader";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 Yup.addMethod(Yup.string, 'validatePhone', function () {
     return this.test('test-phone', "Invalid number format", value => {
@@ -51,25 +54,41 @@ const validationSchema = Yup.object({
         .validatePhone(),
 })
 
+const validationSchemaOrg = Yup.object({
+    tenantName: Yup.string()
+        .required('Rwquired!'),
+
+    country: Yup.string()
+        .required('Required!')
+})
+
 function Dashboard() {
+
+    const [loader, setLoader] = React.useState(false);
 
     const [allEmployees, setAllEmployees] = React.useState([]);
     const [addModal, setAddModal] = React.useState();
     const [editModal, setEditModal] = React.useState(false);
     const [deleteModal, setDeleteModal] = React.useState(false);
+    const [orgModal, setOrgModal] = React.useState(false);
     const [emp, setEmp] = React.useState()
     const [num, setNum] = React.useState(0);
 
     const addEmpFormRef = React.useRef();
     const editEmpFormRef = React.useRef();
+    const editOrgFormRef = React.useState();
+
+    const notify = () => toast("Wow so easy!");
 
     // using localstorage created while admin login to access the tenantName
     React.useEffect(() => {
         const getUsers = async (values) => {
-            axios.get(baseUrl + "api/users/tenant/" + getUser().tenantName)
+            setLoader(true);
+            axios.get(baseUrl + "api/users/tenant/" + getUser().tenantDto.tenantName)
                 .then((response) => {
-                    console.log(response.data);
+                    console.log("aa", response.data);
                     setAllEmployees(response.data);
+                    setLoader(false);
                 })
                 .catch((err) => {
                     console.log(err)
@@ -77,6 +96,29 @@ function Dashboard() {
         }
         getUsers();
     }, [num])
+
+    // editing company info
+    const editOrg = () => {
+        const editOrg = {
+            tenantName: editOrgFormRef.current.values.tenantName,
+            country: editOrgFormRef.current.values.country,
+            websiteUrl: editOrgFormRef.current.values.websiteUrl,
+            contact: editOrgFormRef.current.values.contact
+        }
+
+        axios.put((baseUrl + "api/tenants/edit"), editOrg)
+            .then(() => {
+                setNum(num + 1);
+                var user = getUser();
+                user.tenantDto = editOrg;
+                localStorage.setItem("user", JSON.stringify(user));
+                setOrgModal(false);
+                toast.success("Company updated successfully!");
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
 
     // saving new employee from modal
     const addEmployee = () => {
@@ -89,12 +131,13 @@ function Dashboard() {
             gender: addEmpFormRef.current.values.gender,
             joiningDate: addEmpFormRef.current.values.joiningDate,
             roleId: 2,
-            tenantName: getUser().tenantName
+            tenantName: getUser().tenantDto.tenantName
         }
         axios.post((baseUrl + "api/users/save?password=Welcome" + newEmp.firstName), newEmp)
             .then(() => {
                 setNum(num + 1);
                 setAddModal(false);
+                toast.success("Employee added successfully!");
             })
             .catch((err) => {
                 if (err.response.data === "user already exists") {
@@ -115,26 +158,30 @@ function Dashboard() {
             contactNumber: editEmpFormRef.current.values.phone,
             gender: editEmpFormRef.current.values.gender,
             joiningDate: editEmpFormRef.current.values.joiningDate,
-            roleId: 2
+            roleId: editEmpFormRef.current.values.roleId
         }
         axios.put((baseUrl + "api/users/edit"), editEmp)
             .then(() => {
                 setNum(num + 1);
                 setEditModal(false);
+                toast.success("Employee updated successfully!");
             })
             .catch((err) => {
                 console.log(err)
             })
     }
 
+    console.log("abc", allEmployees);
+
     // deleting existing employee
     const deleteEmployee = () => {
-        console.log("delete", emp.email);
-        axios.delete(baseUrl + "api/users/delete?email=" + emp.email)
+        // console.log("delete", emp.email);
+        axios.delete(baseUrl + "api/users/delete?email=" + emp.userDto.email)
             .then((response) => {
                 setNum(num + 1);
                 console.log("res", response);
                 setDeleteModal(false);
+                toast.success("Employee deleted successfully!");
             })
             .catch((err) => {
                 console.log("error", err)
@@ -160,23 +207,32 @@ function Dashboard() {
         designation: emp && emp.designation,
         phone: emp && emp.contactNumber,
         gender: emp && emp.gender,
-        joiningDate: emp && emp.joiningDate
+        joiningDate: emp && emp.joiningDate,
+        roleId: emp && emp.roleId
+    }
+
+    const initialValuesOrgEdit = {
+        tenantName: getUser().tenantDto.tenantName,
+        country: getUser().tenantDto.country,
+        websiteUrl: getUser().tenantDto.websiteUrl,
+        contact: getUser().tenantDto.contact
     }
 
     const tableColumns = [
-        { title: "SN", field: "tableData.id", filtering: false, render: row => (row.tableData.id + 1) },
-        { title: "Name", field: "firstName", render: row => (row.firstName + " " + row.lastName) },
-        { title: "Designation", field: "designation" },
-        { title: "Email", field: "email" },
-        { title: "Phone", field: "contactNumber" },
-        { title: "Joining Date", field: "joiningDate" },
+        { title: "Employee ID", field: "userId", filtering: false },
+        { title: "Name", field: "userDto.firstName", render: row => (row.userDto.firstName + " " + row.userDto.lastName) },
+        { title: "Role", field: "userDto.roleId", render: row => (row.userDto.roleId == 1 ? 'Admin' : 'Employee') },
+        { title: "Designation", field: "userDto.designation" },
+        { title: "Email", field: "userDto.email" },
+        // { title: "Phone", field: "contactNumber" },
+        { title: "Joining Date", field: "userDto.joiningDate" },
         {
             title: "Actions", field: "email", filtering: false, render: row =>
                 <>
                     <div className="d-flex justify-content-between" style={{ width: '150px' }}>
                         <div>
                             <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">Edit</Tooltip>}>
-                                <tableIcons.Edit style={{ cursor: 'pointer' }} onClick={() => { setEditModal(true); setEmp(row) }} />
+                                <tableIcons.Edit style={{ cursor: 'pointer' }} onClick={() => { setEditModal(true); console.log("ab", row); setEmp(row.userDto) }} />
                             </OverlayTrigger>
                         </div>
                         <div>
@@ -186,12 +242,12 @@ function Dashboard() {
                         </div>
                         <div>
                             <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">View Report</Tooltip>}>
-                                <img src={images['report.png'].default} style={{ width: '25px', cursor: 'pointer' }} onClick={() => console.log(row)} />
+                                <img src={images['report.png'].default} alt="download report icon" style={{ width: '25px', cursor: 'pointer' }} onClick={() => {alert("This feature is currently not available!"); console.log(row)} } />
                             </OverlayTrigger>
                         </div>
                         <div>
                             <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">Download Report</Tooltip>}>
-                                <tableIcons.Export style={{ width: '25px', cursor: 'pointer' }} onClick={() => console.log(row)} />
+                                <tableIcons.Export style={{ width: '25px', cursor: 'pointer' }} onClick={() => {alert("This feature is currently not available!"); console.log(row)} } />
                             </OverlayTrigger>
                         </div>
                     </div>
@@ -199,102 +255,196 @@ function Dashboard() {
         }
     ]
 
+    const Loader = () => {
+        return (
+            <BeatLoader speedMultiplier="1" color="#000" loading={loader} size={30} />
+        )
+    }
+
     return (
-        <div className="col-10 offset-1">
-
-            {/* Add Employee Modal */}
-            <Modal show={addModal} onHide={() => setAddModal(false)} centered>
-                <Modal.Header>
-                    <Modal.Title>New Employee</Modal.Title>
-                    <CloseIcon onClick={() => setAddModal(false)} style={{ cursor: 'pointer' }} />
-                </Modal.Header>
-
-                <Modal.Body>
-                    <Formik
-                        initialValues={initialValuesAdd}
-                        validationSchema={validationSchema}
-                        onSubmit={() => addEmployee()}
-                        innerRef={addEmpFormRef}
-                    >
-                        <FormView />
-                    </Formik>
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button variant="primary" onClick={() => addEmpFormRef.current.submitForm()}>Save</Button>
-                    <span></span>
-                    <Button className="btn-outline-danger" variant="" onClick={() => setAddModal(false)}>Cancel</Button>
-                </Modal.Footer>
-            </Modal>
-
-            {/* Edit Employee Modal */}
-            <Modal show={editModal} onHide={() => setEditModal(false)} centered>
-                <Modal.Header>
-                    <Modal.Title>{emp && (emp.firstName + " " + emp.lastName)}</Modal.Title>
-                    <CloseIcon onClick={() => setEditModal(false)} style={{ cursor: 'pointer' }} />
-                </Modal.Header>
-
-                <Modal.Body>
-                    <Formik
-                        initialValues={initialValuesEdit}
-                        validationSchema={validationSchema}
-                        onSubmit={() => editEmployee()}
-                        innerRef={editEmpFormRef}
-                    >
-                        <FormView />
-                    </Formik>
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button variant="primary" onClick={() => editEmpFormRef.current.submitForm()}>Save</Button>
-                    <span></span>
-                    <Button className="btn-outline-danger" variant="" onClick={() => setEditModal(false)}>Cancel</Button>
-                </Modal.Footer>
-            </Modal>
-
-            {/* Delete Employee Modal */}
-            <Modal show={deleteModal} onHide={() => setDeleteModal(false)} centered>
-                <Modal.Header>
-                    <Modal.Title>Are you sure you want to delete this employee's details?</Modal.Title>
-                    <CloseIcon onClick={() => setDeleteModal(false)} style={{ cursor: 'pointer' }} />
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <Button variant='danger' style={{ marginRight: '20px' }} onClick={() => deleteEmployee()}>Yes</Button>
-                    <Button variant='success' onClick={() => setDeleteModal(false)}>No</Button>
-                </Modal.Body>
-            </Modal>
-
-
-            <MaterialTable
-                icons={tableIcons}
-                // title="Employee Details"
-                columns={tableColumns}
-                // columns={[{ title: "Name", field: "firstName" },
-                // { title: "Designation", field: "designation" }]}
-                data={allEmployees}
-                options={{
-                    search: true,
-                    // selection: false,
-                    filtering: true,
-                    // grouping: false,
-                    // paging: false,
-                    // searchFieldAlignment: 'left',
-
-                }}
-                components={{
-                    Toolbar: (props) => (
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between"
-                            }}
-                        >
-                            <MTableToolbar {...props} />
-                            <Button variant="primary" className="m-3 p-1 px-2" onClick={() => setAddModal(true)}>Add Employee</Button>
-                        </div>
-                    )
-                }}
+        <div className="container">
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
             />
+            <div className="mt-1 text-center d-flex justify-content-between align-items-center bg-white">
+                {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
+                <div className="ms-4" style={{ margni: 'auto 0' }}>
+                    <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().tenantDto.tenantName}</h2>
+                    <p className="" style={{ fontSize: '15px', margin: '0' }}>Company Dashboard</p>
+                </div>
+                <h3 className="display-6" style={{ color: 'blue' }}>Welcome {getUser().userDto.firstName}</h3>
+
+                <div className="me-4" style={{}}>
+                    <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company Profile</Tooltip>}>
+                        <tableIcons.Business style={{ cursor: 'pointer', fontSize: '50px' }} onClick={() => setOrgModal(true)} />
+                    </OverlayTrigger>
+                </div>
+            </div>
+
+            <div className="mt-5 d-flex justify-content-between">
+                <div className="display-6">
+                    Employees
+                </div>
+                <div className="">
+                    <Button variant="primary" className="p-3" onClick={() => setAddModal(true)}>
+                        <tableIcons.AddIcon style={{ marginTop: '-4px' }} />
+                        {' '}ADD EMPLOYEE
+                    </Button>
+                </div>
+            </div>
+
+            {/* original dashboard */}
+            <div className="row">
+                <div className="col-12">
+
+                    {/* Edit Organization */}
+                    <Modal show={orgModal} onHide={() => setOrgModal(false)} centered>
+                        <Modal.Header>
+                            <Modal.Title>{getUser().tenantDto.tenantName}: Company Details</Modal.Title>
+                            <CloseIcon onClick={() => setOrgModal(false)} style={{ cursor: 'pointer' }} />
+                        </Modal.Header>
+
+                        <Modal.Body>
+                            <Formik
+                                initialValues={initialValuesOrgEdit}
+                                validationSchema={validationSchemaOrg}
+                                onSubmit={() => editOrg()}
+                                innerRef={editOrgFormRef}
+                            >
+                                <OrganizationForm />
+                            </Formik>
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={() => editOrgFormRef.current.submitForm()}>Save</Button>
+                            <span></span>
+                            <Button className="btn-outline-danger" variant="" onClick={() => setOrgModal(false)}>Cancel</Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    {/* Add Employee Modal */}
+                    <Modal show={addModal} onHide={() => setAddModal(false)} centered>
+                        <Modal.Header>
+                            <Modal.Title>New Employee</Modal.Title>
+                            <CloseIcon onClick={() => setAddModal(false)} style={{ cursor: 'pointer' }} />
+                        </Modal.Header>
+
+                        <Modal.Body style={{ maxHeight: '70vh', overflowY: 'scroll'}}>
+                            <Formik
+                                initialValues={initialValuesAdd}
+                                validationSchema={validationSchema}
+                                onSubmit={() => addEmployee()}
+                                innerRef={addEmpFormRef}
+                            >
+                                <UserForm />
+                            </Formik>
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={() => addEmpFormRef.current.submitForm()}>Save</Button>
+                            <span></span>
+                            <Button className="btn-outline-danger" variant="" onClick={() => setAddModal(false)}>Cancel</Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    {/* Edit Employee Modal */}
+                    <Modal show={editModal} onHide={() => setEditModal(false)} centered>
+                        <Modal.Header>
+                            <Modal.Title>{emp && (emp.firstName + " " + emp.lastName)}</Modal.Title>
+                            <CloseIcon onClick={() => setEditModal(false)} style={{ cursor: 'pointer' }} />
+                        </Modal.Header>
+
+                        <Modal.Body className="modal-body-scroll" style={{ maxHeight: '70vh', overflowY: 'scroll'}}>
+                            <Formik
+                                initialValues={initialValuesEdit}
+                                validationSchema={validationSchema}
+                                onSubmit={() => editEmployee()}
+                                innerRef={editEmpFormRef}
+                            >
+                                <UserForm />
+                            </Formik>
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={() => editEmpFormRef.current.submitForm()}>Save</Button>
+                            <span></span>
+                            <Button className="btn-outline-danger" variant="" onClick={() => setEditModal(false)}>Cancel</Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    {/* Delete Employee Modal */}
+                    <Modal show={deleteModal} onHide={() => setDeleteModal(false)} centered>
+                        <Modal.Header>
+                            <Modal.Title>Are you sure you want to delete this employee's details?</Modal.Title>
+                            <CloseIcon onClick={() => setDeleteModal(false)} style={{ cursor: 'pointer' }} />
+                        </Modal.Header>
+                        <Modal.Body className="text-center">
+                            <Button variant='success' style={{ marginRight: '20px' }} onClick={() => deleteEmployee()}>Yes</Button>
+                            <Button variant='danger' onClick={() => setDeleteModal(false)}>No</Button>
+                        </Modal.Body>
+                    </Modal>
+
+
+                    <MaterialTable
+                        localization={{
+                            body: {
+                                emptyDataSourceMessage:
+                                    <>
+                                        <Loader />
+                                        <p>Fetching Employess...</p>
+                                    </>
+                            }
+                        }}
+                        icons={tableIcons}
+                        columns={tableColumns}
+
+                        data={allEmployees}
+                        options={{
+                            showTitle: false,
+                            search: true,
+                        }}
+                        components={{
+                            // Container: (props) => {
+                            //     return (
+                            //         // <div className="bg-info">
+                            //             <Paper {...props} />
+                            //         // {/* </div> */}
+                            //     )
+                            // },
+                            Toolbar: (props) => {
+                                return (
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "center"
+                                        }}
+                                    >
+                                        <MTableToolbar {...props} />
+                                    </div>
+                                );
+
+                            },
+                            Pagination: props => {
+                                return (
+                                    <div className="" style={{ margin: '0 auto', width: '250px' }}>
+                                        <div>
+                                            <MTablePagination {...props} />
+                                        </div>
+                                    </div>
+                                );
+                            },
+                        }}
+                    />
+                </div>
+            </div>
         </div>
     );
 }
