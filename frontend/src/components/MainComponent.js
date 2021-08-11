@@ -10,7 +10,7 @@ import Learn from '../common/Formik/Learn';
 
 import Dashboard from './dashboard/DashboardCompnent';
 
-// import Loader from '../common/Loader';
+import { Link, useHistory } from 'react-router-dom';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
 
@@ -53,6 +53,8 @@ function Main() {
 
     // }
 
+    const history = useHistory();
+
     return (
         <Switch>
             <RouteWithLoader exact path="/login" component={Login} loadTime="1" />
@@ -76,7 +78,18 @@ function Main() {
                 //         </div>
                 //     </div>
                 // <div className="row mt-5">
-                <Dashboard />
+                <>
+                {
+                    localStorage.getItem("user") === null ?
+                        <>
+                        {alert("Sign In first!")}
+                        {history.push("/login")}
+
+                        </>
+                        :
+                        <Dashboard />
+                }
+                </>
                 // </div>
                 // </div>
             )} />

@@ -7,34 +7,32 @@ import PhoneInput from 'react-phone-input-2';
 
 
 function InputText(props) {
-    const { label, id, name, type, placeholder, imgInfo, options, ...rest } = props;
-    console.log("avv", props);
+    const { id, name, type, placeholder, imgInfo, options, ...rest } = props;
+    // console.log("avv", props);
 
     return (
-        <Field name="phone">
+        <Field name={name}>
             {props => {
                 const { field, form } = props
+                {/* console.log("manu", field); */}
+                {/* console.log("manu2", form, options); */}
                 return (
                     <>
-                        <div className="col-3 my-auto">{label}</div>
-                        <div className="col-6">
-                            {options.map(option => {
-                                return (
-                                    <>
-                                        <Input id={id}
-                                            name={name}
-                                            type={type}
-                                            value={option.value}
-                                            checked={field.value === option.value}
-                                            onChange={form.handleChange}
-                                        />{' '}
-                                        <Label htmlFor="male" className="form-check-label">{option.key}</Label>
-                                        <br />
-                                    </>
-                                )
-
-                            })}
-                        </div>
+                        {options.map(option => {
+                            return (
+                                <>
+                                    <Input id={option.key}
+                                        name={name}
+                                        type={type}
+                                        value={option.value}
+                                        checked={field.value === option.value}
+                                        onChange={form.handleChange}
+                                    />{' '}
+                                    <Label htmlFor={option.key} className="form-check-label">{option.key}</Label>
+                                    <br />
+                                </>
+                            )
+                        })}
                     </>
                 )
             }}

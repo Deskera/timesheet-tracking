@@ -25,7 +25,7 @@ const validationSchema = Yup.object({
 
 export const genderOptions = [
     { key: 'Male', value: 'MALE' },
-    { key: 'Felame', value: 'FEMALE' },
+    { key: 'Female', value: 'FEMALE' },
     { key: 'Other', value: 'OTHER' }
 ]
 

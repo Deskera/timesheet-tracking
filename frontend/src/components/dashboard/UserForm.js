@@ -71,7 +71,7 @@ function UserForm(props) {
                 <div className="col-7">
                     <FormikControl control="inputText"
                         id="designation"
-                        name="desgination"
+                        name="designation"
                         type="text"
                         border
                     />
@@ -80,7 +80,7 @@ function UserForm(props) {
 
             {/* Gender */}
             <FormGroup className="field-wrapper row d-flex align-items-center">
-                <Label htmlFor="firstname" className="col-3 offset-1 p-0">Gender</Label>
+                <Label htmlFor="gender" className="col-3 offset-1 p-0">Gender</Label>
                 <div className="col-7">
                     <FormikControl control="radio"
                         id="gender"

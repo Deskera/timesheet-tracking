@@ -4,7 +4,6 @@ import LogoCard, { Centered, ParentCard, Card } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
 import Loader from '../../common/Loader';
 import { baseUrl } from '../../common/baseUrl';
@@ -98,37 +97,6 @@ function Login() {
                             innerRef={formRef}
                         >
                             <Form className="mx-auto mb-5" style={{ maxWidth: '350px' }}>
-
-                                {/* Email Address */}
-                                {/* <FormGroup className="field-wrapper">
-                                    <InputFormat id="email" name="email"
-                                        type="email"
-                                        placeholder="Email"
-                                        imgInfo={{
-                                            frontImg: images['mail.svg'].default,
-                                            frontAlt: "Mail Icon"
-                                        }}
-                                    />
-                                </FormGroup> */}
-
-
-
-
-
-                                {/* <FormGroup className="field-wrapper">
-                                    <FormikControl control='inputText'
-                                        id='email'
-                                        name='email'
-                                        type='email'
-                                        placeholder='Email'
-                                        imgInfo={{
-                                            frontImg: images['mail.svg'].default,
-                                            frontAlt: "Mail Icon"
-                                        }}
-                                    />
-
-                                </FormGroup> */}
-
                                 <FormGroup className="field-wrapper">
                                     <FormikControl control='inputText'
                                         id='email'
@@ -153,50 +121,6 @@ function Login() {
                                         }}
                                     />
                                 </FormGroup>
-
-
-
-
-
-                                {/* Password */}
-                                {/* <FormGroup className="mb-3">
-                                    <InputFormat id="password" name="password"
-                                        type="password"
-                                        placeholder="Password"
-                                        imgInfo={{
-                                            frontImg: images['key.svg'].default,
-                                            frontAlt: "Key Icon"
-                                        }}
-                                    />
-                                </FormGroup> */}
-
-                                {/* <FormGroup> */}
-                                {/* </FormGroup> */}
-
-
-
-                                {/* <FormGroup className="mb-3">
-                                    <InputFormat id="password" name="password"
-                                        type="password"
-                                        placeholder="Password"
-                                        imgInfo={{
-                                            frontImg: images['key.svg'].default,
-                                            frontAlt: "Key Icon"
-                                        }}
-                                    />
-                                </FormGroup> */}
-
-
-
-
-
-
-                                {/* <FormGroup> */}
-                                {/* <Field id="email" name="email" type="tel" placeholder="abc"/> */}
-                                {/* <Field> */}
-                                {/* <input type="text" placeholder="abc" /> */}
-                                {/* </Field> */}
-                                {/* </FormGroup> */}
 
                                 {/* Login Button */}
                                 <FormGroup className="mt-5">
