@@ -4,7 +4,10 @@ package com.deskera.timetracking;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Date;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,11 +32,11 @@ import com.deskera.timetracking.service.UserService;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 //@EnableConfigurationProperties
-//@TestMethodOrder(OrderAnnotation.class)
+@TestMethodOrder(OrderAnnotation.class)
 //@DataJpaTest
 //@AutoConfigureTestDatabase(replace = Replace.NONE)
 
-class UserRepoTests {
+class UserServiceTests {
 	
 	@Autowired
     private UserService userService;
@@ -41,14 +44,42 @@ class UserRepoTests {
     private TenantService tenantService;
 	
 	@Test
+	@Order(1)
 	public void testSaveUser() {
-			TenantDto tenantDto=new TenantDto("test-tenant1","IN","xyz.com","7889677867");
-			UserDto userDto=new UserDto("Akansha","B","abc@gmail.com","developer","9089789078","FEMALE","29-10-2021",1,"test-tenant1");
+			TenantDto tenantDto=new TenantDto("test-tenant1","IN","xyz.com","788967786");
+			UserDto userDto=new UserDto("Akansha","B","testemail1@gmail.com","developer","9089789078","FEMALE","29-10-2021",1,"test-tenant1");
 	        
 			tenantService.initialSetup(new UserTenantDto(userDto,tenantDto),"testpassword");
 			
 	        UserResponseDto testuser = userService.getUserByEmail(userDto.getEmail());
-	        assertEquals(testuser.getUserDto().getEmail(),"abc@gmail.com");
+	        assertEquals(testuser.getUserDto().getEmail(),"testemail1@gmail.com");
+	}
+	@Test
+	@Order(2)
+	public void testEditUser() {
+			UserDto userDto=new UserDto("Akansha","Akansha","testemail2@gmail.com","manager","9089789078","FEMALE","29-10-2021",1,"");
+	        long uid=userService.getUserByEmail("testemail1@gmail.com").getUserId();
+			userService.editUser(new UserResponseDto(uid,userDto));
+			
+	        UserResponseDto userDetails = userService.getUserById(uid);
+	        assertEquals(userDetails.getUserDto().getEmail(),"testemail2@gmail.com");
+	        assertEquals(userDetails.getUserDto().getDesignation(),"manager");
+	        assertEquals(userDetails.getUserDto().getLastName(),"Akansha");
+	        
+	}
+	@Test
+	@Order(3)
+	public void testUserLogin() {
+		UserTenantDto userDetails=userService.isValidLogin("testemail2@gmail.com", "testpassword");
+			
+	    assertEquals(userDetails.getUserDto().getEmail(),"testemail2@gmail.com");
+	    assertEquals(userDetails.getTenantDto().getTenantName(),"test-tenant1");
+	}
+	@Test
+	@Order(4)
+	public void testDeleteUser() {
+			userService.deleteUserByEmail("testemail2@gmail.com");
+			tenantService.deleteTenantByName("test-tenant1");
 	}
 
 }
