@@ -1,10 +1,8 @@
 import React from 'react';
 
-import { Input, FormGroup, Label } from 'reactstrap';
-import { Form, Field, ErrorMessage } from 'formik';
-import PhoneInput from 'react-phone-input-2';
+import { FormGroup, Label } from 'reactstrap';
+import { Form } from 'formik';
 
-import { WrapperInput, FieldFeedback } from '../../common/CustomStyles';
 import { countryOptions } from '../admin-register/OrganizationInfoComponent';
 
 import FormikControl from '../../common/Formik/FormikControl';

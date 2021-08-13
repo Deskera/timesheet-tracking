@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Input, Label } from 'reactstrap';
-import { WrapperInput, FieldFeedback } from '../CustomStyles';
-import { ErrorMessage, Field } from 'formik';
-import { images } from '../CommonUtils';
+import { Input } from 'reactstrap';
+import { WrapperInput } from '../CustomStyles';
+import { Field } from 'formik';
 
 
 function Select(props) {
-    const { label, id, name, type, placeholder, imgInfo, options, ...rest } = props;
+    const { id, name, type, options } = props;
     console.log("avv", props);
 
     return (

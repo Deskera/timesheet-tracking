@@ -7,9 +7,11 @@ import 'react-phone-input-2/lib/style.css';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
     <App />
-  </React.StrictMode>,
+  </>,
+  // {/* </React.StrictMode>, */}
   document.getElementById('root')
 );
 

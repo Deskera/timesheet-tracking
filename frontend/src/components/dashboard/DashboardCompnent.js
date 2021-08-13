@@ -1,13 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import MaterialTable, { MTableToolbar, MTablePagination, MTableBody, MTableCell, Paper, MTableBodyRow } from "material-table";
+import MaterialTable, { MTableToolbar, MTablePagination, MTableBodyRow } from "material-table";
 
 import { OverlayTrigger, Tooltip, Button, Modal } from "react-bootstrap";
 
 import { images, getUser } from '../../common/CommonUtils';
 import { tableIcons } from '../../common/TableIcons';
 
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 import { Formik } from 'formik';
@@ -31,6 +31,7 @@ import { BeatLoader, PulseLoader } from "react-spinners";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { TablePagination } from '@material-ui/core';
 
 
 
@@ -103,7 +104,7 @@ function Dashboard() {
         history.push("/login");
     }
 
-    const notify = () => toast("Wow so easy!");
+    // const notify = () => toast("Wow so easy!");
 
     // using localstorage created while admin login to access the tenantName
     React.useEffect(() => {
@@ -268,7 +269,7 @@ function Dashboard() {
     const tableColumns = [
         { title: "Employee ID", field: "userId", filtering: false },
         { title: "Name", field: "userDto.firstName", render: row => (row.userDto.firstName + " " + row.userDto.lastName) },
-        { title: "Role", field: "userDto.roleId", render: row => (row.userDto.roleId == 1 ? 'Admin' : 'Employee') },
+        { title: "Role", field: "userDto.roleId", render: row => (row.userDto.roleId === 1 ? 'Admin' : 'Employee') },
         { title: "Designation", field: "userDto.designation" },
         { title: "Email", field: "userDto.email" },
         // { title: "Phone", field: "contactNumber" },
@@ -283,7 +284,7 @@ function Dashboard() {
                             </OverlayTrigger>
                         </div>
                         {
-                            row.userDto.roleId == 2 ?
+                            row.userDto.roleId === 2 ?
                                 <>
                                     <div>
                                         <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">Delete</Tooltip>}>
@@ -432,7 +433,7 @@ function Dashboard() {
                     {/* Edit Employee Modal */}
                     <Modal show={editModal} onHide={() => setEditModal(false)} centered>
                         <Modal.Header>
-                            <Modal.Title>{emp && (emp.firstName + " " + emp.lastName)}</Modal.Title>
+                            <Modal.Title>{emp && (emp.userDto.firstName + " " + emp.userDto.lastName)}</Modal.Title>
                             <CloseIcon onClick={() => setEditModal(false)} style={{ cursor: 'pointer' }} />
                         </Modal.Header>
 
@@ -488,55 +489,48 @@ function Dashboard() {
                                 backgroundColor: rowData.userDto.roleId === 1 ? '#e3dedc' : ''
                             })
                         }}
-                    components={{
-                        // Container: (props) => {
-                        //     return (
-                        //         // <div className="bg-info">
-                        //             <Paper {...props} />
-                        //         // {/* </div> */}
-                        //     )
-                        // },
-                        Toolbar: (props) => {
-                            return (
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                    }}
-                                >
-                                    <MTableToolbar {...props} />
-                                </div>
-                            );
-
-                        },
-                        Pagination: props => {
-                            return (
-                                <div className="" style={{ margin: '0 auto', width: '250px' }}>
-                                    <div>
-                                        <MTablePagination {...props} />
+                        components={{
+                            // Container: (props) => {
+                            //     return (
+                            //         // <div className="bg-info">
+                            //             <Paper {...props} />
+                            //         // {/* </div> */}
+                            //     )
+                            // },
+                            Toolbar: (props) => {
+                                return (
+                                    <div style={{ display: "flex", justifyContent: "flex-start" }} >
+                                        <MTableToolbar {...props} />
                                     </div>
-                                </div>
-                            );
-                        },
-                        Row: props => {
-                            return (
-                                <div style={{ display: 'contents' }}>
-                                    {console.log("mmm", props)}
-                                    {/* {props.data.userDto.roleId === 1 ?
+                                );
+
+                            },
+                            Pagination: props => {
+                                return (
+                                    <div style={{ margin: '0 auto', width: '320px' }}>
+                                        <TablePagination {...props} />
+                                    </div>
+                                );
+                            },
+                            Row: props => {
+                                return (
+                                    <>
+                                        {/* {console.log("mmm", props)} */}
+                                        {/* {props.data.userDto.roleId === 1 ?
                                         <button>abc</button>
                                         : null} */}
-                                    <MTableBodyRow {...props} />
-                                </div>
-                            )
-                        },
-                        // Container: props => {
-                        //     return (
-                        //         <span className="bg-warning">
-                        //             <Paper {...props} />
-                        //         </span>
-                        //     )
-                        // }
-                    }}
+                                        <MTableBodyRow {...props} />
+                                    </>
+                                )
+                            },
+                            // Container: props => {
+                            //     return (
+                            //         <span className="bg-warning">
+                            //             <Paper {...props} />
+                            //         </span>
+                            //     )
+                            // }
+                        }}
                     />
                 </div>
             </div>

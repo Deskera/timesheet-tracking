@@ -2,15 +2,14 @@ import * as React from 'react';
 import { FormGroup, Button } from 'reactstrap';
 import LogoCard, { Centered, ParentCard, Card } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { images } from '../../common/CommonUtils';
-import Loader from '../../common/Loader';
+// import Loader from '../../common/Loader';
 import { baseUrl } from '../../common/baseUrl';
 import axios from 'axios';
 
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+// import { makeStyles } from '@material-ui/core/styles';
 
 import FormikControl from '../../common/Formik/FormikControl';
 
@@ -37,21 +36,18 @@ const validationSchema = Yup.object({
         .matches(atleast1Spe, "Please use atleast one special character!"),
 })
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         '& > *': {
+//             margin: theme.spacing(1),
+//             width: '25ch',
+//         },
+//     },
+// }));
 
 function Login() {
 
-    const classes = useStyles();
-
-
-    const [loader, setLoader] = React.useState(false);
+    // const [loader, setLoader] = React.useState(false);
 
     const formRef = React.useRef();
     const history = useHistory();
@@ -81,8 +77,8 @@ function Login() {
     return (
 
         <Centered className="container">
-            <ParentCard className="row" style={{ opacity: loader ? '0.4' : '' }} >
-                {loader && <Loader />}
+            <ParentCard className="row"> {/* style={{ opacity: loader ? '0.4' : '' }} */}
+                {/* {loader && <Loader />} */}
 
                 <LogoCard login />
 

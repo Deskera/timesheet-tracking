@@ -1,21 +1,16 @@
 import * as React from 'react';
 import { Input, Label } from 'reactstrap';
-import { WrapperInput, FieldFeedback } from '../CustomStyles';
-import { ErrorMessage, Field } from 'formik';
-import { images } from '../CommonUtils';
-import PhoneInput from 'react-phone-input-2';
+import { Field } from 'formik';
+
 
 
 function InputText(props) {
-    const { id, name, type, placeholder, imgInfo, options, ...rest } = props;
-    // console.log("avv", props);
+    const { id, name, type, options } = props;
 
     return (
-        <Field name={name}>
+        <Field name={name} id={id}>
             {props => {
                 const { field, form } = props
-                {/* console.log("manu", field); */}
-                {/* console.log("manu2", form, options); */}
                 return (
                     <>
                         {options.map(option => {
