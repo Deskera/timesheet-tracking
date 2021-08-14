@@ -6,6 +6,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { images } from '../../common/CommonUtils';
 import FormikControl from '../../common/Formik/FormikControl';
+import { ScaleLoader } from 'react-spinners';
 
 const initialValues = {
     companyName: '',
@@ -38,12 +39,15 @@ export const countryOptions = [
 
 function OrganizationInfo() {
 
+    const [loader, setLoader] = React.useState(false);
+
     const history = useHistory();
     // console.log("bbbb", history.location);
 
     const registerValues = history.location.state;
 
     const onSubmit = (values) => {
+        setLoader(true);
         registerValues["organization_info"] = values;
 
         const newUser = {
@@ -63,7 +67,7 @@ function OrganizationInfo() {
             }
         }
 
-        console.log("asd", newUser);
+        // console.log("asd", newUser);
 
         fetch("http://localhost:8080/api/tenants/initial-setup?password=" + registerValues.values.password, {
             method: 'POST',
@@ -75,6 +79,7 @@ function OrganizationInfo() {
             credentials: 'same-origin'
         })
             .then(response => {
+                setLoader(false);
                 if (response.ok) {
                     return response;
                 }
@@ -85,6 +90,7 @@ function OrganizationInfo() {
                 }
             },
                 error => {
+                    setLoader(false);
                     var errmess = new Error(error.message);
                     throw errmess;
                 })
@@ -165,7 +171,7 @@ function OrganizationInfo() {
                                     </Link>
                                     <div>
                                         <Button type="submit" color="success" style={{ width: "100%" }}>
-                                            Register Organization
+                                            {loader ? <ScaleLoader color="#fff" loading={loader} height={10} /> : "Register Organization"}
                                         </Button>
                                     </div>
                                 </FormGroup>

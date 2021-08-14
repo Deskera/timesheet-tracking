@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, Button } from 'reactstrap';
+import { FormGroup, Button, Label } from 'reactstrap';
 import { Centered, Card, ParentCard } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
@@ -78,15 +78,16 @@ function PersonalInfo() {
                                 </FormGroup>
 
                                 {/* Gender */}
-                                <FormGroup className="row field-wrapper">
-                                    <FormikControl control="radio"
-                                        id="gender"
-                                        name="gender"
-                                        type="radio"
-                                        label="Gender"
-                                        options={genderOptions}
-                                    />
-
+                                <FormGroup className="field-wrapper row d-flex align-items-center">
+                                    <Label htmlFor="gender" className="col-3 offset-1 p-0">Gender</Label>
+                                    <div className="col-7">
+                                        <FormikControl control="radio"
+                                            id="gender"
+                                            name="gender"
+                                            type="radio"
+                                            options={genderOptions}
+                                        />
+                                    </div>
                                 </FormGroup>
 
                                 {/* Submit */}

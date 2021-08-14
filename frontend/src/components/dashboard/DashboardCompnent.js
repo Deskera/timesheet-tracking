@@ -351,23 +351,21 @@ function Dashboard() {
 
             <div className="mt-1 text-center d-flex justify-content-between align-items-center bg-white">
                 {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
-                <div className="ms-4" style={{ margni: 'auto 0' }}>
-                    <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().tenantDto.tenantName}</h2>
-                    <p className="" style={{ fontSize: '15px', margin: '0' }}>Company Dashboard</p>
-                </div>
-                <h3 className="display-6" style={{ color: 'blue' }}>Welcome {getUser().userDto.firstName}</h3>
 
-                <div className="me-4" style={{}}>
+                <h3 className="display-6 ms-4" style={{ color: 'blue', fontSize: '28px' }}>Welcome {getUser().userDto.firstName}</h3>
+
+                <div className="me-4 d-flex justify-content-between" style={{ width: '200px' }}>
+                    <div>
+                        <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().tenantDto.tenantName}</h2>
+                        <p className="" style={{ fontSize: '15px', margin: '0' }}>Company Dashboard</p>
+                    </div>
                     <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company</Tooltip>}>
                         <tableIcons.Business style={{ cursor: 'pointer', fontSize: '50px' }} onClick={handleClick} />
                     </OverlayTrigger>
                 </div>
             </div>
 
-            <div className="mt-5 d-flex justify-content-between">
-                <div className="display-6">
-                    Employees
-                </div>
+            <div className="mt-5 d-flex justify-content-end">
                 <div className="">
                     <Button variant="primary" className="p-3" onClick={() => setAddModal(true)}>
                         <tableIcons.AddIcon style={{ marginTop: '-4px' }} />
@@ -499,7 +497,10 @@ function Dashboard() {
                             // },
                             Toolbar: (props) => {
                                 return (
-                                    <div style={{ display: "flex", justifyContent: "flex-start" }} >
+                                    <div className="d-flex justify-content-between px-3">
+                                        <div className="display-6">
+                                            Employees
+                                        </div>
                                         <MTableToolbar {...props} />
                                     </div>
                                 );

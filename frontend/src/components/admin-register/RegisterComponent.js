@@ -5,6 +5,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
+import { ScaleLoader } from 'react-spinners';
+
 import { images } from '../../common/CommonUtils';
 
 import FormikControl from '../../common/Formik/FormikControl';
@@ -54,10 +56,14 @@ function Register() {
     const formRefRegister = React.useRef();
     const history = useHistory();
 
+    const [loader, setLoader] = React.useState(false);
+
     const onSubmit = (values) => {
         // history.push("/register/personal-info", {values})
+        setLoader(true);
         fetch("http://localhost:8080/api/users/search?email=" + values.email)
             .then(response => {
+                setLoader(false);
                 if (response.ok) {
                     return response;
                 }
@@ -68,6 +74,7 @@ function Register() {
                 }
             },
                 error => {
+                    setLoader(false);
                     var errmess = new Error(error.message);
                     throw errmess;
                 })
@@ -155,7 +162,7 @@ function Register() {
                                 <FormGroup className="mt-5">
                                     {/* useHistory() hook is used to go to new endpoint */}
                                     <Button type="submit" color="success" style={{ width: "100%" }}>
-                                        Create Account
+                                        {loader ? <ScaleLoader color="#fff" loading={loader} height={10} /> : "Create Account"}
                                     </Button>
                                 </FormGroup>
                             </Form>
