@@ -3,10 +3,9 @@ import { Input, Label } from 'reactstrap';
 import { WrapperInput, FieldFeedback } from '../CustomStyles';
 import { ErrorMessage, Field } from 'formik';
 import { images } from '../CommonUtils';
-// import TextField from '@mat'
 
 function InputText(props) {
-    const { label, id, name, placeholder, imgInfo, border, ...rest } = props;
+    const { label, id, name, placeholder, imgInfo, border } = props;
     
     var isPassword = false;
     if (props.type === 'password') {

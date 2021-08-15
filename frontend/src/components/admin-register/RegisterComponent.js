@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { FormGroup, Button } from 'reactstrap';
-import LogoCard, { Centered, ParentCard, Card, FieldFeedback, WrapperInput } from '../../common/CustomStyles';
+import LogoCard, { Centered, ParentCard, Card } from '../../common/CustomStyles';
 import { Link, useHistory } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
-import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
 
 import FormikControl from '../../common/Formik/FormikControl';

@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { Input } from 'reactstrap';
-import { WrapperInput, FieldFeedback } from '../CustomStyles';
-import { ErrorMessage, Field } from 'formik';
-import { images } from '../CommonUtils';
+import { Field } from 'formik';
 
 function DatePicker(props) {
-    const { label, id, name, type, placeholder, imgInfo, options, ...rest } = props;
+    const { id, name, type } = props;
 
     return (
         <Field name={name}>

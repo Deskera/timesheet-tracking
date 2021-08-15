@@ -1,10 +1,9 @@
 import React from 'react';
-import { FormGroup, Button, Input } from 'reactstrap';
-import { Centered, Card, ParentCard, WrapperInput } from '../../common/CustomStyles'
+import { FormGroup, Button } from 'reactstrap';
+import { Centered, Card, ParentCard } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputFormat from '../../common/InputComponent';
 import { images } from '../../common/CommonUtils';
 import FormikControl from '../../common/Formik/FormikControl';
 

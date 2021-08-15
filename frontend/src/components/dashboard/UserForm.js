@@ -1,10 +1,7 @@
 import React from 'react';
 
-import { Input, FormGroup, Label } from 'reactstrap';
-import { Form, Field, ErrorMessage } from 'formik';
-import PhoneInput from 'react-phone-input-2';
-
-import { WrapperInput, FieldFeedback } from '../../common/CustomStyles';
+import { FormGroup, Label } from 'reactstrap';
+import { Form } from 'formik';
 
 import FormikControl from '../../common/Formik/FormikControl';
 
@@ -71,7 +68,7 @@ function UserForm(props) {
                 <div className="col-7">
                     <FormikControl control="inputText"
                         id="designation"
-                        name="desgination"
+                        name="designation"
                         type="text"
                         border
                     />
@@ -80,7 +77,7 @@ function UserForm(props) {
 
             {/* Gender */}
             <FormGroup className="field-wrapper row d-flex align-items-center">
-                <Label htmlFor="firstname" className="col-3 offset-1 p-0">Gender</Label>
+                <Label htmlFor="gender" className="col-3 offset-1 p-0">Gender</Label>
                 <div className="col-7">
                     <FormikControl control="radio"
                         id="gender"

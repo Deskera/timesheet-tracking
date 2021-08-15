@@ -10,9 +10,12 @@ import Learn from '../common/Formik/Learn';
 
 import Dashboard from './dashboard/DashboardCompnent';
 
-// import Loader from '../common/Loader';
+import { useHistory } from 'react-router-dom';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
+
+import HashLoader from "react-spinners/HashLoader";
+
 
 // import { connect } from 'react-redux';
 
@@ -26,15 +29,34 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 // })
 
-import Loader from '../common/Loader';
+// import Loader from '../common/Loader';
 
+
+// function Loader() {
+//     let [loading, setLoading] = useState(true);
+//     let [color, setColor] = useState("#ffffff");
+
+//     return (
+//         <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+//             <HashLoader speedMultiplier="1" color="#9cdaf8" className="bg-info" loading={loading} size={100} />
+//         </div>
+//     );
+// }
+
+const Loader = () => {
+    return (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+            <HashLoader speedMultiplier="1" color="#9cdaf8" className="bg-info" loading={true} size={100} />
+        </div>
+    )
+}
 
 
 const RouteWithLoader = ({ component: Component, loadTime: time, ...rest }) => {
     const [load, setLoaded] = React.useState(true);
 
     React.useEffect(() => {
-        const timer = setTimeout(() => setLoaded(false), time*1000);
+        const timer = setTimeout(() => setLoaded(false), time * 1000);
         return () => clearTimeout(timer);
     }, []);
 
@@ -52,6 +74,8 @@ function Main() {
     // componentDidMount() {
 
     // }
+
+    const history = useHistory();
 
     return (
         <Switch>
@@ -76,7 +100,18 @@ function Main() {
                 //         </div>
                 //     </div>
                 // <div className="row mt-5">
-                <Dashboard />
+                <>
+                    {
+                        localStorage.getItem("user") === null ?
+                            <>
+                                {alert("Sign In first!")}
+                                {history.push("/login")}
+
+                            </>
+                            :
+                            <Dashboard />
+                    }
+                </>
                 // </div>
                 // </div>
             )} />

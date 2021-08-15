@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { Input, Label } from 'reactstrap';
 import { WrapperInput, FieldFeedback } from '../CustomStyles';
 import { ErrorMessage, Field } from 'formik';
-import { images } from '../CommonUtils';
 import PhoneInput from 'react-phone-input-2';
 
-
 function InputText(props) {
-    const { label, id, name, type, placeholder, imgInfo, border, ...rest } = props;
+    const { id, name, border } = props;
 
     return (
         <Field name={name}>
