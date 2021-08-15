@@ -1,8 +1,16 @@
 package com.deskera.timetracking.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,15 +38,26 @@ public class UserController {
 	private UserService userService;
 
 	//get all users from user table
-	@GetMapping("")
-	public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-		return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);	
-	}
+//	@GetMapping("")
+//	public ResponseEntity<Map<String,Object>> getAllUsers() {
+//		return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);	
+//	}
 
 	//get all users of an organization(by org name)
 	@GetMapping("/tenant/{tenantname}")
-	public ResponseEntity<List<UserResponseDto>> getAllUsers(@PathVariable("tenantname") final String tenantName) {
-		return new ResponseEntity<>(userService.getAllUsersByTenantName(tenantName),HttpStatus.OK);	
+	public ResponseEntity<Map<String,Object>> getAllUsers(@PathVariable("tenantname") final String tenantName,
+		    @RequestParam(defaultValue = "0") int page,
+		    @RequestParam(defaultValue = "3") int size,
+		    @RequestParam(defaultValue = "joiningDate,ASC") String[] sort,
+			@RequestParam(value = "name", required = false,defaultValue = "") final String name,
+			@RequestParam(value = "email", required = false,defaultValue = "") final String email,
+			@RequestParam(value = "designation", required = false,defaultValue = "") final String designation,
+			@RequestParam(value = "contactnumber", required = false,defaultValue = "") final String contactnumber,
+			@RequestParam(value = "gender", required = false,defaultValue = "") final String gender,
+			@RequestParam(value = "joiningdate", required = false,defaultValue = "") final String joiningdate) {
+		
+		Pageable pageable = PageRequest.of(page, size,Sort.by(Direction.valueOf(sort[1]),sort[0]));
+		return new ResponseEntity<>(userService.getAllUsersByTenantName(tenantName,pageable,name,email,designation,contactnumber,gender,joiningdate),HttpStatus.OK);	
 	}
 	
 	//user login with email and password(match)
