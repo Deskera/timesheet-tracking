@@ -13,7 +13,7 @@ import FormikControl from '../../common/Formik/FormikControl';
 
 
 const initialValues = {
-    email: '',
+    email: 'e1@manu.com',
     phone: '',
     password: 'Abc@1234',
     confirmPassword: 'Abc@1234'

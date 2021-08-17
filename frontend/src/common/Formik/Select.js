@@ -6,7 +6,6 @@ import { Field } from 'formik';
 
 function Select(props) {
     const { id, name, type, options } = props;
-    console.log("avv", props);
 
     return (
         <Field name={name}>
@@ -15,10 +14,10 @@ function Select(props) {
                 return (
                     <>
                         <WrapperInput className="input-group">
-                            <Input {...field} 
-                            type={type} 
-                            id={id} 
-                            name={name} className="form-select">
+                            <Input {...field}
+                                type={type}
+                                id={id}
+                                name={name} className="form-select">
                                 <option selected value="">
                                     Country
                                 </option>

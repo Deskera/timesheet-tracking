@@ -9,8 +9,8 @@ import { images } from '../../common/CommonUtils';
 import FormikControl from '../../common/Formik/FormikControl';
 
 const initialValues = {
-    firstname: '',
-    lastname: '',
+    firstname: 'Arnav',
+    lastname: 'Bansal',
     gender: ''
 }
 

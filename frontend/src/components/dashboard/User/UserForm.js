@@ -1,11 +1,10 @@
 import React from 'react';
 
 import { FormGroup, Label } from 'reactstrap';
-import { Form } from 'formik';
+import { Field, Form, ErrorMessage } from 'formik';
+import FormikControl from "../../../common/Formik/FormikControl";
 
-import FormikControl from '../../common/Formik/FormikControl';
-
-import { genderOptions } from '../../components/admin-register/PersonalInfoComponent';
+import { genderOptions } from '../../../components/admin-register/PersonalInfoComponent';
 
 function UserForm(props) {
 
@@ -92,27 +91,13 @@ function UserForm(props) {
             <FormGroup className="row d-flex align-items-center">
                 <Label htmlFor="joiningDate" className="col-3 offset-1 p-0">Joining Date</Label>
                 <div className="col-7">
-                <FormikControl control="date"
-                id="joiningDate"
-                name="joiningDate"
-                type="date"
-                border
+                    <FormikControl control="date"
+                        id="joiningDate"
+                        name="joiningDate"
+                        type="date"
+                        border
 
-                />
-                    {/* <Field name="joiningDate">
-                        {props => {
-                            const { field, meta } = props
-                            return (
-                                <div className="row d-flex justify-content-center align-items-center">
-                                    <Label htmlFor="joiningDate" className="col-3 p-0">Joining Date</Label>
-                                    <div className="col-6">
-                                        
-
-                                    </div>
-                                </div>
-                            )
-                        }}
-                    </Field> */}
+                    />
                 </div>
             </FormGroup>
         </Form>
