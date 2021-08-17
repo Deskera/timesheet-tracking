@@ -4,7 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
 
 import com.deskera.timetracking.common.GENDER;
 import com.deskera.timetracking.entity.Role;
@@ -107,7 +111,7 @@ public class UserEntityMapper {
 		
 		return user;
 	}
-
+	
 	public List<UserResponseDto> mapUser(List<User> userList) {
 		List<UserResponseDto> userResponseDtoList=new ArrayList<UserResponseDto>();
 		for(User u:userList)
@@ -141,6 +145,15 @@ public class UserEntityMapper {
 	
 	public UserResponseDto mapUserResponse(final User user) {
 		return new UserResponseDto(user.getUid(),mapUser(user));
+	}
+	
+	public Map<String,Object> mapPageResponse(Page<User> userPage){
+		Map<String,Object> response=new HashMap<String,Object>();
+		response.put("currentPage", userPage.getNumber());
+		response.put("totalItems", userPage.getTotalElements());
+		response.put("totalPages", userPage.getTotalPages());
+		response.put("users", mapUser(userPage.getContent()));
+		return response;
 	}
 	
 }

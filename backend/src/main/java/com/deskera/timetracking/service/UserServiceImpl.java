@@ -1,12 +1,21 @@
 package com.deskera.timetracking.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deskera.timetracking.common.GENDER;
 import com.deskera.timetracking.dto.TenantDto;
 import com.deskera.timetracking.dto.UserDto;
 import com.deskera.timetracking.dto.UserEntityMapper;
@@ -23,6 +32,7 @@ import com.deskera.timetracking.repository.UserRepository;
 public class UserServiceImpl implements UserService{
 
 	private static final UserEntityMapper USER_ENTITY_MAPPER = new UserEntityMapper();
+	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -31,10 +41,10 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private TenantService tenantService;
 	
-	@Override
-	public List<UserResponseDto> getAllUsers() {
-		return USER_ENTITY_MAPPER.mapUser(userRepository.findAllUsers());
-	}
+//	@Override
+//	public Map<String,Object> getAllUsers() {
+//		return USER_ENTITY_MAPPER.mapPageResponse(userRepository.findAllUsers());
+//	}
 
 	@Override
 	public UserResponseDto getUserById(final long id) {
@@ -78,10 +88,46 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public List<UserResponseDto> getAllUsersByTenantName(final String tenantName) {
+	public Map<String,Object> getAllUsersByTenantName(final String tenantName,final Pageable pageable,String name,String email,String designation,String contactnumber,String gender,String joiningdate) {
 		
-		Tenant tenant=tenantService.getTenantByName(tenantName);		
-		return USER_ENTITY_MAPPER.mapUser(userRepository.findAllByTenant(tenant));
+		Tenant tenant=tenantService.getTenantByName(tenantName);
+		Page<User> userPage;
+		if(!gender.isEmpty() && !joiningdate.isEmpty())
+		{
+			if(!GENDER.isExist(gender))
+				{
+					throw new BadRequestException("invalid gender");
+				}
+			try {
+				Date date=DATE_FORMAT.parse(joiningdate);
+				userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),date,pageable);
+				
+			} catch (Exception e) {
+				throw new BadRequestException("Invalid joining date");
+			}
+			}
+		else if(!gender.isEmpty()) {
+			if(!GENDER.isExist(gender))
+			{
+				throw new BadRequestException("invalid gender");
+			}
+			userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),pageable);
+		}
+		else if(!joiningdate.isEmpty())
+		{
+			try {
+				Date date=DATE_FORMAT.parse(joiningdate);
+				userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,date,pageable);
+				
+			} catch (Exception e) {
+				throw new BadRequestException("Invalid joining date");
+			}	
+		}
+		else
+			userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,pageable);
+		
+		return USER_ENTITY_MAPPER.mapPageResponse(userPage);
+					//return USER_ENTITY_MAPPER.mapUser(userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,pageable));
 	}
 
 	@Override
