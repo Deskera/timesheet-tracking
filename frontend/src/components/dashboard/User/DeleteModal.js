@@ -9,16 +9,17 @@ import axios from 'axios';
 
 function DeleteModal(props) {
 
-    const { show, emp, handleClose, renderAgain } = props;
+    const { show, emp, handleClose, tableRef } = props;
 
     const [saveLoader, setSaveLoader] = React.useState(false);
 
     const deleteEmployee = () => {
         setSaveLoader(true);
+        const scopeRef = tableRef.current;
 
         axios.delete(baseUrl + "api/users/delete?email=" + emp.userDto.email)
             .then(() => {
-                renderAgain();
+                scopeRef.onQueryChange();
                 setSaveLoader(false);
                 toast.success("Employee deleted successfully!");
                 handleClose();

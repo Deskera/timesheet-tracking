@@ -9,10 +9,11 @@ import { baseUrl } from '../../../common/baseUrl';
 import { ToastContainer, toast } from 'react-toastify';
 import { PulseLoader } from "react-spinners";
 import axios from 'axios';
+import { tableRef } from '../Table/EmployeeTable';
 
 function EditModal(props) {
 
-    const { show, emp, handleClose, renderAgain } = props;
+    const { show, emp, handleClose, tableRef } = props;
 
     const [saveLoader, setSaveLoader] = React.useState(false);
     const editEmpFormRef = React.useRef();
@@ -34,9 +35,11 @@ function EditModal(props) {
             }
         }
 
+        const scopeRef = tableRef.current;
+
         axios.put((baseUrl + "api/users/edit"), editEmp)
             .then(() => {
-                renderAgain();
+                scopeRef.onQueryChange();
                 setSaveLoader(false);
                 toast.success("Employee updated successfully!");
                 handleClose();
@@ -123,9 +126,13 @@ function EditModal(props) {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button style={{ width: "80px" }} variant="primary" onClick={() => editEmpFormRef.current.submitForm()}>{saveLoader ? <SaveLoader /> : "Save"}</Button>
+                    <Button style={{ width: "80px" }} variant="primary" onClick={() => editEmpFormRef.current.submitForm()}>
+                        {saveLoader ? <SaveLoader /> : "Save"}
+                    </Button>
                     <span></span>
-                    <Button className="btn-outline-danger" variant="" onClick={handleClose}>Cancel</Button>
+                    <Button className="btn-outline-danger" variant="" onClick={handleClose}>
+                        Cancel
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </>

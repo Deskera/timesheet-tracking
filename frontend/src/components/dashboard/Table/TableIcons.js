@@ -15,8 +15,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import AddIcon from '@material-ui/icons/Add';
-import BusinessIcon from '@material-ui/icons/Business';
+// import AddIcon from '@material-ui/icons/Add';
+// import BusinessIcon from '@material-ui/icons/Business';
 // import { RowingSharp } from '@material-ui/icons';
 
 export const tableIcons = {
@@ -37,6 +37,6 @@ export const tableIcons = {
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
-    AddIcon: forwardRef((props, ref) => <AddIcon {...props} ref={ref} />),
-    Business: forwardRef((props, ref) => <BusinessIcon {...props} ref={ref} />)
+    // AddIcon: forwardRef((props, ref) => <AddIcon {...props} ref={ref} />),
+    // Business: forwardRef((props, ref) => <BusinessIcon {...props} ref={ref} />)
 };

@@ -13,7 +13,7 @@ import { getUser } from '../../../common/CommonUtils';
 
 function EditOrgModal(props) {
 
-    const { show, handleClose, renderAgain } = props;
+    const { show, handleClose, tableRef } = props;
 
     const [saveLoader, setSaveLoader] = React.useState(false);
     const editOrgFormRef = React.useRef();
@@ -29,9 +29,11 @@ function EditOrgModal(props) {
             contact: editOrgFormRef.current.values.contact
         }
 
+        const scopeRef = tableRef.current;
+
         axios.put((baseUrl + "api/tenants/edit"), editOrg)
             .then(() => {
-                renderAgain();
+                scopeRef.onQueryChange();
                 setSaveLoader(false);
                 var user = getUser();
                 user.tenantDto = editOrg;

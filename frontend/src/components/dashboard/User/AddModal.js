@@ -13,7 +13,7 @@ import { getUser } from '../../../common/CommonUtils';
 
 function AddModal(props) {
 
-    const { show, handleClose, renderAgain } = props;
+    const { show, handleClose, tableRef } = props;
 
     const [saveLoader, setSaveLoader] = React.useState(false);
     const addEmpFormRef = React.useRef();
@@ -32,9 +32,12 @@ function AddModal(props) {
             roleId: 2,
             tenantName: getUser().tenantDto.tenantName
         }
+
+        const scopeRef = tableRef.current;
+
         axios.post((baseUrl + "api/users/save?password=Welcome" + newEmp.firstName), newEmp)
             .then(() => {
-                renderAgain();
+                scopeRef.onQueryChange();
                 setSaveLoader(false);
                 toast.success("Employee added successfully!");
                 handleClose();
