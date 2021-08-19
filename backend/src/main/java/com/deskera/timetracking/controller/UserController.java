@@ -47,16 +47,19 @@ public class UserController {
 	@GetMapping("/tenant/{tenantname}")
 	public ResponseEntity<Map<String,Object>> getAllUsers(@PathVariable("tenantname") final String tenantName,
 		    @RequestParam(defaultValue = "0") int page,
-		    @RequestParam(defaultValue = "3") int size,
-		    @RequestParam(defaultValue = "joiningDate,ASC") String[] sort,
+		    @RequestParam(defaultValue = "5") int size,
+		    @RequestParam(defaultValue = "firstName,ASC") String[] sort,
+		    @RequestParam(value = "global", required = false,defaultValue = "") final String global,
 			@RequestParam(value = "name", required = false,defaultValue = "") final String name,
 			@RequestParam(value = "email", required = false,defaultValue = "") final String email,
 			@RequestParam(value = "designation", required = false,defaultValue = "") final String designation,
 			@RequestParam(value = "contactnumber", required = false,defaultValue = "") final String contactnumber,
 			@RequestParam(value = "gender", required = false,defaultValue = "") final String gender,
 			@RequestParam(value = "joiningdate", required = false,defaultValue = "") final String joiningdate) {
-		
+			
 		Pageable pageable = PageRequest.of(page, size,Sort.by(Direction.valueOf(sort[1]),sort[0]));
+		if(!global.isEmpty())
+			return new ResponseEntity<>(userService.getAllUsersGlobal(tenantName,pageable,global),HttpStatus.OK);
 		return new ResponseEntity<>(userService.getAllUsersByTenantName(tenantName,pageable,name,email,designation,contactnumber,gender,joiningdate),HttpStatus.OK);	
 	}
 	

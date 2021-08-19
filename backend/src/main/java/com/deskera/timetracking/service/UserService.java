@@ -15,12 +15,13 @@ public interface UserService {
 	UserResponseDto getUserById(final long id);
 	UserResponseDto saveUser(final UserDto userDto,final String password);
 	UserResponseDto getUserByEmail(final String email);
-	Map<String, Object> getAllUsersByTenantName(final String tenantName,final Pageable pageable,String name,String email,String designation,String contactnumber,String gender,String joiningdate);
+	Map<String, Object> getAllUsersByTenantName(final String tenantName,final Pageable pageable,final String name,final String email,final String designation,final String contactnumber,final String gender,final String joiningdate);
 	UserTenantDto isValidLogin(final String email,final String pass);
 	long getUserCountByTenant(final String tenantName);
 	boolean isPresent(final String email);
 	UserResponseDto deleteUserByEmail(final String email);
 	UserResponseDto editUser(final UserResponseDto userDto);
+	Map<String, Object> getAllUsersGlobal(final String tenantName, final Pageable pageable, final String global);
 	
 //	boolean isPresent(final long id);
 //	boolean isAdmin(final String email);

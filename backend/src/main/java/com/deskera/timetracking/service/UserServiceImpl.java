@@ -32,7 +32,6 @@ import com.deskera.timetracking.repository.UserRepository;
 public class UserServiceImpl implements UserService{
 
 	private static final UserEntityMapper USER_ENTITY_MAPPER = new UserEntityMapper();
-	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -92,44 +91,26 @@ public class UserServiceImpl implements UserService{
 		
 		Tenant tenant=tenantService.getTenantByName(tenantName);
 		Page<User> userPage;
-		if(!gender.isEmpty() && !joiningdate.isEmpty())
+		if(!gender.isEmpty())
 		{
 			if(!GENDER.isExist(gender))
 				{
 					throw new BadRequestException("invalid gender");
 				}
-			try {
-				Date date=DATE_FORMAT.parse(joiningdate);
-				userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),date,pageable);
-				
-			} catch (Exception e) {
-				throw new BadRequestException("Invalid joining date");
-			}
-			}
-		else if(!gender.isEmpty()) {
-			if(!GENDER.isExist(gender))
-			{
-				throw new BadRequestException("invalid gender");
-			}
-			userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),pageable);
-		}
-		else if(!joiningdate.isEmpty())
-		{
-			try {
-				Date date=DATE_FORMAT.parse(joiningdate);
-				userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,date,pageable);
-				
-			} catch (Exception e) {
-				throw new BadRequestException("Invalid joining date");
-			}	
+				userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),joiningdate,pageable);
 		}
 		else
-			userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,pageable);
+			userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,joiningdate,pageable);
 		
 		return USER_ENTITY_MAPPER.mapPageResponse(userPage);
-					//return USER_ENTITY_MAPPER.mapUser(userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,pageable));
 	}
 
+	@Override
+	public Map<String, Object> getAllUsersGlobal(final String tenantName,final Pageable pageable,final String global) {
+		Tenant tenant=tenantService.getTenantByName(tenantName);
+		return USER_ENTITY_MAPPER.mapPageResponse(userRepository.findAllByTenant(tenant,global,pageable));
+	}
+	
 	@Override
 	public UserTenantDto isValidLogin(final String email,final String pass) {
 		
@@ -216,6 +197,7 @@ public class UserServiceImpl implements UserService{
 		userRepository.save(user);
 		return USER_ENTITY_MAPPER.mapUserResponse(user);	
 	}
+
 	
 //	@Override
 //	public boolean isPresent(final long id) {
