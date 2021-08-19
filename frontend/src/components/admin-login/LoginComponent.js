@@ -13,6 +13,8 @@ import axios from 'axios';
 
 import FormikControl from '../../common/Formik/FormikControl';
 
+import { ScaleLoader } from 'react-spinners';
+
 const initialValues = {
     email: '',
     password: 'Abc@1234'
@@ -47,20 +49,22 @@ const validationSchema = Yup.object({
 
 function Login() {
 
-    // const [loader, setLoader] = React.useState(false);
+    const [loader, setLoader] = React.useState(false);
 
     const formRef = React.useRef();
     const history = useHistory();
 
     const onSubmit = (values) => {
-        // setLoader(true);
+        setLoader(true);
         axios.get(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password)
             .then((response) => {
+                setLoader(false);
                 console.log("a", response);
                 localStorage.setItem("user", JSON.stringify(response.data));
                 history.push("/dashboard");
             })
             .catch((err) => {
+                setLoader(false);
                 if(err.response === undefined) {
                     alert("Server Error");
                 }
@@ -120,8 +124,8 @@ function Login() {
 
                                 {/* Login Button */}
                                 <FormGroup className="mt-5">
-                                    <Button type="submit" color="success" style={{ width: "100%" }}>
-                                        Login
+                                    <Button type="submit" color="success" className="d-flex align-items-center justify-content-center" style={{ width: "100%", height: "40px" }}>
+                                        {loader ? <ScaleLoader color="#fff" loading={loader} height={10} /> : "Login"}
                                     </Button>
                                 </FormGroup>
 

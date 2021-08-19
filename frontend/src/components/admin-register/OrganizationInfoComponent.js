@@ -6,6 +6,9 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { images } from '../../common/CommonUtils';
 import FormikControl from '../../common/Formik/FormikControl';
+import { ScaleLoader } from 'react-spinners';
+import { baseUrl } from '../../common/baseUrl';
+import axios from 'axios';
 
 const initialValues = {
     companyName: '',
@@ -18,8 +21,8 @@ const validationSchema = Yup.object({
     companyName: Yup.string()
         .required('Required!'),
 
-    country: Yup.string()
-        .required('Required'),
+    // country: Yup.string()
+    // .required('Required'),
 
     websiteUrl: Yup.string()
         .url('Must be a valid URL')
@@ -38,12 +41,17 @@ export const countryOptions = [
 
 function OrganizationInfo() {
 
+    const [loader, setLoader] = React.useState(false);
+    const formRefOrgInfo = React.useRef();
+
     const history = useHistory();
     // console.log("bbbb", history.location);
 
     const registerValues = history.location.state;
 
     const onSubmit = (values) => {
+        console.log("abc");
+        setLoader(true);
         registerValues["organization_info"] = values;
 
         const newUser = {
@@ -65,35 +73,22 @@ function OrganizationInfo() {
 
         console.log("asd", newUser);
 
-        fetch("http://localhost:8080/api/tenants/initial-setup?password=" + registerValues.values.password, {
-            method: 'POST',
-            body: JSON.stringify(newUser),
-            headers: {
-                'Content-Type': 'application/json',
-                'connection': 'keep-alive'
-            },
-            credentials: 'same-origin'
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response;
+        axios.post((baseUrl + "api/tenants/initial-setup?password=" + registerValues.values.password), newUser)
+            .then((response) => {
+                setLoader(false);
+                console.log(response);
+                alert("Registered!");
+                history.push("/login")
+            })
+            .catch((err) => {
+                console.log('Post User', err.response.data);
+                setLoader(false);
+                if (err.response.data === "tenant already exists") {
+                    console.log("aaa");
+                    formRefOrgInfo.current.setFieldError("companyName", "Company with this name already exists!");
                 }
-                else {
-                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                    error.response = response;
-                    throw error;
-                }
-            },
-                error => {
-                    var errmess = new Error(error.message);
-                    throw errmess;
-                })
-            .then(response => response.json())
-            .then(response => { console.log(response); alert("Registered!"); history.push("/login") })
-            .catch(error => {
-                console.log('Post User', error);
-                // alert('Sorry, try Again\nError: ' + error.message);
-            });
+                console.log(err.response)
+            })
     }
 
     return (
@@ -113,6 +108,7 @@ function OrganizationInfo() {
                             initialValues={initialValues}
                             validationSchema={validationSchema}
                             onSubmit={onSubmit}
+                            innerRef={formRefOrgInfo}
                         >
                             <Form className="mx-auto mb-5" style={{ maxWidth: '350px' }}>
 
@@ -165,7 +161,7 @@ function OrganizationInfo() {
                                     </Link>
                                     <div>
                                         <Button type="submit" color="success" style={{ width: "100%" }}>
-                                            Register Organization
+                                            {loader ? <ScaleLoader color="#fff" loading={loader} height={10} /> : "Register Organization"}
                                         </Button>
                                     </div>
                                 </FormGroup>
