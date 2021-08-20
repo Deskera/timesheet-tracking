@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.deskera.timetracking.common.COUNTRY;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.UniqueConstraint;
@@ -21,7 +22,7 @@ import javax.persistence.UniqueConstraint;
 public class Tenant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "tid")
+	@Column(name = "tenant_id")
 	private long tid;
 	
 	@Column(name = "tenant_name",nullable = false)
@@ -39,12 +40,12 @@ public class Tenant {
 	//@CreatedDate
 	@CreationTimestamp
 	@Column(name = "created_date")
-	private Date createdDate;
+	private LocalDateTime createdDate;
 	
 	//@LastModifiedDate
 	@UpdateTimestamp
 	@Column(name = "updated_date")
-	private Date updatedDate;
+	private LocalDateTime updatedDate;
 	
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
@@ -89,19 +90,19 @@ public class Tenant {
 		this.contact = contact;
 	}
 
-	public Date getCreatedDate() {
+	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Date now) {
+	public void setCreatedDate(LocalDateTime now) {
 		this.createdDate = now;
 	}
 
-	public Date getUpdatedDate() {
+	public LocalDateTime getUpdatedDate() {
 		return updatedDate;
 	}
 
-	public void setUpdatedDate(Date now) {
+	public void setUpdatedDate(LocalDateTime now) {
 		this.updatedDate = now;
 	}
 

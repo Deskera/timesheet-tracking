@@ -30,7 +30,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT u FROM User u WHERE u.tenantEntity = ?1 AND (LOWER(u.firstName) LIKE CONCAT('%',LOWER(?2),'%') OR LOWER(u.lastName) LIKE CONCAT('%',LOWER(?2),'%') OR LOWER(u.email) LIKE CONCAT('%',LOWER(?2),'%') OR LOWER(u.designation) LIKE CONCAT('%',LOWER(?2),'%') OR u.contactNumber LIKE %?2% OR to_char(u.joiningDate,'YYYY-MM-DD') LIKE %?2%) AND u.isDeleted=false")
 	Page<User> findAllByTenant(Tenant tenant,String global, Pageable pageable);
 	
-	
 	//List<User> findAllByTenantEntityOrderByJoiningDateDesc(Tenant tenant);
 	
 	int countAllByTenantEntity(Tenant tenant);

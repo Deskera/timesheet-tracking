@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "rid")
+	@Column(name = "role_id")
 	private long rid;
 	
 	@Column(name = "role_name")

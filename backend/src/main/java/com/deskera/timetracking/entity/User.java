@@ -30,7 +30,7 @@ import java.util.Date;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "uid")
+	@Column(name = "user_id")
 	private long uid;
 	
 	@Column(name = "first_name")
@@ -43,11 +43,11 @@ public class User {
 	private String email;
 	
 	@OneToOne
-	@JoinColumn(name="tenant_id",referencedColumnName="tid",nullable = false)
+	@JoinColumn(name="tenant_id",referencedColumnName="tenant_id",nullable = false)
 	private Tenant tenantEntity;
 	
 	@OneToOne
-	@JoinColumn(name="role_id",referencedColumnName="rid", nullable = false)
+	@JoinColumn(name="role_id",referencedColumnName="role_id", nullable = false)
 	private Role roleEntity;
 	
 	@Column(name = "password")
@@ -70,7 +70,7 @@ public class User {
 	//@CreatedDate
 	@CreationTimestamp
 	@Column(name = "created_date")
-	private Date createdDate;
+	private LocalDateTime createdDate;
 	
 	//@LastModifiedDate
 	@UpdateTimestamp
@@ -168,11 +168,11 @@ public class User {
 		this.joiningDate = joiningDate;
 	}
 
-	public Date getCreatedDate() {
+	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Date now) {
+	public void setCreatedDate(LocalDateTime now) {
 		this.createdDate = now;
 	}
 

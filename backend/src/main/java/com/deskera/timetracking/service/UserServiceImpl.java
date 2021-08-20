@@ -1,22 +1,14 @@
 package com.deskera.timetracking.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.deskera.timetracking.common.GENDER;
-import com.deskera.timetracking.dto.TenantDto;
 import com.deskera.timetracking.dto.UserDto;
 import com.deskera.timetracking.dto.UserEntityMapper;
 import com.deskera.timetracking.dto.UserResponseDto;
@@ -39,6 +31,9 @@ public class UserServiceImpl implements UserService{
 	private RoleService roleService;
 	@Autowired
 	private TenantService tenantService;
+	
+	@Autowired
+	private LogService logService;
 	
 //	@Override
 //	public Map<String,Object> getAllUsers() {
@@ -120,7 +115,8 @@ public class UserServiceImpl implements UserService{
 			{
 				user=optional.get();
 				if(pass.equals(user.getPassword()))
-				{
+				{	
+					logService.createLoginLog(user);
 					return USER_ENTITY_MAPPER.mapUserTenant(USER_ENTITY_MAPPER.mapUser(user),tenantService.getTenantDetailsByName(user.getTenantEntity().getTenantName()));
 				}
 				else {
