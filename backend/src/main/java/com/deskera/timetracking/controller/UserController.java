@@ -68,7 +68,12 @@ public class UserController {
 	public ResponseEntity<UserTenantDto> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
 		return new ResponseEntity<>(userService.isValidLogin(email,password),HttpStatus.OK);	
 	}
-
+	
+	@GetMapping("/logout")
+	public ResponseEntity<UserDto> logout(@RequestParam("uid") final long uid){
+		return new ResponseEntity<>(userService.logout(uid),HttpStatus.OK);
+	}
+	
 	//add new user (returns details of the new user)
 	@PostMapping(value="/save")
 	public ResponseEntity<UserResponseDto> saveUser(@RequestBody final UserDto userDto,@RequestParam final String password) {
