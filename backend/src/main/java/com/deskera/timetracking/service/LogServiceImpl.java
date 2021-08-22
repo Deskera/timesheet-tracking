@@ -21,5 +21,12 @@ public class LogServiceImpl implements LogService{
 		return log.getLogId();
 	}
 	
+	@Override
+	public void createLogoutLog(User user) {
+		Log log=new Log();
+		log.setUserEntity(user);
+		log.setType(EVENT.LOGOUT);
+		logRepository.save(log);
+	}
 	
 }

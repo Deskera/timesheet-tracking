@@ -18,7 +18,7 @@ public interface UserService {
 	UserResponseDto deleteUserByEmail(final String email);
 	UserResponseDto editUser(final UserResponseDto userDto);
 	Map<String, Object> getAllUsersGlobal(final String tenantName, final Pageable pageable, final String global);
-	
+	UserDto logout(final long userId);
 //	boolean isPresent(final long id);
 //	boolean isAdmin(final String email);
 //	boolean isAdmin(final long id);

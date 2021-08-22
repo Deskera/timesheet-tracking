@@ -92,10 +92,12 @@ public class UserServiceImpl implements UserService{
 				{
 					throw new BadRequestException("invalid gender");
 				}
-				userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),joiningdate,pageable);
+			if(!joiningdate.isEmpty()) userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),joiningdate,pageable);
+			else userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,GENDER.valueOf(gender),pageable);
 		}
-		else
+		else if(!joiningdate.isEmpty())
 			userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,joiningdate,pageable);
+		else userPage=userRepository.findAllByTenant(tenant,name,email,designation,contactnumber,pageable);
 		
 		return USER_ENTITY_MAPPER.mapPageResponse(userPage);
 	}
@@ -192,6 +194,15 @@ public class UserServiceImpl implements UserService{
 		}
 		userRepository.save(user);
 		return USER_ENTITY_MAPPER.mapUserResponse(user);	
+	}
+
+	@Override
+	public UserDto logout(long userId) {
+		Optional<User> optional=userRepository.findById(userId);
+		if(!optional.isPresent())
+			throw new ResourceNotFoundException("No user found with id "+userId);	
+		logService.createLogoutLog(optional.get());
+		return USER_ENTITY_MAPPER.mapUser(optional.get());
 	}
 
 	
