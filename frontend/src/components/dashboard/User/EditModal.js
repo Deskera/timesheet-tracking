@@ -9,7 +9,6 @@ import { baseUrl } from '../../../common/baseUrl';
 import { ToastContainer, toast } from 'react-toastify';
 import { PulseLoader } from "react-spinners";
 import axios from 'axios';
-import { tableRef } from '../Table/EmployeeTable';
 
 function EditModal(props) {
 

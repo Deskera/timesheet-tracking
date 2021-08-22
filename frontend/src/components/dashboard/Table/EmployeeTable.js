@@ -1,6 +1,6 @@
 import React from 'react';
-import MaterialTable, { MTableToolbar, MTablePagination, MTableBodyRow } from "material-table";
-import { OverlayTrigger, Tooltip, Button, Modal } from "react-bootstrap";
+import MaterialTable, { MTableToolbar, MTableBodyRow } from "material-table";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { tableIcons } from './TableIcons';
 import { TablePagination } from '@material-ui/core';
 import { baseUrl } from '../../../common/baseUrl';
