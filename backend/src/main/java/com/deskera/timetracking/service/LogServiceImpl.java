@@ -28,6 +28,13 @@ public class LogServiceImpl implements LogService{
 		log.setUserEntity(user);
 		log.setType(EVENT.LOGIN);
 		log.setDeviceId(deviceId);
+		
+		Optional<LocalDateTime> optional1=logRepository.findLastLoginLogoutLog(user, deviceId,EVENT.LOGIN);
+		Optional<LocalDateTime> optional2=logRepository.findLastLoginLogoutLog(user, deviceId,EVENT.LOGOUT);
+		if(optional1.isPresent() && optional2.isPresent())
+			if(optional1.get().compareTo(optional2.get()) >= 0) {
+				throw new BadRequestException("Already logged in with device "+deviceId);
+			}	
 		logRepository.save(log);
 		//return log.getLogId();
 	}
