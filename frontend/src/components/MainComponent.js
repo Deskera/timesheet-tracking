@@ -6,7 +6,7 @@ import Register from './admin-register/RegisterComponent';
 import OrganizationInfo from './admin-register/OrganizationInfoComponent';
 import PersonalInfo from './admin-register/PersonalInfoComponent';
 
-import Learn from '../common/Formik/Learn';
+// import Learn from '../common/Formik/Learn';
 
 import Dashboard from './dashboard/DashboardCompnent';
 
@@ -84,7 +84,7 @@ function Main() {
             <RouteWithLoader exact path="/register/personal-info" component={PersonalInfo} loadTime="3" />
             <RouteWithLoader exact path="/register/organization-info" component={OrganizationInfo} loadTime="0.5" />
 
-            <RouteWithLoader exact path="/learn" component={Learn} />
+            {/* <RouteWithLoader exact path="/learn" component={Learn} /> */}
 
             <Route exact path="/dashboard" component={() => (
                 // <div className="container">
