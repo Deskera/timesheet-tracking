@@ -15,7 +15,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.deskera.timetracking.common.GENDER;
 
@@ -63,7 +62,7 @@ public class User {
 	@Column(name = "gender")
 	private GENDER gender;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)	//to store only date (remove time)
 	@Column(name = "joining_date")
 	private Date joiningDate;
 	

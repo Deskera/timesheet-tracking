@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService{
 				user=optional.get();
 				if(pass.equals(user.getPassword()))
 				{	
-					logService.createLoginLog(user);
+					logService.createLoginLog(user,"deviceID");
 					return USER_ENTITY_MAPPER.mapUserTenant(USER_ENTITY_MAPPER.mapUser(user),tenantService.getTenantDetailsByName(user.getTenantEntity().getTenantName()));
 				}
 				else {
@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService{
 		Optional<User> optional=userRepository.findById(userId);
 		if(!optional.isPresent())
 			throw new ResourceNotFoundException("No user found with id "+userId);	
-		logService.createLogoutLog(optional.get());
+		logService.createLogoutLog(optional.get(),"deviceID");
 		return USER_ENTITY_MAPPER.mapUser(optional.get());
 	}
 

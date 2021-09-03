@@ -3,6 +3,6 @@ package com.deskera.timetracking.service;
 import com.deskera.timetracking.entity.User;
 
 public interface LogService {
-	long createLoginLog(User user);
-	void createLogoutLog(User user);
+	void createLoginLog(User user,String deviceId);
+	void createLogoutLog(User user,String deviceId);
 }
