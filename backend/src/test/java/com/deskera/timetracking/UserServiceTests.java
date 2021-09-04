@@ -70,7 +70,7 @@ class UserServiceTests {
 	@Test
 	@Order(3)
 	public void testUserLogin() {
-		UserTenantDto userDetails=userService.isValidLogin("testemail2@gmail.com", "testpassword","deviceID");
+		UserTenantDto userDetails=userService.isValidLogin("testemail2@gmail.com", "testpassword");
 			
 	    assertEquals(userDetails.getUserDto().getEmail(),"testemail2@gmail.com");
 	    assertEquals(userDetails.getTenantDto().getTenantName(),"test-tenant1");

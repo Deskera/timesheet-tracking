@@ -65,14 +65,14 @@ public class UserController {
 	
 	//user login with email and password(match)
 	@GetMapping("/login")	
-	public ResponseEntity<UserTenantDto> login(@RequestParam("email") final String email,@RequestParam("password") final String password
-			,@RequestParam("deviceid") final String deviceId) {
-		return new ResponseEntity<>(userService.isValidLogin(email,password,deviceId),HttpStatus.OK);	
+	public ResponseEntity<UserTenantDto> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
+		return new ResponseEntity<>(userService.isValidLogin(email,password),HttpStatus.OK);	
 	}
 	
 	@GetMapping("/logout")
-	public ResponseEntity<UserDto> logout(@RequestParam("uid") final long uid,@RequestParam("deviceid") final String deviceId){
-		return new ResponseEntity<>(userService.logout(uid,deviceId),HttpStatus.OK);
+	public ResponseEntity<UserDto> logout(@RequestParam("uid") final long uid)
+	{
+		return new ResponseEntity<>(userService.logout(uid),HttpStatus.OK);
 	}
 	
 	//add new user (returns details of the new user)

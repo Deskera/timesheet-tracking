@@ -36,8 +36,8 @@ public class Log {
 	@Column(name = "type")
 	private EVENT type;
 	
-	@Column(name="device_id")
-	private String deviceId;
+//	@Column(name="device_id")
+//	private String deviceId;
 //	@Lob
 //    @Column(name="image", columnDefinition="BYTEA")
 //    private byte[] image;
@@ -78,13 +78,13 @@ public class Log {
 		this.punchAt = punchAt;
 	}
 
-	public String getDeviceId() {
-		return deviceId;
-	}
-
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
-	}
+//	public String getDeviceId() {
+//		return deviceId;
+//	}
+//
+//	public void setDeviceId(String deviceId) {
+//		this.deviceId = deviceId;
+//	}
 	
 	
 //	public byte[] getImage() {

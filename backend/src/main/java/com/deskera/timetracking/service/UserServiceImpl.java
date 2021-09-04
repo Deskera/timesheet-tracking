@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public UserTenantDto isValidLogin(final String email,final String pass,final String deviceId) {
+	public UserTenantDto isValidLogin(final String email,final String pass) {
 		
 			Optional<User> optional=userRepository.findByEmail(email);
 			User user = null;
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService{
 				user=optional.get();
 				if(pass.equals(user.getPassword()))
 				{	
-					logService.createLoginLog(user,deviceId);
+					logService.createLoginLog(user);
 					return USER_ENTITY_MAPPER.mapUserTenant(USER_ENTITY_MAPPER.mapUser(user),tenantService.getTenantDetailsByName(user.getTenantEntity().getTenantName()));
 				}
 				else {
@@ -197,11 +197,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserDto logout(final long userId,final String deviceId) {
+	public UserDto logout(final long userId) {
 		Optional<User> optional=userRepository.findById(userId);
 		if(!optional.isPresent())
 			throw new ResourceNotFoundException("No user found with id "+userId);	
-		logService.createLogoutLog(optional.get(),deviceId);
+		logService.createLogoutLog(optional.get());
 		return USER_ENTITY_MAPPER.mapUser(optional.get());
 	}
 

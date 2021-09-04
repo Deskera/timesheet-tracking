@@ -23,31 +23,35 @@ public class LogServiceImpl implements LogService{
 	WorkHoursRepository workHoursRepository;
 
 	@Override
-	public void createLoginLog(User user,String deviceId) {
+	public void createLoginLog(User user) {
 		Log log=new Log();
 		log.setUserEntity(user);
 		log.setType(EVENT.LOGIN);
-		log.setDeviceId(deviceId);
+		//log.setDeviceId(deviceId);
 		
-		Optional<LocalDateTime> optional1=logRepository.findLastLoginLogoutLog(user, deviceId,EVENT.LOGIN);
-		Optional<LocalDateTime> optional2=logRepository.findLastLoginLogoutLog(user, deviceId,EVENT.LOGOUT);
+		Optional<LocalDateTime> optional1=logRepository.findLastLoginLogoutLog(user,EVENT.LOGIN);
+		Optional<LocalDateTime> optional2=logRepository.findLastLoginLogoutLog(user,EVENT.LOGOUT);
 		if(optional1.isPresent() && optional2.isPresent())
+		{
 			if(optional1.get().compareTo(optional2.get()) >= 0) {
-				throw new BadRequestException("Already logged in with device "+deviceId);
-			}	
+				throw new BadRequestException("Already logged in");
+			}
+		}
+		else if(optional1.isPresent() && !optional2.isPresent())
+			throw new BadRequestException("Already logged in");
+		
 		logRepository.save(log);
-		//return log.getLogId();
 	}
 	
 	@Override
-	public void createLogoutLog(User user,String deviceId) {
+	public void createLogoutLog(User user) {
 		Log log=new Log();
 		log.setUserEntity(user);
 		log.setType(EVENT.LOGOUT);
-		log.setDeviceId(deviceId);
+		//log.setDeviceId(deviceId);
 		
-		Optional<LocalDateTime> optional1=logRepository.findLastLoginLogoutLog(user, deviceId,EVENT.LOGIN);
-		Optional<LocalDateTime> optional2=logRepository.findLastLoginLogoutLog(user, deviceId,EVENT.LOGOUT);
+		Optional<LocalDateTime> optional1=logRepository.findLastLoginLogoutLog(user, EVENT.LOGIN);
+		Optional<LocalDateTime> optional2=logRepository.findLastLoginLogoutLog(user, EVENT.LOGOUT);
 
 		if(optional1.isPresent())
 		{	
@@ -55,7 +59,7 @@ public class LogServiceImpl implements LogService{
 			if(optional2.isPresent()) {
 				LocalDateTime lastLogoutEntry = optional2.get();
 				if(lastLoginEntry.compareTo(lastLogoutEntry) <= 0) {
-					throw new BadRequestException("Already logged out from device "+deviceId);
+					throw new BadRequestException("Already logged out");
 				}	
 			}
 			logRepository.save(log);
@@ -79,10 +83,9 @@ public class LogServiceImpl implements LogService{
 			whr.setUpdatedBy(user);
 			whr.setLastLogout(log.getPunchAt());
 			workHoursRepository.save(whr);
-			//System.out.println(lastLoginTime+" "+minutes);
 		}
 		else {
-			throw new BadRequestException("Device not logged in "+deviceId);
+			throw new BadRequestException("Device not logged in");
 		}
 	}
 	
