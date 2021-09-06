@@ -1,5 +1,8 @@
 package com.deskera.timetracking.service;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,15 +12,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.deskera.timetracking.common.GENDER;
+import com.deskera.timetracking.dto.ImageDto;
 import com.deskera.timetracking.dto.UserDto;
 import com.deskera.timetracking.dto.UserEntityMapper;
 import com.deskera.timetracking.dto.UserResponseDto;
 import com.deskera.timetracking.dto.UserTenantDto;
+import com.deskera.timetracking.entity.Location;
+import com.deskera.timetracking.entity.Log;
+import com.deskera.timetracking.entity.LoginImage;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
 import com.deskera.timetracking.entity.User;
 import com.deskera.timetracking.exception.BadRequestException;
 import com.deskera.timetracking.exception.ResourceNotFoundException;
+import com.deskera.timetracking.repository.LocationRepository;
+import com.deskera.timetracking.repository.LoginImageRepository;
 import com.deskera.timetracking.repository.UserRepository;
 
 @Service
@@ -34,6 +43,12 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private LogService logService;
+	
+	@Autowired
+	private LoginImageRepository loginImageRepository;
+	
+	@Autowired
+	private LocationRepository locationRepository;
 	
 //	@Override
 //	public Map<String,Object> getAllUsers() {
@@ -109,7 +124,7 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public UserTenantDto isValidLogin(final String email,final String pass) {
+	public Map<String,Object> isValidLogin(final String email,final String pass) {
 		
 			Optional<User> optional=userRepository.findByEmail(email);
 			User user = null;
@@ -118,8 +133,12 @@ public class UserServiceImpl implements UserService{
 				user=optional.get();
 				if(pass.equals(user.getPassword()))
 				{	
-					logService.createLoginLog(user);
-					return USER_ENTITY_MAPPER.mapUserTenant(USER_ENTITY_MAPPER.mapUser(user),tenantService.getTenantDetailsByName(user.getTenantEntity().getTenantName()));
+					long logId=logService.createLoginLog(user);
+					Map<String,Object> response=new HashMap<String,Object>();
+					response.put("logId", logId);
+					response.put("userId",user.getUid());
+					response.put("user",USER_ENTITY_MAPPER.mapUserTenant(USER_ENTITY_MAPPER.mapUser(user),tenantService.getTenantDetailsByName(user.getTenantEntity().getTenantName())));
+					return response;
 				}
 				else {
 					throw new BadRequestException("Invalid password");
@@ -197,12 +216,42 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@Transactional
 	public UserDto logout(final long userId) {
 		Optional<User> optional=userRepository.findById(userId);
 		if(!optional.isPresent())
 			throw new ResourceNotFoundException("No user found with id "+userId);	
 		logService.createLogoutLog(optional.get());
 		return USER_ENTITY_MAPPER.mapUser(optional.get());
+	}
+
+	@Override
+	@Transactional
+	public void saveImage(long logId, ImageDto imageDto) {
+		//System.out.println(imageDto.getLogId());
+		//System.out.println(imageDto.getImg());
+		Log log=logService.getLogById(logId);
+		byte[] decodedString = Base64.getDecoder().decode(imageDto.getImg().getBytes());
+		LoginImage loginImage=new LoginImage();
+		loginImage.setImage(decodedString);
+		loginImage.setLog(log);
+		loginImageRepository.save(loginImage);
+		//System.out.println(Base64.getEncoder().encode(loginImageRepository.findById(loginImage.getImgId()).get().getImage()));
+	}
+
+	@Override
+	@Transactional
+	public void saveLocation(long userId, double latitude, double longitude) {
+		Optional<User> optional=userRepository.findById(userId);
+		if(!optional.isPresent())
+		{
+			throw new ResourceNotFoundException("No User found with id : " + userId);
+		}
+		Location location=new Location();
+		location.setLatitude(latitude);
+		location.setLongitude(longitude);
+		location.setUserEntity(optional.get());
+		locationRepository.save(location);
 	}
 
 	

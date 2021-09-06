@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deskera.timetracking.dto.ImageDto;
 import com.deskera.timetracking.dto.UserDto;
 import com.deskera.timetracking.dto.UserResponseDto;
 import com.deskera.timetracking.dto.UserTenantDto;
@@ -65,7 +66,7 @@ public class UserController {
 	
 	//user login with email and password(match)
 	@GetMapping("/login")	
-	public ResponseEntity<UserTenantDto> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
+	public ResponseEntity<Map<String,Object>> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
 		return new ResponseEntity<>(userService.isValidLogin(email,password),HttpStatus.OK);	
 	}
 	
@@ -75,11 +76,23 @@ public class UserController {
 		return new ResponseEntity<>(userService.logout(uid),HttpStatus.OK);
 	}
 	
+	@PostMapping(value="/image")
+	public ResponseEntity<String> saveImage(@RequestBody final ImageDto imageDto,@RequestParam final long logId) {
+		userService.saveImage(logId,imageDto);
+		return new ResponseEntity<>("image saved",HttpStatus.OK);
+	}
+	
 	//add new user (returns details of the new user)
 	@PostMapping(value="/save")
 	public ResponseEntity<UserResponseDto> saveUser(@RequestBody final UserDto userDto,@RequestParam final String password) {
 		
 		return new ResponseEntity<>(userService.saveUser(userDto,password),HttpStatus.OK);
+	}
+	
+	@PostMapping(value="/location")
+	public ResponseEntity<String> saveUserLocation(@RequestParam final long userId,@RequestParam final double latitude,@RequestParam final double longitude) {
+		userService.saveLocation(userId,latitude,longitude);
+		return new ResponseEntity<>("location saved",HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete")
@@ -98,5 +111,11 @@ public class UserController {
 	public ResponseEntity<Boolean> isPresent(@RequestParam("email") final String email) {
 		return new ResponseEntity<>(userService.isPresent(email),HttpStatus.OK);	
 	}
+	
+//	@GetMapping("/workhours")
+//	public ResponseEntity<UserDto> workingHrDetails(@RequestParam("uid") final long uid)
+//	{
+//		return new ResponseEntity<>(userService.workHourDetails(uid),HttpStatus.OK);
+//	}
 }
  

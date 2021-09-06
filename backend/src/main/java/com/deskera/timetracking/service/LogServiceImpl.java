@@ -12,6 +12,7 @@ import com.deskera.timetracking.entity.Log;
 import com.deskera.timetracking.entity.User;
 import com.deskera.timetracking.entity.WorkHours;
 import com.deskera.timetracking.exception.BadRequestException;
+import com.deskera.timetracking.exception.ResourceNotFoundException;
 import com.deskera.timetracking.repository.LogRepository;
 import com.deskera.timetracking.repository.WorkHoursRepository;
 
@@ -23,7 +24,7 @@ public class LogServiceImpl implements LogService{
 	WorkHoursRepository workHoursRepository;
 
 	@Override
-	public void createLoginLog(User user) {
+	public long createLoginLog(User user) {
 		Log log=new Log();
 		log.setUserEntity(user);
 		log.setType(EVENT.LOGIN);
@@ -41,6 +42,7 @@ public class LogServiceImpl implements LogService{
 			throw new BadRequestException("Already logged in");
 		
 		logRepository.save(log);
+		return log.getLogId();
 	}
 	
 	@Override
@@ -87,6 +89,14 @@ public class LogServiceImpl implements LogService{
 		else {
 			throw new BadRequestException("Device not logged in");
 		}
+	}
+
+	@Override
+	public Log getLogById(long logId) {
+		Optional<Log> optional=logRepository.findById(logId);
+		if(!optional.isPresent())
+			throw new ResourceNotFoundException("No such log id found");
+		return optional.get();
 	}
 	
 }

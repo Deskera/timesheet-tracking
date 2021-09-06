@@ -1,9 +1,5 @@
 package com.deskera.timetracking.dto;
 
-import java.util.Date;
-
-import com.deskera.timetracking.common.GENDER;
-import com.deskera.timetracking.exception.BadRequestException;
 import com.sun.istack.NotNull;
 
 public class UserDto {
