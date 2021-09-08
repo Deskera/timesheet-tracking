@@ -12,6 +12,8 @@ import AddModal from './User/AddModal';
 import EditModal from './User/EditModal';
 import DeleteModal from './User/DeleteModal';
 import EmployeeTable from './Table/EmployeeTable';
+import { baseUrl } from '../../common/baseUrl';
+import axios from 'axios';
 
 function Dashboard() {
 
@@ -39,8 +41,15 @@ function Dashboard() {
 
     const logOut = () => {
         setCompanyMenu(null);
-        localStorage.clear();
-        history.push("/login");
+        axios.get(baseUrl + "api/users/logout?uid=" + getUser().userId)
+            .then((response) => {
+                console.log("a", response);
+                localStorage.clear();
+                history.push("/login");
+            })
+            .catch((err) => {
+                console.log(err.response)
+            })
     }
 
 
@@ -84,11 +93,11 @@ function Dashboard() {
             <div className="mt-1 text-center d-flex justify-content-between align-items-center bg-white">
                 {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
 
-                <h3 className="display-6 ms-4" style={{ color: 'blue', fontSize: '28px' }}>Welcome {getUser().userDto.firstName}</h3>
+                <h3 className="display-6 ms-4" style={{ color: 'blue', fontSize: '28px' }}>Welcome {getUser().user.userDto.firstName}</h3>
 
                 <div className="me-4 d-flex justify-content-between" style={{ width: '200px' }}>
                     <div>
-                        <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().tenantDto.tenantName}</h2>
+                        <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().user.tenantDto.tenantName}</h2>
                         <p className="" style={{ fontSize: '15px', margin: '0' }}>Company Dashboard</p>
                     </div>
                     <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company</Tooltip>}>

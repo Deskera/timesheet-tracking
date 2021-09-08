@@ -30,7 +30,7 @@ function AddModal(props) {
             gender: addEmpFormRef.current.values.gender,
             joiningDate: addEmpFormRef.current.values.joiningDate,
             roleId: 2,
-            tenantName: getUser().tenantDto.tenantName
+            tenantName: getUser().user.tenantDto.tenantName
         }
 
         const scopeRef = tableRef.current;

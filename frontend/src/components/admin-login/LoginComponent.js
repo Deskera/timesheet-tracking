@@ -60,12 +60,17 @@ function Login() {
             .then((response) => {
                 setLoader(false);
                 console.log("a", response);
-                localStorage.setItem("user", JSON.stringify(response.data));
-                history.push("/dashboard");
+                if (response.data.user.userDto.roleId == 2) {
+                    alert("Access Denied!");
+                }
+                else {
+                    localStorage.setItem("user", JSON.stringify(response.data));
+                    history.push("/dashboard");
+                }
             })
             .catch((err) => {
                 setLoader(false);
-                if(err.response === undefined) {
+                if (err.response === undefined) {
                     alert("Server Error");
                 }
                 else if (err.response.status === 404) {
@@ -73,6 +78,9 @@ function Login() {
                 }
                 else if (err.response.data === "Invalid password") {
                     formRef.current.setFieldError("password", "Incorrect password for this email.")
+                }
+                else if (err.response.data === "Already logged in") {
+                    alert("Multiple login Attemp!")
                 }
                 console.log(err.response)
             })

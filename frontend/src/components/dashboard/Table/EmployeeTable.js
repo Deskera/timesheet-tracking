@@ -98,7 +98,7 @@ function EmployeeTable(props) {
                             })
                         }
 
-                        axios.get(baseUrl + "api/users/tenant/" + getUser().tenantDto.tenantName + "?", {
+                        axios.get(baseUrl + "api/users/tenant/" + getUser().user.tenantDto.tenantName + "?", {
                             params: {
                                 page: query.page,
                                 size: query.pageSize,
