@@ -39,11 +39,11 @@ public class WorkHours {
 	@JoinColumn(name="user_id",referencedColumnName="user_id",nullable = false)
 	private User userEntity;
 	
-	@JsonFormat(pattern = "hh:mm:ss")
+	@JsonFormat(pattern = "hh:mm")
 	@Column(name = "lastlogout_time")
 	private LocalDateTime lastLogout;
 	
-	@JsonFormat(pattern = "hh:mm:ss")
+	@JsonFormat(pattern = "hh:mm")
 	@Column(name = "firstlogin_time")
 	private LocalDateTime firstLogin;
 	

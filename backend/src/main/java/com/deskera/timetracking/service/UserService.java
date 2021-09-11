@@ -27,5 +27,6 @@ public interface UserService {
 //	void updateUser(final User admin);
 	void saveImage(long logId, ImageDto imageDto);
 	void saveLocation(long userId, double latitude, double longitude);
+	Map<String,Object> workingTimeHistory(long uid, Pageable pageable);
 
 }

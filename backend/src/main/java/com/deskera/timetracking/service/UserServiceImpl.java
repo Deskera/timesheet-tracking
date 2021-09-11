@@ -1,6 +1,7 @@
 package com.deskera.timetracking.service;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,11 +24,13 @@ import com.deskera.timetracking.entity.LoginImage;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
 import com.deskera.timetracking.entity.User;
+import com.deskera.timetracking.entity.WorkHours;
 import com.deskera.timetracking.exception.BadRequestException;
 import com.deskera.timetracking.exception.ResourceNotFoundException;
 import com.deskera.timetracking.repository.LocationRepository;
 import com.deskera.timetracking.repository.LoginImageRepository;
 import com.deskera.timetracking.repository.UserRepository;
+import com.deskera.timetracking.repository.WorkHoursRepository;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -49,6 +52,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private LocationRepository locationRepository;
+	
+	@Autowired
+	private WorkHoursRepository workHoursRepository;
 	
 //	@Override
 //	public Map<String,Object> getAllUsers() {
@@ -228,16 +234,26 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	public void saveImage(long logId, ImageDto imageDto) {
-		//System.out.println(imageDto.getLogId());
-		//System.out.println(imageDto.getImg());
+	
+		if(!imageDto.getImg().isEmpty())
+		{
 		Log log=logService.getLogById(logId);
-		byte[] decodedString = Base64.getDecoder().decode(imageDto.getImg().getBytes());
+		byte[] decodedString = Base64.getDecoder().decode(imageDto.getImg());
+
 		LoginImage loginImage=new LoginImage();
 		loginImage.setImage(decodedString);
 		loginImage.setLog(log);
 		loginImageRepository.save(loginImage);
-		//System.out.println(Base64.getEncoder().encode(loginImageRepository.findById(loginImage.getImgId()).get().getImage()));
-	}
+		
+		//String s=new String(Base64.getEncoder().encode(loginImageRepository.findById(loginImage.getImgId()).get().getImage()));
+		//String binaryStr = new BigInteger(1, decodedString).toString(2);
+		//System.out.println(s);
+		//System.out.println(binaryStr);
+		
+		}
+		else
+			throw new BadRequestException("empty image");
+		}
 
 	@Override
 	@Transactional
@@ -252,6 +268,22 @@ public class UserServiceImpl implements UserService{
 		location.setLongitude(longitude);
 		location.setUserEntity(optional.get());
 		locationRepository.save(location);
+	}
+
+	@Override
+	public Map<String, Object> workingTimeHistory(long userId,Pageable pageable) {
+		Optional<User> optional=userRepository.findById(userId);
+		if(!optional.isPresent())
+		{
+			throw new ResourceNotFoundException("No User found with id : " + userId);
+		}
+		Map<String,Object> response=new HashMap<String,Object>();
+		Page<WorkHours> workHoursPage=workHoursRepository.findAllByUserEntityAndIsDeletedFalseOrderByFirstLoginDesc(optional.get(),pageable);
+		response.put("currentPage", workHoursPage.getNumber());
+		response.put("totalItems", workHoursPage.getTotalElements());
+		response.put("totalPages", workHoursPage.getTotalPages());
+		response.put("worktimehistory", USER_ENTITY_MAPPER.mapWorkHours(workHoursPage.getContent()));
+		return response;
 	}
 
 	

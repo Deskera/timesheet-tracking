@@ -14,6 +14,7 @@ import com.deskera.timetracking.common.GENDER;
 import com.deskera.timetracking.entity.Role;
 import com.deskera.timetracking.entity.Tenant;
 import com.deskera.timetracking.entity.User;
+import com.deskera.timetracking.entity.WorkHours;
 import com.deskera.timetracking.exception.BadRequestException;
 
 public class UserEntityMapper {
@@ -154,6 +155,15 @@ public class UserEntityMapper {
 		response.put("totalPages", userPage.getTotalPages());
 		response.put("users", mapUser(userPage.getContent()));
 		return response;
+	}
+	
+	public List<WorkHoursResponseDto> mapWorkHours(List<WorkHours> workHours) {
+		List<WorkHoursResponseDto> workHoursResponseDto=new ArrayList<WorkHoursResponseDto>();
+		for(WorkHours w:workHours)
+		{
+			workHoursResponseDto.add(new WorkHoursResponseDto(w.getFirstLogin(),w.getLastLogout(),w.getWorkingHours()));
+		}
+		return workHoursResponseDto;
 	}
 	
 }

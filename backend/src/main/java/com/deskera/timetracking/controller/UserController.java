@@ -112,6 +112,14 @@ public class UserController {
 		return new ResponseEntity<>(userService.isPresent(email),HttpStatus.OK);	
 	}
 	
+	@GetMapping("/worktimehistory")	
+	public ResponseEntity<Map<String,Object>> workingTimeHistory(@RequestParam("uid") final long userId,
+			@RequestParam(defaultValue = "0") int page,
+		    @RequestParam(defaultValue = "5") int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return new ResponseEntity<>(userService.workingTimeHistory(userId,pageable),HttpStatus.OK);	
+	}
+	
 //	@GetMapping("/workhours")
 //	public ResponseEntity<UserDto> workingHrDetails(@RequestParam("uid") final long uid)
 //	{
