@@ -23,7 +23,7 @@ function EditOrgModal(props) {
         setSaveLoader(true);
 
         const editOrg = {
-            tenantName: getUser().tenantDto.tenantName,
+            tenantName: getUser().user.tenantDto.tenantName,
             country: editOrgFormRef.current.values.country,
             websiteUrl: editOrgFormRef.current.values.websiteUrl,
             contact: editOrgFormRef.current.values.contact
@@ -48,9 +48,9 @@ function EditOrgModal(props) {
     }
 
     const initialValues = {
-        country: getUser().tenantDto.country,
-        websiteUrl: getUser().tenantDto.websiteUrl,
-        contact: getUser().tenantDto.contact
+        country: getUser().user.tenantDto.country,
+        websiteUrl: getUser().user.tenantDto.websiteUrl,
+        contact: getUser().user.tenantDto.contact
     }
 
     const validationSchema = Yup.object({
@@ -82,7 +82,7 @@ function EditOrgModal(props) {
             />
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header>
-                    <Modal.Title>{getUser().tenantDto.tenantName}: Company Details</Modal.Title>
+                    <Modal.Title>{getUser().user.tenantDto.tenantName}: Company Details</Modal.Title>
                     <CloseIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
                 </Modal.Header>
 
