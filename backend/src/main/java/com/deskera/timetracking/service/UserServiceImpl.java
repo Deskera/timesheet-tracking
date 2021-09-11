@@ -10,9 +10,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.deskera.timetracking.common.GENDER;
+import com.deskera.timetracking.common.Mail;
 import com.deskera.timetracking.dto.ImageDto;
 import com.deskera.timetracking.dto.UserDto;
 import com.deskera.timetracking.dto.UserEntityMapper;
@@ -88,8 +91,21 @@ public class UserServiceImpl implements UserService{
 		user.setDeleted(false);
 		
 		this.userRepository.save(user);
-		
+		mailSend(user.getEmail(),user.getPassword());
 		return USER_ENTITY_MAPPER.mapUserResponse(user);
+	}
+	
+	@Autowired 
+	Mail mail;
+	
+	void mailSend(String to,String pwd) {
+		try {
+			mail.sendEmail(to,pwd);
+			//System.out.println("sent");
+		}
+		catch(Exception e) {
+			throw new BadRequestException("mail error");
+		}
 	}
 
 	@Override
@@ -285,7 +301,6 @@ public class UserServiceImpl implements UserService{
 		response.put("worktimehistory", USER_ENTITY_MAPPER.mapWorkHours(workHoursPage.getContent()));
 		return response;
 	}
-
 	
 //	@Override
 //	public boolean isPresent(final long id) {
