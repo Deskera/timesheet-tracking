@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.deskera.timetracking.common.COUNTRY;
 import com.deskera.timetracking.common.GENDER;
+import com.deskera.timetracking.dto.ImageDto;
 import com.deskera.timetracking.dto.TenantDto;
 import com.deskera.timetracking.dto.TenantEntityMapper;
 import com.deskera.timetracking.dto.UserDto;
@@ -70,6 +71,7 @@ class UserServiceTests {
 	@Test
 	@Order(3)
 	public void testUserLogin() {
+		ImageDto imageDto=new ImageDto();
 		UserTenantDto userDetails=(UserTenantDto) userService.isValidLogin("testemail2@gmail.com", "testpassword").get("user");
 			
 	    assertEquals(userDetails.getUserDto().getEmail(),"testemail2@gmail.com");

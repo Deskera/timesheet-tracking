@@ -13,9 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 
 import com.deskera.timetracking.common.EVENT;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -45,6 +47,30 @@ public class Log {
 	@ManyToOne
 	@JoinColumn(name="user_id",referencedColumnName="user_id",nullable = false)
 	private User userEntity;
+	
+	@Type(type="org.hibernate.type.BinaryType")
+	@Column(name="image", columnDefinition="BYTEA")
+    private byte[] image;
+	
+	@OneToOne
+	@JoinColumn(name="location",referencedColumnName="loc_id")
+	private Location location;
+	
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 
 	public long getLogId() {
 		return logId;

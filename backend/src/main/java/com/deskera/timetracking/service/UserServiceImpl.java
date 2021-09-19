@@ -2,7 +2,10 @@ package com.deskera.timetracking.service;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +42,7 @@ import com.deskera.timetracking.repository.WorkHoursRepository;
 public class UserServiceImpl implements UserService{
 
 	private static final UserEntityMapper USER_ENTITY_MAPPER = new UserEntityMapper();
+	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -155,9 +159,7 @@ public class UserServiceImpl implements UserService{
 				user=optional.get();
 				if(pass.equals(user.getPassword()))
 				{	
-					long logId=logService.createLoginLog(user);
 					Map<String,Object> response=new HashMap<String,Object>();
-					response.put("logId", logId);
 					response.put("userId",user.getUid());
 					response.put("user",USER_ENTITY_MAPPER.mapUserTenant(USER_ENTITY_MAPPER.mapUser(user),tenantService.getTenantDetailsByName(user.getTenantEntity().getTenantName())));
 					return response;
@@ -171,6 +173,15 @@ public class UserServiceImpl implements UserService{
 			}
 	}
 
+	private Location saveLogLocation(User user, double latitude, double longitude) {
+		Location location=new Location();
+		location.setLatitude(latitude);
+		location.setLongitude(longitude);
+		location.setUserEntity(user);
+		locationRepository.save(location);
+		return location;
+	}
+	
 	@Override
 	public long getUserCountByTenant(String tenantName) {
 		Tenant tenant=tenantService.getTenantByName(tenantName);
@@ -239,12 +250,12 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@Transactional
-	public UserDto logout(final long userId) {
+	public LocalDateTime clockout(final long userId, double latitude, double longitude, ImageDto imageDto) {
 		Optional<User> optional=userRepository.findById(userId);
 		if(!optional.isPresent())
 			throw new ResourceNotFoundException("No user found with id "+userId);	
-		logService.createLogoutLog(optional.get());
-		return USER_ENTITY_MAPPER.mapUser(optional.get());
+		return logService.createLogoutLog(optional.get(),saveLogLocation(optional.get(), latitude, longitude),imageDto);
+		//return USER_ENTITY_MAPPER.mapUser(optional.get());
 	}
 
 	@Override
@@ -287,20 +298,40 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Map<String, Object> workingTimeHistory(long userId,Pageable pageable) {
+	public Map<String, Object> workingTimeHistory(long userId,Pageable pageable,String fromDate,String toDate) {
 		Optional<User> optional=userRepository.findById(userId);
 		if(!optional.isPresent())
 		{
 			throw new ResourceNotFoundException("No User found with id : " + userId);
 		}
 		Map<String,Object> response=new HashMap<String,Object>();
-		Page<WorkHours> workHoursPage=workHoursRepository.findAllByUserEntityAndIsDeletedFalseOrderByFirstLoginDesc(optional.get(),pageable);
+		Page<WorkHours> workHoursPage;
+		if(!fromDate.isEmpty() && !toDate.isEmpty()) {
+			try {
+				Date from=(DATE_FORMAT.parse(fromDate));
+				Date to=(DATE_FORMAT.parse(toDate));
+				workHoursPage=workHoursRepository.findAllByDate(optional.get(),from,to,pageable);
+			} catch (Exception e) {
+				throw new BadRequestException("Invalid date");
+			}
+		}
+		else
+			workHoursPage=workHoursRepository.findAllByUserEntityAndIsDeletedFalseOrderByFirstLoginDesc(optional.get(),pageable);
 		response.put("currentPage", workHoursPage.getNumber());
 		response.put("totalItems", workHoursPage.getTotalElements());
 		response.put("totalPages", workHoursPage.getTotalPages());
 		response.put("worktimehistory", USER_ENTITY_MAPPER.mapWorkHours(workHoursPage.getContent()));
 		return response;
 	}
+
+	@Override
+	public LocalDateTime clockin(long uid, double latitude, double longitude, ImageDto imageDto) {
+		Optional<User> optional=userRepository.findById(uid);
+		if(!optional.isPresent())
+			throw new ResourceNotFoundException("No user found with id "+uid);	
+		return logService.createLoginLog(optional.get(),saveLogLocation(optional.get(), latitude, longitude),imageDto);
+	}
+
 	
 //	@Override
 //	public boolean isPresent(final long id) {

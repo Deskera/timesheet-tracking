@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,13 +40,21 @@ public class WorkHours {
 	@JoinColumn(name="user_id",referencedColumnName="user_id",nullable = false)
 	private User userEntity;
 	
-	@JsonFormat(pattern = "hh:mm")
-	@Column(name = "lastlogout_time")
-	private LocalDateTime lastLogout;
+	@OneToOne
+	@JoinColumn(name="first_login",referencedColumnName="log_id")
+	private Log firstLogin;
 	
-	@JsonFormat(pattern = "hh:mm")
-	@Column(name = "firstlogin_time")
-	private LocalDateTime firstLogin;
+	@OneToOne
+	@JoinColumn(name="last_logout",referencedColumnName="log_id")
+	private Log lastLogout;
+	
+//	@JsonFormat(pattern = "hh:mm")
+//	@Column(name = "lastlogout_time")
+//	private LocalDateTime lastLogout;
+//	
+//	@JsonFormat(pattern = "hh:mm")
+//	@Column(name = "firstlogin_time")
+//	private LocalDateTime firstLogin;
 	
 	@ManyToOne
 	@JoinColumn(name="created_by",referencedColumnName="user_id",nullable = false)
@@ -55,6 +64,14 @@ public class WorkHours {
 	@JoinColumn(name="updated_by",referencedColumnName="user_id",nullable = false)
 	private User updatedBy;
 
+//	@OneToOne
+//	@JoinColumn(name="first_location",referencedColumnName="loc_id")
+//	private Location firstLocation;
+//	
+//	@OneToOne
+//	@JoinColumn(name="last_location",referencedColumnName="loc_id")
+//	private Location lastLocation;
+	
 	@CreationTimestamp
 	@Column(name = "created_date")
 	private LocalDateTime createdDate;
@@ -72,6 +89,22 @@ public class WorkHours {
 //
 //	public void setDate(LocalDateTime date) {
 //		this.date = date;
+//	}
+
+//	public Location getFirstLocation() {
+//		return firstLocation;
+//	}
+//
+//	public void setFirstLocation(Location firstLocation) {
+//		this.firstLocation = firstLocation;
+//	}
+//
+//	public Location getLastLocation() {
+//		return lastLocation;
+//	}
+//
+//	public void setLastLocation(Location lastLocation) {
+//		this.lastLocation = lastLocation;
 //	}
 
 	public long getWorkingHours() {
@@ -138,20 +171,37 @@ public class WorkHours {
 		this.workHrId = workHrId;
 	}
 
-	public LocalDateTime getLastLogout() {
-		return lastLogout;
-	}
-
-	public void setLastLogout(LocalDateTime lastLogout) {
-		this.lastLogout = lastLogout;
-	}
-
-	public LocalDateTime getFirstLogin() {
+	public Log getFirstLogin() {
 		return firstLogin;
 	}
 
-	public void setFirstLogin(LocalDateTime firstLogin) {
+	public void setFirstLogin(Log firstLogin) {
 		this.firstLogin = firstLogin;
 	}
+
+	public Log getLastLogout() {
+		return lastLogout;
+	}
+
+	public void setLastLogout(Log lastLogout) {
+		this.lastLogout = lastLogout;
+	}
+
+//	public LocalDateTime getLastLogout() {
+//		return lastLogout;
+//	}
+//
+//	public void setLastLogout(LocalDateTime lastLogout) {
+//		this.lastLogout = lastLogout;
+//	}
+//
+//	public LocalDateTime getFirstLogin() {
+//		return firstLogin;
+//	}
+//
+//	public void setFirstLogin(LocalDateTime firstLogin) {
+//		this.firstLogin = firstLogin;
+//	}
+	
 	
 }

@@ -1,5 +1,6 @@
 package com.deskera.timetracking.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,22 +69,34 @@ public class UserController {
 	}
 	
 	//user login with email and password(match)
-	@GetMapping("/login")	
-	public ResponseEntity<Map<String,Object>> login(@RequestParam("email") final String email,@RequestParam("password") final String password) {
+	@PostMapping("/login")	
+	public ResponseEntity<Map<String,Object>> login(@RequestParam("email") final String email,
+			@RequestParam("password") final String password) {
 		return new ResponseEntity<>(userService.isValidLogin(email,password),HttpStatus.OK);	
 	}
+		
+	@PostMapping("/clockin")	
+	public ResponseEntity<LocalDateTime> clockin(@RequestParam("uid") final long uid,
+			@RequestParam final double latitude,
+			@RequestParam final double longitude,
+			@RequestBody final ImageDto imageDto) {
+		return new ResponseEntity<>(userService.clockin(uid,latitude,longitude,imageDto),HttpStatus.OK);	
+	}
 	
-	@GetMapping("/logout")
-	public ResponseEntity<UserDto> logout(@RequestParam("uid") final long uid)
+	@PostMapping("/clockout")
+	public ResponseEntity<LocalDateTime> clockout(@RequestParam("uid") final long uid,
+			@RequestParam final double latitude,
+			@RequestParam final double longitude,
+			@RequestBody final ImageDto imageDto)
 	{
-		return new ResponseEntity<>(userService.logout(uid),HttpStatus.OK);
+		return new ResponseEntity<>(userService.clockout(uid,latitude,longitude,imageDto),HttpStatus.OK);
 	}
 	
-	@PostMapping(value="/image")
-	public ResponseEntity<String> saveImage(@RequestBody final ImageDto imageDto,@RequestParam final long logId) {
-		userService.saveImage(logId,imageDto);
-		return new ResponseEntity<>("image saved",HttpStatus.OK);
-	}
+//	@PostMapping(value="/image")
+//	public ResponseEntity<String> saveImage(@RequestBody final ImageDto imageDto,@RequestParam final long logId) {
+//		userService.saveImage(logId,imageDto);
+//		return new ResponseEntity<>("image saved",HttpStatus.OK);
+//	}
 	
 	//add new user (returns details of the new user)
 	@PostMapping(value="/save")
@@ -118,15 +131,14 @@ public class UserController {
 	@GetMapping("/worktimehistory")	
 	public ResponseEntity<Map<String,Object>> workingTimeHistory(@RequestParam("uid") final long userId,
 			@RequestParam(defaultValue = "0") int page,
-		    @RequestParam(defaultValue = "5") int size) {
+		    @RequestParam(defaultValue = "5") int size,
+			@RequestParam(value = "from", required = false,defaultValue = "") final String fromDate,
+			@RequestParam(value = "to", required = false,defaultValue = "") final String toDate) {
 		Pageable pageable = PageRequest.of(page, size);
-		return new ResponseEntity<>(userService.workingTimeHistory(userId,pageable),HttpStatus.OK);	
+		
+		return new ResponseEntity<>(userService.workingTimeHistory(userId,pageable,fromDate,toDate),HttpStatus.OK);	
+		
 	}
 	
-//	@GetMapping("/workhours")
-//	public ResponseEntity<UserDto> workingHrDetails(@RequestParam("uid") final long uid)
-//	{
-//		return new ResponseEntity<>(userService.workHourDetails(uid),HttpStatus.OK);
-//	}
 }
  

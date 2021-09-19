@@ -1,5 +1,6 @@
 package com.deskera.timetracking.service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import org.springframework.data.domain.Pageable;
 
@@ -20,13 +21,16 @@ public interface UserService {
 	UserResponseDto deleteUserByEmail(final String email);
 	UserResponseDto editUser(final UserResponseDto userDto);
 	Map<String, Object> getAllUsersGlobal(final String tenantName, final Pageable pageable, final String global);
-	UserDto logout(final long userId);
+	void saveImage(long logId, ImageDto imageDto);
+	void saveLocation(long userId, double latitude, double longitude);
+	Map<String,Object> workingTimeHistory(long uid, Pageable pageable, String fromDate, String toDate);
+	LocalDateTime clockin(long uid, double latitude, double longitude, ImageDto imageDto);
+	LocalDateTime clockout(long uid, double latitude, double longitude, ImageDto imageDto);
+
+//	UserDto logout(final long userId, double latitude, double longitude, ImageDto imageDto);
 //	boolean isPresent(final long id);
 //	boolean isAdmin(final String email);
 //	boolean isAdmin(final long id);
 //	void updateUser(final User admin);
-	void saveImage(long logId, ImageDto imageDto);
-	void saveLocation(long userId, double latitude, double longitude);
-	Map<String,Object> workingTimeHistory(long uid, Pageable pageable);
 
 }

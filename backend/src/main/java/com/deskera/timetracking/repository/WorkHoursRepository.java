@@ -1,5 +1,6 @@
 package com.deskera.timetracking.repository;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,4 +16,8 @@ public interface WorkHoursRepository extends JpaRepository<WorkHours, Long>{
 	Optional<WorkHours> findByUserEntityAndDate(User user); 
 	
 	Page<WorkHours> findAllByUserEntityAndIsDeletedFalseOrderByFirstLoginDesc(User user,Pageable pageable);
+	
+	@Query("SELECT w from WorkHours w WHERE w.userEntity = ?1 AND DATE(w.createdDate) >= ?2 AND DATE(w.createdDate) <= ?3 AND w.isDeleted=false order by w.createdDate DESC")
+	Page<WorkHours> findAllByDate(User user,Date fromDate,Date toDate,Pageable pageable);
+	
 }

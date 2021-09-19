@@ -32,7 +32,7 @@ public class LoginImage {
 	public long getImgId() {
 		return imgId;
 	}
-
+	
 	public void setImgId(long imgId) {
 		this.imgId = imgId;
 	}

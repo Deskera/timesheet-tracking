@@ -161,7 +161,14 @@ public class UserEntityMapper {
 		List<WorkHoursResponseDto> workHoursResponseDto=new ArrayList<WorkHoursResponseDto>();
 		for(WorkHours w:workHours)
 		{
-			workHoursResponseDto.add(new WorkHoursResponseDto(w.getFirstLogin(),w.getLastLogout(),w.getWorkingHours()));
+			if(w.getLastLogout() !=null)
+			     workHoursResponseDto.add(new WorkHoursResponseDto(w.getFirstLogin().getPunchAt(),w.getLastLogout().getPunchAt(),w.getWorkingHours(),
+					new LocationDto(w.getFirstLogin().getLocation().getLatitude(),w.getFirstLogin().getLocation().getLongitude()),
+					new LocationDto(w.getLastLogout().getLocation().getLatitude(),w.getLastLogout().getLocation().getLongitude())));
+			else
+				workHoursResponseDto.add(new WorkHoursResponseDto(w.getFirstLogin().getPunchAt(),null,w.getWorkingHours(),
+						new LocationDto(w.getFirstLogin().getLocation().getLatitude(),w.getFirstLogin().getLocation().getLongitude()),null));
+				
 		}
 		return workHoursResponseDto;
 	}
