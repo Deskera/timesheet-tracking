@@ -10,7 +10,7 @@ import axios from 'axios';
 
 function EmployeeTable(props) {
 
-    const { tableRef, setEmp, openEditOrgModal, openAddModal, openEditModal, openDeleteModal } = props;
+    const { tableRef, setEmp, openEditModal, openDeleteModal } = props;
 
     const [tableLoader, setTableLoader] = React.useState(false);
 

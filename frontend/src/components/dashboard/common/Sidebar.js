@@ -1,7 +1,7 @@
 import React from "react";
 import { NavItem, NavLink, Nav, Collapse, Button } from "reactstrap";
 import { Link } from "react-router-dom";
-import { getUser } from '../../common/CommonUtils';
+import { getUser } from "../../../common/CommonUtils";
 
 function Sidebar() {
 

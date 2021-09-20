@@ -1,20 +1,20 @@
 import React from 'react';
 import { OverlayTrigger, Tooltip, Button, Modal } from "react-bootstrap";
-import { images, getUser } from '../../common/CommonUtils';
+// import { images, getUser } from 'common/CommonUtils';
 import { useHistory } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
-import BusinessIcon from '@material-ui/icons/Business';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import AddIcon from '@material-ui/icons/Add';
+// import BusinessIcon from '@material-ui/icons/Business';
 import 'react-toastify/dist/ReactToastify.css';
-import EditOrgModal from './Organization/EditOrgModal';
-import AddModal from './User/AddModal';
-import EditModal from './User/EditModal';
-import DeleteModal from './User/DeleteModal';
-import EmployeeTable from './EmployeeInfo/EmployeeTable';
-import { baseUrl } from '../../common/baseUrl';
-import axios from 'axios';
-import Sidebar from './Sidebar';
+import EditOrgModal from './common/organization/EditOrgModal';
+import AddModal from './employeeInfo/user/AddModal';
+import EditModal from './employeeInfo/user/EditModal';
+import DeleteModal from './employeeInfo/user/DeleteModal';
+import EmployeeTable from './employeeInfo/EmployeeTable';
+// import { baseUrl } from 'common/baseUrl';
+// import axios from 'axios';
+// import Sidebar from 'dashboard/common/Sidebar';
 
 function Dashboard() {
 
