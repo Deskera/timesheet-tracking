@@ -14,6 +14,7 @@ import DeleteModal from './User/DeleteModal';
 import EmployeeTable from './Table/EmployeeTable';
 import { baseUrl } from '../../common/baseUrl';
 import axios from 'axios';
+import Sidebar from './Sidebar';
 
 function Dashboard() {
 
@@ -40,16 +41,10 @@ function Dashboard() {
     const history = useHistory();
 
     const logOut = () => {
+        console.log("manu out");
         setCompanyMenu(null);
-        axios.get(baseUrl + "api/users/logout?uid=" + getUser().userId)
-            .then((response) => {
-                console.log("a", response);
-                localStorage.clear();
-                history.push("/login");
-            })
-            .catch((err) => {
-                console.log(err.response)
-            })
+        localStorage.clear();
+        history.push("/login");
     }
 
 
@@ -79,89 +74,94 @@ function Dashboard() {
 
 
     return (
-        <div className="container">
-            <Menu
-                anchorEl={companyMenu}
-                keepMounted
-                open={Boolean(companyMenu)}
-                onClose={handleClose}
-            >
-                <MenuItem onClick={() => { setOrgModal(true); setCompanyMenu(null) }}>Company Profile</MenuItem>
-                <MenuItem onClick={logOut}>Logout</MenuItem>
-            </Menu>
+        <div className="row m-0 p-0">
+            <div className=" bg-success col-2 m-0">
+                <Sidebar />
+            </div>
+            <div className="col-10 m-0">
+                <Menu
+                    anchorEl={companyMenu}
+                    keepMounted
+                    open={Boolean(companyMenu)}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={() => { setOrgModal(true); setCompanyMenu(null) }}>Company Profile</MenuItem>
+                    <MenuItem onClick={logOut}>Logout</MenuItem>
+                </Menu>
 
-            <div className="mt-1 text-center d-flex justify-content-between align-items-center bg-white">
-                {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
+                <div className="mt-1 text-center d-flex justify-content-between align-items-center bg-white">
+                    {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
 
-                <h3 className="display-6 ms-4" style={{ color: 'blue', fontSize: '28px' }}>Welcome {getUser().user.userDto.firstName}</h3>
+                    <h3 className="display-6 ms-4" style={{ color: 'blue', fontSize: '28px' }}>Welcome {getUser().user.userDto.firstName}</h3>
 
-                <div className="me-4 d-flex justify-content-between" style={{ width: '200px' }}>
-                    <div>
-                        <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().user.tenantDto.tenantName}</h2>
-                        <p className="" style={{ fontSize: '15px', margin: '0' }}>Company Dashboard</p>
+                    <div className="me-4 d-flex justify-content-between" style={{ width: '200px' }}>
+                        <div>
+                            <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().user.tenantDto.tenantName}</h2>
+                            <p className="" style={{ fontSize: '15px', margin: '0' }}>Company Dashboard</p>
+                        </div>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company</Tooltip>}>
+                            <BusinessIcon style={{ cursor: 'pointer', fontSize: '50px' }} onClick={handleClick} />
+                        </OverlayTrigger>
                     </div>
-                    <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company</Tooltip>}>
-                        <BusinessIcon style={{ cursor: 'pointer', fontSize: '50px' }} onClick={handleClick} />
-                    </OverlayTrigger>
                 </div>
-            </div>
 
-            <div className="mt-5 d-flex justify-content-end">
-                <div className="">
-                    <Button variant="primary" className="p-3" onClick={() => setAddModal(true)}>
-                        <AddIcon style={{ marginTop: '-4px' }} />
-                        {' '}ADD EMPLOYEE
-                    </Button>
+                <div className="mt-5 d-flex justify-content-end">
+                    <div className="">
+                        <Button variant="primary" className="p-3" onClick={() => setAddModal(true)}>
+                            <AddIcon style={{ marginTop: '-4px' }} />
+                            {' '}ADD EMPLOYEE
+                        </Button>
+                    </div>
                 </div>
-            </div>
 
-            {/* original dashboard */}
-            <div className="row">
-                <div className="col-12">
+                {/* original dashboard */}
+                <div className="row">
+                    <div className="col-12">
 
-                    {/* Edit Organization */}
-                    <EditOrgModal
-                        tableRef={tableRef}
-                        show={orgModal}
-                        handleClose={() => setOrgModal(false)}
-                        renderAgain={() => setNum(num + 1)}
-                    />
+                        {/* Edit Organization */}
+                        <EditOrgModal
+                            tableRef={tableRef}
+                            show={orgModal}
+                            handleClose={() => setOrgModal(false)}
+                            renderAgain={() => setNum(num + 1)}
+                        />
 
-                    {/* Add Employee Modal */}
-                    <AddModal
-                        tableRef={tableRef}
-                        show={addModal}
-                        handleClose={() => setAddModal(false)}
-                        renderAgain={() => setNum(num + 1)}
-                    />
+                        {/* Add Employee Modal */}
+                        <AddModal
+                            tableRef={tableRef}
+                            show={addModal}
+                            handleClose={() => setAddModal(false)}
+                            renderAgain={() => setNum(num + 1)}
+                        />
 
-                    {/* Edit Employee Modal */}
-                    <EditModal
-                        tableRef={tableRef}
-                        show={editModal}
-                        emp={emp}
-                        handleClose={() => setEditModal(false)}
-                    // renderAgain={() => setNum(num + 1)}
-                    />
+                        {/* Edit Employee Modal */}
+                        <EditModal
+                            tableRef={tableRef}
+                            show={editModal}
+                            emp={emp}
+                            handleClose={() => setEditModal(false)}
+                        // renderAgain={() => setNum(num + 1)}
+                        />
 
-                    {/* Delete Employee Modal */}
-                    <DeleteModal
-                        tableRef={tableRef}
-                        show={deleteModal}
-                        emp={emp}
-                        handleClose={() => setDeleteModal(false)}
-                        renderAgain={() => setNum(num + 1)}
-                    />
+                        {/* Delete Employee Modal */}
+                        <DeleteModal
+                            tableRef={tableRef}
+                            show={deleteModal}
+                            emp={emp}
+                            handleClose={() => setDeleteModal(false)}
+                            renderAgain={() => setNum(num + 1)}
+                        />
 
-                    {/* Employee Table using Material Table */}
-                    <EmployeeTable
-                        tableRef={tableRef}
-                        setEmp={setEmp}
-                        openEditOrgModal={() => setOrgModal(true)}
-                        openAddModal={() => setDeleteModal(true)}
-                        openEditModal={() => setEditModal(true)}
-                        openDeleteModal={() => setDeleteModal(true)}
-                    />
+                        {/* Employee Table using Material Table */}
+                        <EmployeeTable
+                            tableRef={tableRef}
+                            setEmp={setEmp}
+                            openEditOrgModal={() => setOrgModal(true)}
+                            openAddModal={() => setDeleteModal(true)}
+                            openEditModal={() => setEditModal(true)}
+                            openDeleteModal={() => setDeleteModal(true)}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

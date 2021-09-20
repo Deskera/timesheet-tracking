@@ -4,7 +4,6 @@ import LogoCard, { Centered, ParentCard, Card } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { images } from '../../common/CommonUtils';
 // import Loader from '../../common/Loader';
 import { baseUrl } from '../../common/baseUrl';
 import axios from 'axios';
@@ -14,6 +13,7 @@ import axios from 'axios';
 import FormikControl from '../../common/Formik/FormikControl';
 
 import { ScaleLoader } from 'react-spinners';
+import { images, getUser } from '../../common/CommonUtils';
 
 const initialValues = {
     email: '',
@@ -38,14 +38,7 @@ const validationSchema = Yup.object({
         .matches(atleast1Spe, "Please use atleast one special character!"),
 })
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         '& > *': {
-//             margin: theme.spacing(1),
-//             width: '25ch',
-//         },
-//     },
-// }));
+
 
 function Login() {
 
@@ -54,9 +47,17 @@ function Login() {
     const formRef = React.useRef();
     const history = useHistory();
 
+    React.useEffect(() => {
+        if (getUser()) {
+            console.log("manu");
+            history.push("/dashboard");
+        }
+    }, [])
+
     const onSubmit = (values) => {
+        console.log("a", values);
         setLoader(true);
-        axios.get(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password)
+        axios.post(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password)
             .then((response) => {
                 setLoader(false);
                 console.log("a", response);
