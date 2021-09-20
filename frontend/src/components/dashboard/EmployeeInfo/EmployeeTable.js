@@ -1,5 +1,5 @@
 import React from 'react';
-import MaterialTable, { MTableToolbar, MTableBodyRow } from "material-table";
+import MaterialTable, { MTableToolbar, MTableBodyRow, Paper } from "material-table";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { tableIcons } from './TableIcons';
 import { TablePagination } from '@material-ui/core';
@@ -15,7 +15,9 @@ function EmployeeTable(props) {
     const [tableLoader, setTableLoader] = React.useState(false);
 
     const tableColumns = [
-        { title: "Employee ID", field: "userId", filtering: false },
+        {
+            title: "Employee ID", field: "userId", filtering: false
+        },
         {
             title: "Name",
             field: "userDto.firstName",
@@ -112,6 +114,7 @@ function EmployeeTable(props) {
                             }
                         })
                             .then((response) => {
+                                console.log("abcd", response.data.users);
                                 resolve({
                                     data: response.data.users,
                                     page: response.data.currentPage,
@@ -126,25 +129,31 @@ function EmployeeTable(props) {
                 }
                 options={{
                     showTitle: false,
-                    search: true,
+                    search: false,
                     filtering: true,
                     debounceInterval: 700,
                     padding: "dense",
-                    rowStyle: rowData => ({
-                        backgroundColor: rowData.userDto.roleId === 1 ? '#e3dedc' : ''
-                    })
+                    rowStyle:
+                        rowData => ({
+                            fontSize: 14,
+                            fontFamily: 'Cursive',
+                            backgroundColor: rowData.userDto.roleId === 1 ? '#e3dedc' : ''
+                        }),
+                    headerStyle: {
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                    }
                 }}
                 components={{
                     Toolbar: (props) => {
                         return (
                             <div className="d-flex justify-content-between px-3">
-                                <div className="display-6">
+                                {/* <div className="display-6">
                                     Employees
-                                </div>
-                                <MTableToolbar {...props} />
+                                </div> */}
+                                {/* <MTableToolbar {...props} /> */}
                             </div>
                         );
-
                     },
                     Pagination: props => {
                         return (

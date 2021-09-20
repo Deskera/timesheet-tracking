@@ -1,20 +1,12 @@
 import React from 'react';
 import { OverlayTrigger, Tooltip, Button, Modal } from "react-bootstrap";
-import { images, getUser } from '../../common/CommonUtils';
-import { useHistory } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
-import BusinessIcon from '@material-ui/icons/Business';
+
 import 'react-toastify/dist/ReactToastify.css';
-import EditOrgModal from './Organization/EditOrgModal';
-import AddModal from './User/AddModal';
-import EditModal from './User/EditModal';
-import DeleteModal from './User/DeleteModal';
-import EmployeeTable from './EmployeeInfo/EmployeeTable';
-import { baseUrl } from '../../common/baseUrl';
-import axios from 'axios';
-import Sidebar from './Sidebar';
+// import EditOrgModal from '../Organization/EditOrgModal';
+import EditModal from '../User/EditModal';
+import AddModal from '../User/AddModal';
+import DeleteModal from '../User/DeleteModal';
+import EmployeeTable from './EmployeeTable';
 
 function Dashboard() {
 
@@ -22,30 +14,29 @@ function Dashboard() {
     const [addModal, setAddModal] = React.useState();
     const [editModal, setEditModal] = React.useState(false);
     const [deleteModal, setDeleteModal] = React.useState(false);
-    const [orgModal, setOrgModal] = React.useState(false);
+    // const [orgModal, setOrgModal] = React.useState(false);
     const [emp, setEmp] = React.useState()
     const [num, setNum] = React.useState(0);
 
-    const [companyMenu, setCompanyMenu] = React.useState(null);
+    // const [companyMenu, setCompanyMenu] = React.useState(null);
 
 
-    const abc = React.useRef();
-    const handleClick = (event) => {
-        setCompanyMenu(event.currentTarget);
-    };
+    // const handleClick = (event) => {
+    //     setCompanyMenu(event.currentTarget);
+    // };
 
-    const handleClose = () => {
-        setCompanyMenu(null);
-    };
+    // const handleClose = () => {
+    //     setCompanyMenu(null);
+    // };
 
-    const history = useHistory();
+    // const history = useHistory();
 
-    const logOut = () => {
-        console.log("manu out");
-        setCompanyMenu(null);
-        localStorage.clear();
-        history.push("/login");
-    }
+    // const logOut = () => {
+    //     console.log("manu out");
+    //     setCompanyMenu(null);
+    //     localStorage.clear();
+    //     history.push("/login");
+    // }
 
     const tableRef = React.createRef();
 
@@ -84,12 +75,12 @@ function Dashboard() {
                 <div className="col-12">
 
                     {/* Edit Organization */}
-                    <EditOrgModal
+                    {/* <EditOrgModal
                         tableRef={tableRef}
                         show={orgModal}
                         handleClose={() => setOrgModal(false)}
                         renderAgain={() => setNum(num + 1)}
-                    />
+                    /> */}
 
                     {/* Add Employee Modal */}
                     <AddModal
@@ -121,7 +112,7 @@ function Dashboard() {
                     <EmployeeTable
                         tableRef={tableRef}
                         setEmp={setEmp}
-                        openEditOrgModal={() => setOrgModal(true)}
+                        // openEditOrgModal={() => setOrgModal(true)}
                         openAddModal={() => setDeleteModal(true)}
                         openEditModal={() => setEditModal(true)}
                         openDeleteModal={() => setDeleteModal(true)}
