@@ -16,7 +16,7 @@ import { ScaleLoader } from 'react-spinners';
 import { images, getUser } from '../../common/CommonUtils';
 
 const initialValues = {
-    email: '',
+    email: 'e1@delta.com',
     password: 'Abc@1234'
 }
 
@@ -50,7 +50,7 @@ function Login() {
     React.useEffect(() => {
         if (getUser()) {
             console.log("manu");
-            history.push("/dashboard");
+            history.push("/dashboard/overview");
         }
     }, [])
 
