@@ -48,12 +48,12 @@ const RouteWithLoader = ({ component: Component, loadTime: time, ...rest }) => {
 };
 
 const RouteWithSidebar = ({ component: Component, loadTime: time, ...rest }) => {
-    const [load, setLoaded] = React.useState(true);
+    // const [load, setLoaded] = React.useState(true);
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => setLoaded(false), time * 1000);
-        return () => clearTimeout(timer);
-    }, []);
+    // React.useEffect(() => {
+    //     const timer = setTimeout(() => setLoaded(false), time * 1000);
+    //     return () => clearTimeout(timer);
+    // }, []);
 
     return (
         <Route {...rest} component={() => (
@@ -64,7 +64,9 @@ const RouteWithSidebar = ({ component: Component, loadTime: time, ...rest }) => 
                 <div className="col-10 m-0">
                     <div className="container">
                         <Common />
-                        <Component />
+                        <div className="p-3" style={{ backgroundColor: '#f0ede6', height: '100vh' }}>
+                            <Component />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,10 +75,6 @@ const RouteWithSidebar = ({ component: Component, loadTime: time, ...rest }) => 
 };
 
 function Main() {
-
-    // componentDidMount() {
-
-    // }
 
     const history = useHistory();
 
@@ -113,4 +111,3 @@ function Main() {
 }
 
 export default Main;
-// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

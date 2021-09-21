@@ -38,8 +38,6 @@ const validationSchema = Yup.object({
         .matches(atleast1Spe, "Please use atleast one special character!"),
 })
 
-
-
 function Login() {
 
     const [loader, setLoader] = React.useState(false);
