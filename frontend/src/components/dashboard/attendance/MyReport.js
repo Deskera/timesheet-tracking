@@ -7,18 +7,54 @@ import { baseUrl } from '../../../common/baseUrl';
 import { BeatLoader } from "react-spinners";
 import { images, getUser } from '../../../common/CommonUtils';
 import axios from 'axios';
+import DailyReport from './DailyReport';
+import FromToPicker from './FromToPicker';
 
 function MyReport() {
-
     // const { tableRef, setEmp, openEditModal, openDeleteModal } = props;
 
     const [tableLoader, setTableLoader] = React.useState(false);
 
-    const tableColumns = [
-        { title: "First Login", field: "firstLogin", filtering: false },
-        { title: "Last Login", field: "lastLogout", filtering: false },
-        { title: "Total Work Hours", field: "workHours", filtering: false },
-    ]
+    const [reportData, setReportData] = React.useState([]);
+    const [fromDate, setFromDate] = React.useState(new Date());
+    const [toDate, setToDate] = React.useState(new Date());
+
+    React.useEffect(() => {
+        console.log("wwww", fromDate, toDate);
+        axios.get(baseUrl + "api/users/worktimehistory?", {
+            params: {
+                uid: 2,
+                from: fromDate,
+                to: toDate,
+            }
+        })
+            .then((response) => {
+                var arr = []
+                response.data.worktimehistory.map((val, index) => {
+                    var a = Object.values(val);
+                    var b = a[0].split("T");
+                    var b1 = a[1].split("T");
+                    var hours = Math.floor(a[2] / 60);
+                    var minutes = a[2] % 60;
+
+                    // setReportData((prevData) => {
+                    //     return [
+                    //         ...prevData,
+                    //         { key: JSON.stringify(Date.now()), date: b[0], firstLogin: b[1].slice(0, 8), lastLogout: b1[1].slice(0, 8), workHours: hours + " hr " + minutes + " min" }
+                    //     ]
+                    // })
+                    var d = { key: JSON.stringify(index), date: b[0], firstLogin: b[1].slice(0, 8), lastLogout: b1[1].slice(0, 8), workHours: hours + " hr " + minutes + " min" };
+                    // for (var i = 0; i < 2; i++) {
+                    arr.push(d);
+                    // }
+                })
+                setReportData(arr);
+            })
+            .catch((err) => {
+                console.log("a", err)
+            })
+    }, [fromDate, toDate]);
+
 
     const TableLoader = () => {
         return (
@@ -31,97 +67,19 @@ function MyReport() {
             <div className="mb-5" style={{ fontSize: '20px' }}>
                 My Attendance Report
             </div>
-            <MaterialTable
-                // tableRef={tableRef}
-                localization={{
-                    body: {
-                        emptyDataSourceMessage:
-                            <>
-                                <TableLoader />
-                                <p>Fetching Employess...</p>
-                            </>
-                    }
-                }}
-                icons={tableIcons}
-                columns={tableColumns}
-
-                data={query =>
-                    new Promise((resolve, reject) => {
-                        console.log("rrrr", query);
-
-                        let filters = {};
-                        if (query.filters) {
-                            query.filters.map((filter) => {
-                                filters[`${filter.column.field}`.split(".")[1]] = filter.value;
-                            })
-                        }
-
-                        axios.get(baseUrl + "api/users/worktimehistory" + "?", {
-                            params: {
-                                uid: 2,
-                                // page: 1,
-                                // size: 10,
-                                // sort: query.orderBy && (`${query.orderBy.field}`.split(".")[1] + "," + query.orderDirection.toUpperCase()),
-                            }
-                        })
-                            .then((response) => {
-                                console.log("abcd", response);
-                                resolve({
-                                    data: response.data.worktimehistory,
-                                    page: response.data.currentPage,
-                                    totalCount: response.data.totalItems,
-                                });
-                            })
-                            .catch((err) => {
-                                setTableLoader(false);
-                                console.log("error", err)
-                            })
-                    })
+            <div className="">
+                <FromToPicker
+                    fromDate={fromDate}
+                    setFromDate={setFromDate}
+                    toDate={toDate}
+                    setToDate={setToDate}
+                />
+            </div>
+            <div className="row bg-warning px-3">
+                {
+                    reportData.map(item => <DailyReport item={item} />)
                 }
-                options={{
-                    showTitle: false,
-                    search: false,
-                    filtering: true,
-                    debounceInterval: 700,
-                    padding: "dense",
-                    rowStyle:
-                        rowData => ({
-                            fontSize: 14,
-                            fontFamily: 'Cursive',
-                            // backgroundColor: rowData.userDto.roleId === 1 ? '#e3dedc' : ''
-                        }),
-                    headerStyle: {
-                        fontWeight: 'bold',
-                        fontSize: 16,
-                    }
-                }}
-                components={{
-                    Toolbar: (props) => {
-                        return (
-                            <div className="d-flex justify-content-between px-3">
-                                {/* <div className="display-6">
-                                    Employees
-                                </div> */}
-                                {/* <MTableToolbar {...props} /> */}
-                            </div>
-                        );
-                    },
-                    Pagination: props => {
-                        return (
-                            <div style={{ margin: '0 auto', width: '330px' }}>
-                                <TablePagination {...props} />
-                            </div>
-                        );
-                    },
-                    Row: props => {
-                        return (
-                            <>
-                                <MTableBodyRow {...props} />
-                            </>
-                        )
-                    },
-                }}
-            />
+            </div>
         </div>
     )
 }

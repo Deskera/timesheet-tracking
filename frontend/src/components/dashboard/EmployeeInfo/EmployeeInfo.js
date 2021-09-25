@@ -18,8 +18,10 @@ function EmployeeInfo() {
 
     return (
         <>
-            <div style={{ fontSize: '25px' }}>Employee Table</div>
-            <div className="d-flex justify-content-center align-items-center" style={{ height: '80px' }}>
+            <div className="d-flex justify-content-center align-items-center">
+                <div style={{ fontSize: '25px' }}>Employee Table</div>
+            </div>
+            <div className="d-flex justify-content-start align-items-center" style={{ height: '80px' }}>
                 <Button variant="primary" className="p-3 d-flex justify-content-center align-items-center" style={{ width: '200px', height: '50px' }} onClick={() => setAddModal(true)}>
                     {/* <AddIcon /> */}
                     {' '}ADD EMPLOYEE

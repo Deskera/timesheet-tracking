@@ -57,11 +57,11 @@ const RouteWithSidebar = ({ component: Component, loadTime: time, ...rest }) => 
 
     return (
         <Route {...rest} component={() => (
-            <div className="row bg-white m-0 p-0">
+            <div className="row bg-white m-0 p-0" style={{ height: '100vh' }}>
                 <div className="col-2 m-0" style={{ backgroundColor: '#0b0e57', height: '100vh' }}>
                     <Sidebar />
                 </div>
-                <div className="col-10 m-0">
+                <div className="col-10 bg-white m-0">
                     <div className="container">
                         <Common />
                         <div className="p-3" style={{ backgroundColor: '#f0ede6', height: '100vh' }}>

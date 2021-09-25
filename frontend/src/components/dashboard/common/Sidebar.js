@@ -93,7 +93,7 @@ const Sidebar = () => {
     return (
         <>
             <SidebarNav sidebar={true}>
-                <h3 className="text-center" style={{ color: 'white' }}>Welcome {getUser().user.userDto.firstName}</h3>
+                <h3 className="text-center mb-5" style={{ color: 'white' }}>Welcome {getUser().user.userDto.firstName}</h3>
                 <SidebarWrap>
                     {SidebarData.map((item, index) => {
                         return <SubMenu item={item} key={index} />;

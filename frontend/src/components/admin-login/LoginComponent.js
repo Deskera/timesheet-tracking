@@ -48,7 +48,7 @@ function Login() {
     React.useEffect(() => {
         if (getUser()) {
             console.log("manu");
-            history.push("/dashboard/overview");
+            history.push("/dashboard/employee-info");
         }
     }, [])
 
@@ -64,7 +64,7 @@ function Login() {
                 }
                 else {
                     localStorage.setItem("user", JSON.stringify(response.data));
-                    history.push("/dashboard");
+                    history.push("/dashboard/employee-info");
                 }
             })
             .catch((err) => {
