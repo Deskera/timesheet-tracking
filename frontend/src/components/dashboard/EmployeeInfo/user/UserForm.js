@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormGroup, Label } from 'reactstrap';
-import { Field, Form, ErrorMessage } from 'formik';
+import { Form } from 'formik';
 import FormikControl from "../../../../common/Formik/FormikControl";
 
 import { genderOptions } from '../../../admin-register/PersonalInfoComponent';

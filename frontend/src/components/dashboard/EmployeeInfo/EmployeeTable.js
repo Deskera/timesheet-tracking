@@ -1,5 +1,5 @@
 import React from 'react';
-import MaterialTable, { MTableToolbar, MTableBodyRow, Paper } from "material-table";
+import MaterialTable, { MTableBodyRow } from "material-table";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { tableIcons } from './TableIcons';
 import { TablePagination } from '@material-ui/core';
@@ -26,10 +26,8 @@ function EmployeeTable(props) {
                 console.log("aaab", term, rowData)
             }
         },
-        // { title: "Role", field: "userDto.roleId", render: row => (row.userDto.roleId === 1 ? 'Admin' : 'Employee') },
         { title: "Designation", field: "userDto.designation" },
         { title: "Email", field: "userDto.email" },
-        // { title: "Phone", field: "userDto.contactNumber" },
         { title: "Joining Date", field: "userDto.joiningDate" },
         {
             title: "Actions", field: "email", filtering: false, render: row =>
@@ -96,25 +94,23 @@ function EmployeeTable(props) {
 
                 data={query =>
                     new Promise((resolve, reject) => {
-                        console.log("rrrr", query);
 
                         let filters = {};
                         if (query.filters) {
-                            query.filters.map((filter) => {
+                            query.filters.map(filter => {
                                 filters[`${filter.column.field}`.split(".")[1]] = filter.value;
                             })
                         }
 
                         let querySort = "";
                         if (query.orderBy) {
-                            if (query.orderBy.field == "userId") {
+                            if (query.orderBy.field === "userId") {
                                 querySort = "uid," + query.orderDirection.toUpperCase();
                             }
                             else {
                                 querySort = `${query.orderBy.field}`.split(".")[1] + "," + query.orderDirection.toUpperCase();
                             }
                         }
-                        console.log("ddd", querySort);
 
                         axios.get(baseUrl + "api/users/tenant/" + getUser().user.tenantDto.tenantName + "?", {
                             params: {
@@ -130,7 +126,6 @@ function EmployeeTable(props) {
                             }
                         })
                             .then((response) => {
-                                console.log("abcd", response.data.users);
                                 resolve({
                                     data: response.data.users,
                                     page: response.data.currentPage,
@@ -163,12 +158,8 @@ function EmployeeTable(props) {
                 components={{
                     Toolbar: (props) => {
                         return (
-                            <div className="d-flex justify-content-between px-3">
-                                {/* <div className="display-6">
-                                    Employees
-                                </div> */}
-                                {/* <MTableToolbar {...props} /> */}
-                            </div>
+                            <>
+                            </>
                         );
                     },
                     Pagination: props => {
@@ -181,21 +172,10 @@ function EmployeeTable(props) {
                     Row: props => {
                         return (
                             <>
-                                {/* {console.log("mmm", props)} */}
-                                {/* {props.data.userDto.roleId === 1 ?
-                                        <button>abc</button>
-                                        : null} */}
                                 <MTableBodyRow {...props} />
                             </>
                         )
                     },
-                    // Container: props => {
-                    //     return (
-                    //         <span className="bg-warning">
-                    //             <Paper {...props} />
-                    //         </span>
-                    //     )
-                    // }
                 }}
             />
         </>

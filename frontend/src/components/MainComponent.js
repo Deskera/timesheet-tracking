@@ -1,26 +1,19 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Login from './admin-login/LoginComponent';
-
 import Register from './admin-register/RegisterComponent';
 import OrganizationInfo from './admin-register/OrganizationInfoComponent';
 import PersonalInfo from './admin-register/PersonalInfoComponent';
-
-
-import Dashboard from './dashboard/DashboardCompnent';
-
-import { useHistory } from 'react-router-dom';
-
-import { Switch, Route, Redirect } from 'react-router-dom';
-
-import HashLoader from "react-spinners/HashLoader";
-
 import Sidebar from './dashboard/common/Sidebar';
 import EmployeeInfo from './dashboard/employeeInfo/EmployeeInfo';
 import EmpReport from './dashboard/employeeInfo/EmpReport';
 import MyReport from './dashboard/attendance/MyReport';
 import TeamReport from './dashboard/attendance/TeamReport';
 import Common from './dashboard/common/CommonTemplate';
+
+import HashLoader from "react-spinners/HashLoader";
 
 const Loader = () => {
     return (
@@ -48,12 +41,6 @@ const RouteWithLoader = ({ component: Component, loadTime: time, ...rest }) => {
 };
 
 const RouteWithSidebar = ({ component: Component, loadTime: time, ...rest }) => {
-    // const [load, setLoaded] = React.useState(true);
-
-    // React.useEffect(() => {
-    //     const timer = setTimeout(() => setLoaded(false), time * 1000);
-    //     return () => clearTimeout(timer);
-    // }, []);
 
     return (
         <Route {...rest} component={() => (
