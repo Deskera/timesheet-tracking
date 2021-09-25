@@ -24,7 +24,7 @@ function Common() {
             />
 
             <div className="mt-4 mb-3 text-center d-flex justify-content-between align-items-center bg-white">
-                <h2 className="" style={{ fontSize: '40px', margin: '0' }}>{getUser().user.tenantDto.tenantName}</h2>
+                <h2 style={{ fontSize: '40px', margin: '0' }}>{getUser().user.tenantDto.tenantName}</h2>
 
                 <div>
                     <Button style={{ backgroundColor: 'green' }} onClick={() => setOrgModal(true)}>Company Profile</Button>

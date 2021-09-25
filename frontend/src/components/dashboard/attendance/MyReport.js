@@ -29,7 +29,9 @@ function MyReport() {
                     var minutes = a[2] % 60;
 
                     var d = { key: JSON.stringify(index), date: b[0], firstLogin: b[1].slice(0, 8), lastLogout: b1[1].slice(0, 8), workHours: hours + " hr " + minutes + " min" };
-                    arr.push(d);
+                    for (var i = 0; i < 21; i++) {
+                        arr.push(d);
+                    }
                 })
                 setReportData(arr);
             })

@@ -57,14 +57,14 @@ const RouteWithSidebar = ({ component: Component, loadTime: time, ...rest }) => 
 
     return (
         <Route {...rest} component={() => (
-            <div className="row bg-white m-0 p-0" style={{ height: '100vh' }}>
-                <div className="col-2 m-0" style={{ backgroundColor: '#0b0e57', height: '100vh' }}>
+            <div className="row bg-white m-0 p-0" style={{ minHeight: '100vh', height: 'auto' }}>
+                <div className="col-2 m-0">
                     <Sidebar />
                 </div>
-                <div className="col-10 bg-white m-0">
+                <div className="col-10 m-0">
                     <div className="container">
                         <Common />
-                        <div className="p-3" style={{ backgroundColor: '#f0ede6', height: '100vh' }}>
+                        <div className="p-3" style={{ backgroundColor: '#f0ede6' }}>
                             <Component />
                         </div>
                     </div>
@@ -85,10 +85,10 @@ function Main() {
             <RouteWithLoader exact path="/register/personal-info" component={PersonalInfo} loadTime="3" />
             <RouteWithLoader exact path="/register/organization-info" component={OrganizationInfo} loadTime="0.5" />
 
-            <RouteWithSidebar exact path="/dashboard/overview" component={Overview} />
+            {/* <RouteWithSidebar exact path="/dashboard/overview" component={Overview} /> */}
             <RouteWithSidebar exact path="/dashboard/employee-info" component={EmployeeInfo} />
             <RouteWithSidebar exact path="/dashboard/my-report" component={MyReport} />
-            <RouteWithSidebar exact path="/dashboard/team-report" component={TeamReport} />
+            {/* <RouteWithSidebar exact path="/dashboard/team-report" component={TeamReport} /> */}
 
             {/* <RouteWithSidebar exact path="/dashboard" component={() => (
                 <>
