@@ -50,7 +50,12 @@ function EmployeeTable(props) {
                                     </div>
                                     <div>
                                         <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">View Report</Tooltip>}>
-                                            <img src={images['report.png'].default} alt="download report icon" style={{ width: '25px', cursor: 'pointer' }} onClick={() => { alert("This feature is currently not available!"); console.log(row) }} />
+                                            <img src={images['report.png'].default} alt="download report icon" style={{ width: '25px', cursor: 'pointer' }}
+                                                onClick={() => {
+                                                    var win = window.open("/dashboard/employee-info/view-report", "_blank")
+                                                    win.viewEmp = row;
+                                                }}
+                                            />
                                         </OverlayTrigger>
                                     </div>
                                     <div>
@@ -182,6 +187,9 @@ function EmployeeTable(props) {
                     // }
                 }}
             />
+
+            {/* aa{viewEmp && viewEmp.userDto.firstName} */}
+            {/* {console.log("eee", viewEmp)} */}
         </>
     )
 }

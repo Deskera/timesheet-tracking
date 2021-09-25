@@ -9,7 +9,7 @@ function FromToPicker(props) {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <div className="row">
-                <div className="col-6 d-flex justify-content-between">
+                <div className="col-12 d-flex justify-content-evenly">
                     <KeyboardDatePicker
                         showTodayButton
                         label="From Date"
@@ -31,11 +31,11 @@ function FromToPicker(props) {
                         minDate={fromDate}
                         minDateMessage="Should be greater than From Date!"
                     />
-                </div>
 
-                <span className="offset-1 col-2">
-                    Sort by Wrok Hour
-                </span>
+                    <span className="offset-1 col-2">
+                        Sort by Wrok Hour
+                    </span>
+                </div>
             </div>
         </MuiPickersUtilsProvider>
     )

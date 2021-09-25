@@ -16,8 +16,8 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import HashLoader from "react-spinners/HashLoader";
 
 import Sidebar from './dashboard/common/Sidebar';
-import Overview from './dashboard/overview/Overview';
 import EmployeeInfo from './dashboard/employeeInfo/EmployeeInfo';
+import EmpReport from './dashboard/employeeInfo/EmpReport';
 import MyReport from './dashboard/attendance/MyReport';
 import TeamReport from './dashboard/attendance/TeamReport';
 import Common from './dashboard/common/CommonTemplate';
@@ -87,8 +87,9 @@ function Main() {
 
             {/* <RouteWithSidebar exact path="/dashboard/overview" component={Overview} /> */}
             <RouteWithSidebar exact path="/dashboard/employee-info" component={EmployeeInfo} />
+            <RouteWithSidebar exact path="/dashboard/employee-info/view-report" component={EmpReport} />
             <RouteWithSidebar exact path="/dashboard/my-report" component={MyReport} />
-            {/* <RouteWithSidebar exact path="/dashboard/team-report" component={TeamReport} /> */}
+            <RouteWithSidebar exact path="/dashboard/team-report" component={TeamReport} />
 
             {/* <RouteWithSidebar exact path="/dashboard" component={() => (
                 <>
