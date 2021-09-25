@@ -1,39 +1,14 @@
 import React from 'react';
-import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import DateFnsUtils from '@date-io/date-fns';
 import { KeyboardDatePicker, DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 function FromToPicker(props) {
 
     const { fromDate, setFromDate, toDate, setToDate } = props;
 
-    // console.log("rrrr", fromDate, fromDate.getMonth(), toDate);
-
-    // const [fromShow, setFromShow] = useState(false);
-    // const [toShow, setToShow] = useState(false);
-
-    // const onFromChange = (event, selectedDate) => {
-    //     setFromShow(false);
-    //     if (selectedDate) {
-    //         setFromDate(selectedDate);
-    //     }
-    //     else {
-    //         setFromDate(fromDate);
-    //     }
-    // };
-
-    // const onToChange = (event, selectedDate) => {
-    //     setToShow(false);
-    //     if (selectedDate) {
-    //         setToDate(selectedDate);
-    //     }
-    //     else {
-    //         setToDate(toDate);
-    //     }
-    // };
-
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <div className="row mb-5">
+            <div className="row">
                 <div className="col-6 d-flex justify-content-between">
                     <KeyboardDatePicker
                         showTodayButton
@@ -53,8 +28,8 @@ function FromToPicker(props) {
                         format="dd/MM/yyyy"
                         value={toDate}
                         onChange={date => setToDate(date)}
-                    // minDate={fromDate}
-                    // minDateMessage="Should be greater than From Date!"
+                        minDate={fromDate}
+                        minDateMessage="Should be greater than From Date!"
                     />
                 </div>
 
