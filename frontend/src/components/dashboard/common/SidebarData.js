@@ -13,9 +13,9 @@ export const SidebarData = [
         path: '/dashboard/my-report',
         icon: <FaIcons.FaEnvelopeOpenText />,
     },
-    {
-        title: 'Team Report',
-        path: '/dashboard/team-report',
-        icon: <IoIcons.IoIosPaper />
-    }
+    // {
+    //     title: 'Team Report',
+    //     path: '/dashboard/team-report',
+    //     icon: <IoIcons.IoIosPaper />
+    // }
 ];

@@ -7,6 +7,7 @@ import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import { ScaleLoader } from 'react-spinners';
 
 function ReportSchema(props) {
 
@@ -17,12 +18,13 @@ function ReportSchema(props) {
     const [totalPages, setTotalPages] = React.useState(0);
     const [totalItems, setTotalItems] = React.useState(0);
     const [pageSize, setPageSize] = React.useState(20);
+    const [loader, setLoader] = React.useState(true);
 
     React.useEffect(() => {
+        setLoader(true);
         axios.get(baseUrl + "api/users/worktimehistory?", {
             params: {
-                uid: 2,
-                // uid: props.userId,
+                uid: props.userId,
                 from: fromDate,
                 to: toDate,
                 page: currPage,
@@ -47,6 +49,7 @@ function ReportSchema(props) {
                     // }
                 })
                 setReportData(arr);
+                setLoader(false);
             })
             .catch((err) => {
                 console.log("a", err)
@@ -64,35 +67,49 @@ function ReportSchema(props) {
                 />
             </div>
             <div className="mb-3 d-flex justify-content-center">
-                <FirstPageIcon
-                    className="hoverEffect"
-                    onClick={() => { if (currPage != 0) { setCurrPage(currPage - 1) } }}
-                />
-                <KeyboardArrowLeftIcon
-                    className="hoverEffect"
-                    onClick={() => { if (currPage != 0) { setCurrPage(currPage - 1) } }}
-                />
                 {
-                    currPage == totalPages - 1 ?
-                        <>
-                            {(pageSize * (currPage + 1) - pageSize + 1) + " - " + totalItems + " of " + totalItems}
-                        </>
+                    loader ?
+                        <ScaleLoader color="#000" loading={loader} height={30} />
                         :
-                        <>
-                            {(pageSize * (currPage + 1) - pageSize + 1) + " - " + (pageSize * (currPage + 1)) + " of " + totalItems}
-                        </>
+                        totalItems == 0 ?
+                            <div>
+                                No Entries Found!
+                            </div>
+                            :
+                            <>
+                                <FirstPageIcon
+                                    className="hoverEffect"
+                                    onClick={() => { if (currPage !== 0) { setCurrPage(0) } }}
+                                />
+                                <KeyboardArrowLeftIcon
+                                    className="hoverEffect"
+                                    onClick={() => { if (currPage !== 0) { setCurrPage(currPage - 1) } }}
+                                />
+                                {
+                                    currPage == totalPages - 1 ?
+                                        <>
+                                            {(pageSize * (currPage + 1) - pageSize + 1) + " - " + totalItems + " of " + totalItems}
+                                        </>
+                                        :
+                                        <>
+                                            {(pageSize * (currPage + 1) - pageSize + 1) + " - " + (pageSize * (currPage + 1)) + " of " + totalItems}
+                                        </>
+                                }
+                                <KeyboardArrowRightIcon
+                                    className="hoverEffect"
+                                    onClick={() => { if (currPage !== totalPages - 1) { setCurrPage(currPage + 1) } }}
+
+                                />
+                                <LastPageIcon
+                                    className="hoverEffect"
+                                    onClick={() => { if (currPage !== totalPages - 1) { setCurrPage(totalPages - 1) } }}
+
+                                />
+                            </>
                 }
-                <KeyboardArrowRightIcon
-                    className="hoverEffect"
-                    onClick={() => { if (currPage != pageSize - 1) { setCurrPage(currPage + 1) } }}
-
-                />
-                <LastPageIcon
-                    className="hoverEffect"
-                    onClick={() => { if (currPage != pageSize - 1) { setCurrPage(currPage + 1) } }}
-
-                />
             </div>
+
+
             <div className="row" style={{ paddingLeft: '3%' }}>
                 {
                     reportData.map(item => (

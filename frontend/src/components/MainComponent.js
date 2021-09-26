@@ -10,7 +10,6 @@ import Sidebar from './dashboard/common/Sidebar';
 import EmployeeInfo from './dashboard/employeeInfo/EmployeeInfo';
 import EmpReport from './dashboard/employeeInfo/EmpReport';
 import MyReport from './dashboard/attendance/MyReport';
-import TeamReport from './dashboard/attendance/TeamReport';
 import Common from './dashboard/common/CommonTemplate';
 
 import HashLoader from "react-spinners/HashLoader";
@@ -72,26 +71,9 @@ function Main() {
             <RouteWithLoader exact path="/register/personal-info" component={PersonalInfo} loadTime="3" />
             <RouteWithLoader exact path="/register/organization-info" component={OrganizationInfo} loadTime="0.5" />
 
-            {/* <RouteWithSidebar exact path="/dashboard/overview" component={Overview} /> */}
             <RouteWithSidebar exact path="/dashboard/employee-info" component={EmployeeInfo} />
             <RouteWithSidebar exact path="/dashboard/employee-info/view-report" component={EmpReport} />
             <RouteWithSidebar exact path="/dashboard/my-report" component={MyReport} />
-            <RouteWithSidebar exact path="/dashboard/team-report" component={TeamReport} />
-
-            {/* <RouteWithSidebar exact path="/dashboard" component={() => (
-                <>
-                    {
-                        localStorage.getItem("user") === null ?
-                            <>
-                                {alert("Sign In first!")}
-                                {history.push("/login")}
-
-                            </>
-                            :
-                            <Dashboard />
-                    }
-                </>
-            )} /> */}
 
             <Redirect to="/login" />
         </Switch>
