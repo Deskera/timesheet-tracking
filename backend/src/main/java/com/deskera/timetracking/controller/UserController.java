@@ -132,9 +132,10 @@ public class UserController {
 	public ResponseEntity<Map<String,Object>> workingTimeHistory(@RequestParam("uid") final long userId,
 			@RequestParam(defaultValue = "0") int page,
 		    @RequestParam(defaultValue = "5") int size,
+		    @RequestParam(defaultValue = "createdDate,DESC") String[] sort,
 			@RequestParam(value = "from", required = false,defaultValue = "") final String fromDate,
 			@RequestParam(value = "to", required = false,defaultValue = "") final String toDate) {
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size,Sort.by(Direction.valueOf(sort[1]),sort[0]));
 		
 		return new ResponseEntity<>(userService.workingTimeHistory(userId,pageable,fromDate,toDate),HttpStatus.OK);	
 		

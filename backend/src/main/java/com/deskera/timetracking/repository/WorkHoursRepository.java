@@ -17,7 +17,7 @@ public interface WorkHoursRepository extends JpaRepository<WorkHours, Long>{
 	
 	Page<WorkHours> findAllByUserEntityAndIsDeletedFalseOrderByFirstLoginDesc(User user,Pageable pageable);
 	
-	@Query("SELECT w from WorkHours w WHERE w.userEntity = ?1 AND DATE(w.createdDate) >= ?2 AND DATE(w.createdDate) <= ?3 AND w.isDeleted=false order by w.createdDate DESC")
+	@Query("SELECT w from WorkHours w WHERE w.userEntity = ?1 AND DATE(w.createdDate) >= ?2 AND DATE(w.createdDate) <= ?3 AND w.isDeleted=false")
 	Page<WorkHours> findAllByDate(User user,Date fromDate,Date toDate,Pageable pageable);
 	
 }
