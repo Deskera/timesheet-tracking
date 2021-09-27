@@ -5,60 +5,62 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
 import UserForm from './UserForm';
-import { baseUrl } from '../../../common/baseUrl';
+import { baseUrl } from '../../../../common/baseUrl';
 import { ToastContainer, toast } from 'react-toastify';
 import { PulseLoader } from "react-spinners";
 import axios from 'axios';
-import { getUser } from '../../../common/CommonUtils';
 
-function AddModal(props) {
+function EditModal(props) {
 
-    const { show, handleClose, tableRef } = props;
+    const { show, emp, handleClose, tableRef } = props;
 
     const [saveLoader, setSaveLoader] = React.useState(false);
-    const addEmpFormRef = React.useRef();
+    const editEmpFormRef = React.useRef();
 
-    const addEmployee = () => {
+    const editEmployee = () => {
         setSaveLoader(true);
 
-        const newEmp = {
-            firstName: addEmpFormRef.current.values.firstname,
-            lastName: addEmpFormRef.current.values.lastname,
-            email: addEmpFormRef.current.values.email,
-            designation: addEmpFormRef.current.values.designation,
-            contactNumber: addEmpFormRef.current.values.phone,
-            gender: addEmpFormRef.current.values.gender,
-            joiningDate: addEmpFormRef.current.values.joiningDate,
-            roleId: 2,
-            tenantName: getUser().user.tenantDto.tenantName
+        const editEmp = {
+            userId: emp && emp.userId,
+            userDto: {
+                firstName: editEmpFormRef.current.values.firstname,
+                lastName: editEmpFormRef.current.values.lastname,
+                email: editEmpFormRef.current.values.email,
+                designation: editEmpFormRef.current.values.designation,
+                contactNumber: editEmpFormRef.current.values.phone,
+                gender: editEmpFormRef.current.values.gender,
+                joiningDate: editEmpFormRef.current.values.joiningDate,
+                roleId: editEmpFormRef.current.values.roleId
+            }
         }
 
         const scopeRef = tableRef.current;
 
-        axios.post((baseUrl + "api/users/save?password=Welcome" + newEmp.firstName), newEmp)
+        axios.put((baseUrl + "api/users/edit"), editEmp)
             .then(() => {
                 scopeRef.onQueryChange();
                 setSaveLoader(false);
-                toast.success("Employee added successfully!");
+                toast.success("Employee updated successfully!");
                 handleClose();
             })
             .catch((err) => {
                 setSaveLoader(false);
-                if (err.response.data === "user already exists") {
-                    addEmpFormRef.current.setFieldError("email", "Email already taken!")
+                if (err.response.data === "email already exists") {
+                    editEmpFormRef.current.setFieldError("email", "Email already taken!")
                 }
-                console.log(err.response)
+                console.log(err)
             })
     }
 
     const initialValues = {
-        firstname: '',
-        lastname: '',
-        email: '',
-        designation: '',
-        phone: '',
-        gender: '',
-        joiningDate: ''
+        firstname: emp && emp.userDto.firstName,
+        lastname: emp && emp.userDto.lastName,
+        email: emp && emp.userDto.email,
+        designation: emp && emp.userDto.designation,
+        phone: emp && emp.userDto.contactNumber,
+        gender: emp && emp.userDto.gender,
+        joiningDate: emp && emp.userDto.joiningDate,
+        roleId: emp && emp.userDto.roleId
     }
 
     Yup.addMethod(Yup.string, 'validatePhone', function () {
@@ -107,7 +109,7 @@ function AddModal(props) {
             />
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header>
-                    <Modal.Title>New Employee</Modal.Title>
+                    <Modal.Title>{emp && (emp.userDto.firstName + " " + emp.userDto.lastName)}</Modal.Title>
                     <CloseIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
                 </Modal.Header>
 
@@ -115,21 +117,25 @@ function AddModal(props) {
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={() => addEmployee()}
-                        innerRef={addEmpFormRef}
+                        onSubmit={() => editEmployee()}
+                        innerRef={editEmpFormRef}
                     >
                         <UserForm />
                     </Formik>
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button style={{ width: "80px" }} variant="primary" onClick={() => addEmpFormRef.current.submitForm()}>{saveLoader ? <SaveLoader /> : "Save"}</Button>
+                    <Button style={{ width: "80px" }} variant="primary" onClick={() => editEmpFormRef.current.submitForm()}>
+                        {saveLoader ? <SaveLoader /> : "Save"}
+                    </Button>
                     <span></span>
-                    <Button className="btn-outline-danger" variant="" onClick={handleClose}>Cancel</Button>
+                    <Button className="btn-outline-danger" variant="" onClick={handleClose}>
+                        Cancel
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </>
     )
 }
 
-export default AddModal;
+export default EditModal;

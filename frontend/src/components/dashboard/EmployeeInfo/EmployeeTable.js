@@ -1,5 +1,5 @@
 import React from 'react';
-import MaterialTable, { MTableToolbar, MTableBodyRow } from "material-table";
+import MaterialTable, { MTableToolbar, MTableBodyRow, Paper } from "material-table";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { tableIcons } from './TableIcons';
 import { TablePagination } from '@material-ui/core';
@@ -10,12 +10,14 @@ import axios from 'axios';
 
 function EmployeeTable(props) {
 
-    const { tableRef, setEmp, openEditOrgModal, openAddModal, openEditModal, openDeleteModal } = props;
+    const { tableRef, setEmp, openEditModal, openDeleteModal } = props;
 
     const [tableLoader, setTableLoader] = React.useState(false);
 
     const tableColumns = [
-        { title: "Employee ID", field: "userId", filtering: false },
+        {
+            title: "Employee ID", field: "userId", filtering: false
+        },
         {
             title: "Name",
             field: "userDto.firstName",
@@ -48,7 +50,12 @@ function EmployeeTable(props) {
                                     </div>
                                     <div>
                                         <OverlayTrigger overlay={<Tooltip id="profile-edit-tooltip">View Report</Tooltip>}>
-                                            <img src={images['report.png'].default} alt="download report icon" style={{ width: '25px', cursor: 'pointer' }} onClick={() => { alert("This feature is currently not available!"); console.log(row) }} />
+                                            <img src={images['report.png'].default} alt="download report icon" style={{ width: '25px', cursor: 'pointer' }}
+                                                onClick={() => {
+                                                    var win = window.open("/dashboard/employee-info/view-report", "_blank")
+                                                    win.viewEmp = row;
+                                                }}
+                                            />
                                         </OverlayTrigger>
                                     </div>
                                     <div>
@@ -98,11 +105,22 @@ function EmployeeTable(props) {
                             })
                         }
 
+                        let querySort = "";
+                        if (query.orderBy) {
+                            if (query.orderBy.field == "userId") {
+                                querySort = "uid," + query.orderDirection.toUpperCase();
+                            }
+                            else {
+                                querySort = `${query.orderBy.field}`.split(".")[1] + "," + query.orderDirection.toUpperCase();
+                            }
+                        }
+                        console.log("ddd", querySort);
+
                         axios.get(baseUrl + "api/users/tenant/" + getUser().user.tenantDto.tenantName + "?", {
                             params: {
                                 page: query.page,
                                 size: query.pageSize,
-                                sort: query.orderBy && (`${query.orderBy.field}`.split(".")[1] + "," + query.orderDirection.toUpperCase()),
+                                sort: querySort,
                                 name: filters.firstName && filters.firstName,
                                 email: filters.email && filters.email,
                                 contactnumber: filters.contactnumber && filters.contactnumber,
@@ -112,6 +130,7 @@ function EmployeeTable(props) {
                             }
                         })
                             .then((response) => {
+                                console.log("abcd", response.data.users);
                                 resolve({
                                     data: response.data.users,
                                     page: response.data.currentPage,
@@ -126,29 +145,35 @@ function EmployeeTable(props) {
                 }
                 options={{
                     showTitle: false,
-                    search: true,
+                    search: false,
                     filtering: true,
                     debounceInterval: 700,
                     padding: "dense",
-                    rowStyle: rowData => ({
-                        backgroundColor: rowData.userDto.roleId === 1 ? '#e3dedc' : ''
-                    })
+                    rowStyle:
+                        rowData => ({
+                            fontSize: 14,
+                            fontFamily: 'Cursive',
+                            backgroundColor: rowData.userDto.roleId === 1 ? '#e3dedc' : ''
+                        }),
+                    headerStyle: {
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                    }
                 }}
                 components={{
                     Toolbar: (props) => {
                         return (
                             <div className="d-flex justify-content-between px-3">
-                                <div className="display-6">
+                                {/* <div className="display-6">
                                     Employees
-                                </div>
-                                <MTableToolbar {...props} />
+                                </div> */}
+                                {/* <MTableToolbar {...props} /> */}
                             </div>
                         );
-
                     },
                     Pagination: props => {
                         return (
-                            <div style={{ margin: '0 auto', width: '330px' }}>
+                            <div style={{ margin: '0 auto', width: '340px' }}>
                                 <TablePagination {...props} />
                             </div>
                         );

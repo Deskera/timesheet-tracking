@@ -3,9 +3,8 @@ import React from 'react';
 import { FormGroup, Label } from 'reactstrap';
 import { Form } from 'formik';
 
-import { countryOptions } from '../../admin-register/OrganizationInfoComponent';
-
-import FormikControl from '../../../common/Formik/FormikControl';
+import { countryOptions } from '../../../admin-register/OrganizationInfoComponent';
+import FormikControl from '../../../../common/Formik/FormikControl';
 
 function OrganizationForm() {
     return (

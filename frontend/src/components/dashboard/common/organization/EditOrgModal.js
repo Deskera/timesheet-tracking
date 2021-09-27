@@ -5,11 +5,11 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
 import OrganizationForm from './OrganizationForm';
-import { baseUrl } from '../../../common/baseUrl';
+import { baseUrl } from '../../../../common/baseUrl';
 import { ToastContainer, toast } from 'react-toastify';
 import { PulseLoader } from "react-spinners";
 import axios from 'axios';
-import { getUser } from '../../../common/CommonUtils';
+import { getUser } from '../../../../common/CommonUtils';
 
 function EditOrgModal(props) {
 

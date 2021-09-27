@@ -1,19 +1,20 @@
 import React from 'react';
 import { OverlayTrigger, Tooltip, Button, Modal } from "react-bootstrap";
-import { images, getUser } from '../../common/CommonUtils';
+// import { images, getUser } from 'common/CommonUtils';
 import { useHistory } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
-import BusinessIcon from '@material-ui/icons/Business';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import AddIcon from '@material-ui/icons/Add';
+// import BusinessIcon from '@material-ui/icons/Business';
 import 'react-toastify/dist/ReactToastify.css';
-import EditOrgModal from './Organization/EditOrgModal';
-import AddModal from './User/AddModal';
-import EditModal from './User/EditModal';
-import DeleteModal from './User/DeleteModal';
-import EmployeeTable from './Table/EmployeeTable';
-import { baseUrl } from '../../common/baseUrl';
-import axios from 'axios';
+import EditOrgModal from './common/organization/EditOrgModal';
+import AddModal from './employeeInfo/user/AddModal';
+import EditModal from './employeeInfo/user/EditModal';
+import DeleteModal from './employeeInfo/user/DeleteModal';
+import EmployeeTable from './employeeInfo/EmployeeTable';
+// import { baseUrl } from 'common/baseUrl';
+// import axios from 'axios';
+// import Sidebar from 'dashboard/common/Sidebar';
 
 function Dashboard() {
 
@@ -40,47 +41,18 @@ function Dashboard() {
     const history = useHistory();
 
     const logOut = () => {
+        console.log("manu out");
         setCompanyMenu(null);
-        axios.get(baseUrl + "api/users/logout?uid=" + getUser().userId)
-            .then((response) => {
-                console.log("a", response);
-                localStorage.clear();
-                history.push("/login");
-            })
-            .catch((err) => {
-                console.log(err.response)
-            })
+        localStorage.clear();
+        history.push("/login");
     }
 
-
-    // using localstorage created while admin login to access the tenantName
-    // React.useEffect(() => {
-    //     const getUsers = async (values) => {
-    //         setTableLoader(true);
-    //         axios.get(baseUrl + "api/users/tenant/" + getUser().tenantDto.tenantName, {
-    //             params: {
-    //                 page: 0,
-    //                 size: 10
-    //             }
-    //         })
-    //             .then((response) => {
-    //                 console.log("aa", response);
-    //                 setAllEmployees(response.data.users);
-    //                 setTableLoader(false);
-    //             })
-    //             .catch((err) => {
-    //                 setTableLoader(false);
-    //                 console.log(err)
-    //             })
-    //     }
-    //     getUsers();
-    // }, [num])
     const tableRef = React.createRef();
 
-
     return (
-        <div className="container">
-            <Menu
+        <>
+            {/* <div className="container"> */}
+            {/* <Menu
                 anchorEl={companyMenu}
                 keepMounted
                 open={Boolean(companyMenu)}
@@ -88,35 +60,27 @@ function Dashboard() {
             >
                 <MenuItem onClick={() => { setOrgModal(true); setCompanyMenu(null) }}>Company Profile</MenuItem>
                 <MenuItem onClick={logOut}>Logout</MenuItem>
-            </Menu>
+            </Menu> */}
 
-            <div className="mt-1 text-center d-flex justify-content-between align-items-center bg-white">
-                {/* <img className="col-2" src={images['logo.png'].default} alt="Company logo" style={{ width: '' }} /> */}
+            {/* <div className="mt-4 text-center d-flex justify-content-center align-items-center bg-white"> */}
+            {/* <div> */}
+            {/* <h2 className="" style={{ fontSize: '40px', margin: '0' }}>{getUser().user.tenantDto.tenantName}</h2> */}
+            {/* <p className="" style={{ fontSize: '20px', margin: '0' }}>Company Dashboard</p> */}
+            {/* </div> */}
+            {/* <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company</Tooltip>}> */}
+            {/* <BusinessIcon style={{ cursor: 'pointer', fontSize: '50px' }} onClick={handleClick} /> */}
+            {/* </OverlayTrigger> */}
+            {/* </div> */}
 
-                <h3 className="display-6 ms-4" style={{ color: 'blue', fontSize: '28px' }}>Welcome {getUser().user.userDto.firstName}</h3>
-
-                <div className="me-4 d-flex justify-content-between" style={{ width: '200px' }}>
-                    <div>
-                        <h2 className="" style={{ fontSize: '20px', margin: '0' }}>{getUser().user.tenantDto.tenantName}</h2>
-                        <p className="" style={{ fontSize: '15px', margin: '0' }}>Company Dashboard</p>
-                    </div>
-                    <OverlayTrigger placement="bottom" overlay={<Tooltip id="admin">Company</Tooltip>}>
-                        <BusinessIcon style={{ cursor: 'pointer', fontSize: '50px' }} onClick={handleClick} />
-                    </OverlayTrigger>
-                </div>
-            </div>
-
-            <div className="mt-5 d-flex justify-content-end">
-                <div className="">
-                    <Button variant="primary" className="p-3" onClick={() => setAddModal(true)}>
-                        <AddIcon style={{ marginTop: '-4px' }} />
+            {/* original dashboard */}
+            <div className="mt-3" style={{ backgroundColor: '#f0ede6', height: '100vh' }}>
+                <div className="pt-3 ps-3" style={{ fontSize: '25px' }}>Employee Table</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '80px' }}>
+                    <Button variant="primary" className="p-3 d-flex justify-content-center align-items-center" style={{ width: '200px', height: '50px' }} onClick={() => setAddModal(true)}>
+                        {/* <AddIcon /> */}
                         {' '}ADD EMPLOYEE
                     </Button>
                 </div>
-            </div>
-
-            {/* original dashboard */}
-            <div className="row">
                 <div className="col-12">
 
                     {/* Edit Organization */}
@@ -164,7 +128,8 @@ function Dashboard() {
                     />
                 </div>
             </div>
-        </div>
+            {/* </div> */}
+        </>
     );
 }
 

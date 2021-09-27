@@ -4,7 +4,6 @@ import LogoCard, { Centered, ParentCard, Card } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { images } from '../../common/CommonUtils';
 // import Loader from '../../common/Loader';
 import { baseUrl } from '../../common/baseUrl';
 import axios from 'axios';
@@ -14,9 +13,10 @@ import axios from 'axios';
 import FormikControl from '../../common/Formik/FormikControl';
 
 import { ScaleLoader } from 'react-spinners';
+import { images, getUser } from '../../common/CommonUtils';
 
 const initialValues = {
-    email: '',
+    email: 'e1@delta.com',
     password: 'Abc@1234'
 }
 
@@ -38,15 +38,6 @@ const validationSchema = Yup.object({
         .matches(atleast1Spe, "Please use atleast one special character!"),
 })
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         '& > *': {
-//             margin: theme.spacing(1),
-//             width: '25ch',
-//         },
-//     },
-// }));
-
 function Login() {
 
     const [loader, setLoader] = React.useState(false);
@@ -54,9 +45,21 @@ function Login() {
     const formRef = React.useRef();
     const history = useHistory();
 
+    React.useEffect(() => {
+        if (getUser()) {
+            console.log("manu");
+            history.push("/dashboard/employee-info");
+        }
+        window.history.pushState(null, document.title, window.location.href);
+        window.addEventListener('popstate', function (event) {
+            window.history.pushState(null, document.title, window.location.href);
+        });
+    }, [])
+
     const onSubmit = (values) => {
+        console.log("a", values);
         setLoader(true);
-        axios.get(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password)
+        axios.post(baseUrl + "api/users/login?email=" + values.email + "&password=" + values.password)
             .then((response) => {
                 setLoader(false);
                 console.log("a", response);
@@ -65,7 +68,7 @@ function Login() {
                 }
                 else {
                     localStorage.setItem("user", JSON.stringify(response.data));
-                    history.push("/dashboard");
+                    history.push("/dashboard/employee-info");
                 }
             })
             .catch((err) => {

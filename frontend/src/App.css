@@ -54,3 +54,9 @@ img {
 .field-wrapper {
     margin-bottom: 30px;
 }
+
+.hoverEffect:hover {
+    background-color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
