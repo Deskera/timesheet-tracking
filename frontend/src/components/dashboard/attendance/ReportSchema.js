@@ -18,6 +18,7 @@ function ReportSchema(props) {
     const [totalPages, setTotalPages] = React.useState(0);
     const [totalItems, setTotalItems] = React.useState(0);
     const [pageSize, setPageSize] = React.useState(20);
+    const [sortOrder, setSortOrder] = React.useState();
     const [loader, setLoader] = React.useState(true);
 
     React.useEffect(() => {
@@ -29,6 +30,7 @@ function ReportSchema(props) {
                 to: toDate,
                 page: currPage,
                 size: pageSize,
+                sort: sortOrder && "workingHours," + sortOrder
             }
         })
             .then((response) => {
@@ -54,16 +56,18 @@ function ReportSchema(props) {
             .catch((err) => {
                 console.log("a", err)
             })
-    }, [fromDate, toDate, currPage]);
+    }, [fromDate, toDate, currPage, sortOrder]);
 
     return (
         <div>
-            <div className="mb-5">
+            <div className="mb-4">
                 <FromToPicker
                     fromDate={fromDate}
                     setFromDate={setFromDate}
                     toDate={toDate}
                     setToDate={setToDate}
+                    sortOrder={sortOrder}
+                    setSortOrder={setSortOrder}
                 />
             </div>
             <div className="mb-3 d-flex justify-content-center">
