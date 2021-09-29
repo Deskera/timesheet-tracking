@@ -42,7 +42,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	int countAllByTenantEntity(Tenant tenant);
 	
 	@Query("SELECT u FROM User u WHERE u.email = ?1 AND u.isDeleted=false")
-	Optional<User> findByEmail(String email);       
+	Optional<User> findByEmail(String email);
+	
+	@Query("SELECT u FROM User u WHERE u.uid = ?1 AND u.isDeleted=false")
+	Optional<User> findById(long id);
 	
 //	@Query("SELECT u FROM User u WHERE u.isDeleted=false")
 //	Page<User> findAllUsers(Pageable pageable);
