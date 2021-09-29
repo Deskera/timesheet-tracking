@@ -13,7 +13,7 @@ function InputText(props) {
                 return (
                     <div className="row d-flex justify-content-center align-items-center">
                         <div className="col-12">
-                            <WrapperInput className="input-group bg-info col-6 p-0"
+                            <WrapperInput style={{ zIndex: 12 }} className="input-group bg-info col-6 p-0"
                                 invalid={meta.touched && meta.error}
                             >
                                 <div style={{ width: '100%' }}>

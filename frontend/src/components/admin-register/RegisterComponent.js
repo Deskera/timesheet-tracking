@@ -13,10 +13,10 @@ import FormikControl from '../../common/Formik/FormikControl';
 
 
 const initialValues = {
-    email: 'e1@manu.com',
+    email: '',
     phone: '',
-    password: 'Abc@1234',
-    confirmPassword: 'Abc@1234'
+    password: '',
+    confirmPassword: ''
 }
 
 Yup.addMethod(Yup.string, 'validatePhone', function () {
@@ -59,7 +59,6 @@ function Register() {
     const [loader, setLoader] = React.useState(false);
 
     const onSubmit = (values) => {
-        // history.push("/register/personal-info", {values})
         setLoader(true);
         fetch("http://localhost:8080/api/users/search?email=" + values.email)
             .then(response => {
@@ -80,7 +79,6 @@ function Register() {
                 })
             .then(response => response.json())
             .then(response => {
-                // console.log("navay", response); 
                 if (response === true) {
                     formRefRegister.current.setFieldError("email", "Email already taken!");
                 }
