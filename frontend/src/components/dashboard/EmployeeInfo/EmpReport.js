@@ -1,5 +1,4 @@
 import React from 'react';
-import { getUser } from '../../../common/CommonUtils';
 import ReportSchema from '../../dashboard/attendance/ReportSchema';
 
 function EmpReport() {

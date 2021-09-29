@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Modal } from "react-bootstrap";
 import 'yup-phone-lite';
 import { baseUrl } from '../../../../common/baseUrl';
-import { getUser } from '../../../../common/CommonUtils';
 import { ToastContainer, toast } from 'react-toastify';
 import { PulseLoader } from "react-spinners";
 import axios from 'axios';

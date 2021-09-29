@@ -4,11 +4,8 @@ import LogoCard, { Centered, ParentCard, Card } from '../../common/CustomStyles'
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-// import Loader from '../../common/Loader';
 import { baseUrl } from '../../common/baseUrl';
 import axios from 'axios';
-
-// import { makeStyles } from '@material-ui/core/styles';
 
 import FormikControl from '../../common/Formik/FormikControl';
 
@@ -47,7 +44,6 @@ function Login() {
 
     React.useEffect(() => {
         if (getUser()) {
-            console.log("manu");
             history.push("/dashboard/employee-info");
         }
         window.history.pushState(null, document.title, window.location.href);

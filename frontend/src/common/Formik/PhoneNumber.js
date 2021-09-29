@@ -2,7 +2,6 @@ import * as React from 'react';
 import { WrapperInput, FieldFeedback } from '../CustomStyles';
 import { ErrorMessage, Field } from 'formik';
 import PhoneInput from 'react-phone-input-2';
-import { Label } from 'reactstrap';
 
 function InputText(props) {
     const { id, name, border } = props;
