@@ -12,7 +12,6 @@ import com.deskera.timetracking.common.EVENT;
 import com.deskera.timetracking.dto.ImageDto;
 import com.deskera.timetracking.entity.Location;
 import com.deskera.timetracking.entity.Log;
-import com.deskera.timetracking.entity.LoginImage;
 import com.deskera.timetracking.entity.User;
 import com.deskera.timetracking.entity.WorkHours;
 import com.deskera.timetracking.exception.BadRequestException;
