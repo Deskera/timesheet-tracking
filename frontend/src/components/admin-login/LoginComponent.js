@@ -13,8 +13,8 @@ import { ScaleLoader } from 'react-spinners';
 import { images, getUser } from '../../common/CommonUtils';
 
 const initialValues = {
-    email: 'e1@delta.com',
-    password: 'Abc@1234'
+    email: '',
+    password: ''
 }
 
 const atleast1Cap = "(?=.*[A-Z])";

@@ -21,8 +21,8 @@ const validationSchema = Yup.object({
     companyName: Yup.string()
         .required('Required!'),
 
-    // country: Yup.string()
-    // .required('Required'),
+    country: Yup.string()
+        .required('Required'),
 
     websiteUrl: Yup.string()
         .url('Must be a valid URL')
@@ -45,12 +45,10 @@ function OrganizationInfo() {
     const formRefOrgInfo = React.useRef();
 
     const history = useHistory();
-    // console.log("bbbb", history.location);
 
     const registerValues = history.location.state;
 
     const onSubmit = (values) => {
-        console.log("abc");
         setLoader(true);
         registerValues["organization_info"] = values;
 
@@ -71,12 +69,9 @@ function OrganizationInfo() {
             }
         }
 
-        console.log("asd", newUser);
-
         axios.post((baseUrl + "api/tenants/initial-setup?password=" + registerValues.values.password), newUser)
             .then((response) => {
                 setLoader(false);
-                console.log(response);
                 alert("Registered!");
                 history.push("/login")
             })
@@ -84,7 +79,6 @@ function OrganizationInfo() {
                 console.log('Post User', err.response.data);
                 setLoader(false);
                 if (err.response.data === "tenant already exists") {
-                    console.log("aaa");
                     formRefOrgInfo.current.setFieldError("companyName", "Company with this name already exists!");
                 }
                 console.log(err.response)
