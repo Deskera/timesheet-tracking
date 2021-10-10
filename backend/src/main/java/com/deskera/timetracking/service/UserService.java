@@ -1,0 +1,36 @@
+package com.deskera.timetracking.service;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import org.springframework.data.domain.Pageable;
+
+import com.deskera.timetracking.dto.ImageDto;
+import com.deskera.timetracking.dto.UserDto;
+import com.deskera.timetracking.dto.UserResponseDto;
+import com.deskera.timetracking.dto.UserTenantDto;
+
+public interface UserService {
+	//Map<String, Object> getAllUsers();
+	UserResponseDto getUserById(final long id);
+	UserResponseDto saveUser(final UserDto userDto,final String password);
+	UserResponseDto getUserByEmail(final String email);
+	Map<String, Object> getAllUsersByTenantName(final String tenantName,final Pageable pageable,final String name,final String email,final String designation,final String contactnumber,final String gender,final String joiningdate);
+	Map<String, Object> isValidLogin(final String email,final String pass);
+	long getUserCountByTenant(final String tenantName);
+	boolean isPresent(final String email);
+	UserResponseDto deleteUserByEmail(final String email);
+	UserResponseDto editUser(final UserResponseDto userDto);
+	Map<String, Object> getAllUsersGlobal(final String tenantName, final Pageable pageable, final String global);
+	void saveImage(long logId, ImageDto imageDto);
+	void saveLocation(long userId, double latitude, double longitude);
+	Map<String,Object> workingTimeHistory(long uid, Pageable pageable, String fromDate, String toDate);
+	LocalDateTime clockin(long uid, double latitude, double longitude, ImageDto imageDto);
+	LocalDateTime clockout(long uid, double latitude, double longitude, ImageDto imageDto);
+
+//	UserDto logout(final long userId, double latitude, double longitude, ImageDto imageDto);
+//	boolean isPresent(final long id);
+//	boolean isAdmin(final String email);
+//	boolean isAdmin(final long id);
+//	void updateUser(final User admin);
+
+}
